@@ -1,9 +1,24 @@
 package Model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "objection")
 public class ObjectionType {
-	private String objectionType; 
-	private String objectionInformation;  //this is just a default objection rules explanation for reference with federal rule #
+	
+	@Id
+	@OneToMany(mappedBy = "objection", fetch = FetchType.LAZY)
 	private int objectionTypeID;
+	@Column(name = "objection_type")
+	private String objectionType; 
+	@Column(name = "explanation")
+	private String objectionInformation;  //this is just a default objection rules explanation for reference with federal rule #
+	
 	
 	public String toString(){
 		String s = ""; 

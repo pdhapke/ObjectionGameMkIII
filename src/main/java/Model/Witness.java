@@ -1,12 +1,30 @@
 package Model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "witnesses")
 public class Witness {
-private String firstname; 
-private String lastname; 
-private String affidavit; 
-private String side; 
-private int fk_caseID;
+@Id
+@GeneratedValue
 private int witnessID; 
+@ManyToOne
+@JoinColumn(name = "case_id")
+private int fk_caseID;
+@Column(name="first_name")
+private String firstname; 
+@Column(name="last_name")
+private String lastname; 
+@Column(name="affidavit")
+private String affidavit; 
+@Column(name="side")
+private String side; 
 
 
 

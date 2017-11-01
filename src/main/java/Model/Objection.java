@@ -1,13 +1,36 @@
 package Model;
 
+
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+
+@Entity
+@Table (name = "correct_objection")
 public class Objection {
-private ObjectionType description;
+@Id
+@GeneratedValue
+private int objectionID; 
+@ManyToOne
+@JoinColumn(name = "question_id")
+private int fk_questionID; 
+@ManyToOne
+@JoinColumn(name = "objection_rule_number")
+private int fk_objectionTypeID;
+@Column(name="correct_reason")
 private String explanation; //more detailed reason for why it is correct
+@Column(name="correct_time")
 private String timing; //when the objection should be made (is)(calls for)(witness has begun)
 
-private int objectionID; 
-private int fk_questionID; 
-private int fk_objectionTypeID; 
+@Transient 
+private ObjectionType description;
 
 public String toString(){
 	String s = ""; 

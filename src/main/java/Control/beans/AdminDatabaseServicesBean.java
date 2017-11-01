@@ -3,9 +3,9 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import Model.Question;
-import Control.DataBaseServices;
+import Control.AdminDatabaseServices;
 
-public class DataBaseServicesBean implements DataBaseServices{
+public class AdminDatabaseServicesBean implements AdminDatabaseServices{
 
 	public boolean addQuestions(List<Question> list) {
 		// TODO Auto-generated method stub

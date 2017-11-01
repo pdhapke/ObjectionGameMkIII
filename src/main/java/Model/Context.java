@@ -1,7 +1,21 @@
 package Model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table (name = "context")
 public class Context {
+	@Id
+	@GeneratedValue
+	@OneToMany(mappedBy = "context", fetch = FetchType.LAZY)
 	private int caseID; 
+	@Column(name="context")
 	private String context;
 	
 	public Context(){};
