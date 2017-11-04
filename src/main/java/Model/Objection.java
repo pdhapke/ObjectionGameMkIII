@@ -17,12 +17,13 @@ import javax.persistence.Transient;
 public class Objection {
 @Id
 @GeneratedValue
+@Column(name="correct_objection_id")
 private int objectionID; 
-@ManyToOne
-@JoinColumn(name = "question_id")
+
+@Column (name = "question_id")
 private int fk_questionID; 
-@ManyToOne
-@JoinColumn(name = "objection_rule_number")
+
+@Column(name = "objection_rule_number")
 private int fk_objectionTypeID;
 @Column(name="correct_reason")
 private String explanation; //more detailed reason for why it is correct

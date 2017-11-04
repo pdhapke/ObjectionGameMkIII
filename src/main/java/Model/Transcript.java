@@ -15,12 +15,13 @@ import javax.persistence.Transient;
 public class Transcript {
 @Id
 @GeneratedValue
+@Column(name = "question_id")
 private int questionID; 
-@ManyToOne
-@JoinColumn(name = "witness_id")
+
+@Column(name = "witness_id")
 private int fk_witnessID; 
-@ManyToOne
-@JoinColumn(name = "previous_question_id")
+
+@Column(name = "previous_question_id")
 private int previousQuestionID;	
 @Column(name="side")
 private String sideAskingQuestion;

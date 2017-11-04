@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class Context {
 	@Id
 	@GeneratedValue
-	@OneToMany(mappedBy = "context", fetch = FetchType.LAZY)
+	@Column(name="case_id")
 	private int caseID; 
 	@Column(name="context")
 	private String context;

@@ -21,17 +21,18 @@ public interface ClientDatabaseServices {
 	public List<Question> getQuestions(String type, int numberOfQuestions, List<Integer> history ); 
 	public Question getQuestion(String type, List<Integer> history);
 	
-	//entry point for creating questions
-	public Transcript getRandomTranscript(List<Integer> history); 
-	public Objection getObjectionOfType(int typeID, List<Integer> history); 
-	public Objection getObjectionOfType(String type, List<Integer> history); 	
-	
 	//read each object by id
-	public Objection getObjection(int id); 
+	public List<Objection> getObjections(int questionID);
+	public Objection getObjection(int id);
 	public Transcript getTranscript(int id); 
 	public Context getContext(int id); 
 	public Witness getWitness(int id); 
 	public ObjectionType getObjectionType(int id); 
 	
-	
+	//check to make sure item exists
+	public boolean objectionExists(int id); 
+	public boolean transcriptExists(int id); 
+	public boolean contextExists(int id); 
+	public boolean witnessExists(int id); 
+	public boolean objectionTypeExists(int id);
 	}

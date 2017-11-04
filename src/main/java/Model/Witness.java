@@ -13,9 +13,10 @@ import javax.persistence.Table;
 public class Witness {
 @Id
 @GeneratedValue
+@Column(name = "witness_id")
 private int witnessID; 
-@ManyToOne
-@JoinColumn(name = "case_id")
+
+@Column(name = "case_id")
 private int fk_caseID;
 @Column(name="first_name")
 private String firstname; 

@@ -10,6 +10,7 @@ import Model.beans.QuestionList;
 public class QuestionServiceBean implements QuestionService{
 	private int score; 
 	private QuestionList list; 
+	
 	private List<Integer> completedQuestions; 
 	private int nextQuestion; 
 	private String objectionPracticeType; 
@@ -142,5 +143,10 @@ public class QuestionServiceBean implements QuestionService{
 		
 		return output;		
 	}
-
+	public List<Question> getList() {
+		return list.getQuestionList();
+	}
+	public void setList(List<Question> l) {
+		this.setList(l);
+	}
 }

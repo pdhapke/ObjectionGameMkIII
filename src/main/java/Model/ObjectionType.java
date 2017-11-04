@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class ObjectionType {
 	
 	@Id
-	@OneToMany(mappedBy = "objection", fetch = FetchType.LAZY)
+	@Column(name = "objection_rule_number")
 	private int objectionTypeID;
 	@Column(name = "objection_type")
 	private String objectionType; 

@@ -37,6 +37,9 @@ public class QuestionListBean implements QuestionList{
 	public List<Question> getQuestionList() {
 		return list;
 	}
+	public void setQuestionList(List<Question> list){
+		this.list = list;
+	}
 
 	public Question get(int i) {
 		// TODO Auto-generated method stub
