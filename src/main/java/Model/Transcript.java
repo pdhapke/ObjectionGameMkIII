@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,16 +39,21 @@ public String toString(){
 	s = s.concat("The " + this.sideAskingQuestion + " asks: " +"\"" + this.courtQuestion + "\"").concat("\n");
 	s = s.concat("The witness will answer: " + "\"" + this.witnessAnswer + "\"").concat("\n");
 	s = s.concat("*The previous question(s) were: ").concat("\n");
-	for (String string : previousQuestion){
-		s = s.concat(i + " question ago: ");
-		s = s.concat("\"" + string  + "\"").concat("\n");
-		i++; 
+	System.out.println(previousQuestion.size());
+	if(previousQuestion.size() != 0){
+		for (String string : previousQuestion){
+			s = s.concat(i + " question ago: ");
+			s = s.concat("\"" + string  + "\"").concat("\n");
+			i++; 
+		}
 	}
 	s = s.concat("Question ID: " + this.questionID + " Previous Question ID: " + this.previousQuestionID );
 	return s;
 }
 
-public Transcript(){};
+public Transcript(){
+	 this.previousQuestion = new ArrayList<String>();
+};
 
 public Transcript(List<String> previous, String side, String current, String answer,  int qID, int preID, int fk){
 	this.previousQuestion = previous; 

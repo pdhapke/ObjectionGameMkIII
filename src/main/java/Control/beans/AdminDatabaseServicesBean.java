@@ -18,10 +18,11 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 	
 
 	public boolean addQuestions(List<Question> list) {
-		boolean success = false; 
+		boolean success = true; 
 		try{
+			
 			for(Question q : list){
-				addQuestion(q);
+				success = success && addQuestion(q);
 			}
 		} catch (Exception e) {
 		success = false; 
@@ -30,37 +31,35 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 	}
 
 	public boolean addQuestion(Question q) {
-		boolean success = false; 
-		try{
-			Transcript t = q.getTranscript(); 
-			if (transcriptExists(t.getQuestionID())!= true){
-				addTranscript(t);
-			}
+			boolean success = false; 
 			Context c = q.getContextObject();
 			if (contextExists(c.getCaseID()) != true){
 				addContext(c);
 			}
+			
 			Witness w = q.getWitness(); 
 			if (witnessExists(w.getWitnessID()) != true){
 				addWitness(w);
 			}
+			
+			
+			Transcript t = q.getTranscript(); 
+			if (transcriptExists(t.getQuestionID())!= true){
+				addTranscript(t);
+				}
+				
 			List<Objection> objs = q.getCorrectObjections();
-			for (Objection singleObj : objs){
+			for (Objection singleObj : objs){		
 				if (objectionExists(singleObj.getObjectionID()) != true){
-					addObjection(singleObj);
-				}
-				if(objectionTypeExists(singleObj.getFk_objectionTypeID()) != true){
+					if(objectionTypeExists(singleObj.getFk_objectionTypeID()) != true){
 					addObjectionType(singleObj.getDescription());					
-				}
+					}					
+					addObjection(singleObj);
+				}	
 			}
+			
 			success = true; 
-		
-		} catch (Exception e) {
-		success = false; 
-		}
-		
-	
-		
+			
 				
 		return success;
 	}

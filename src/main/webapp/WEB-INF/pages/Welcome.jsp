@@ -14,5 +14,9 @@
 <body>
 <h2>Hello World</h2>
 
+<a href="all.mvc">
+   <button >Push to show Database</button>
+</a>
+
 
 </html>

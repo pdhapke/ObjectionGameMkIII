@@ -144,11 +144,11 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	public List<Objection> getObjections(int questionID) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		String query = "Select result FROM Objection result WHERE result.questionID =" + questionID;
+		String query = "Select result FROM Objection result WHERE result.fk_questionID =" + questionID;
 		TypedQuery<Objection> typedQuery = em.createQuery(query, Objection.class);
 		List<Objection> objs = typedQuery.getResultList();
 		for (Objection i : objs){
-			query = "Select result FROM Objection result WHERE result.objectionTypeID =" + i.getFk_objectionTypeID();
+			query = "Select result FROM ObjectionType result WHERE result.objectionTypeID =" + i.getFk_objectionTypeID();
 			i.setDescription(em.createQuery(query, ObjectionType.class).getResultList().get(0));	
 			}
 		em.close();
@@ -160,7 +160,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		String query = "Select result FROM Objection result WHERE result.objectionID =" + id;
 		TypedQuery<Objection> typedQuery = em.createQuery(query, Objection.class);
 		Objection obj = typedQuery.getResultList().get(0);
-		query = "Select result FROM Objection result WHERE result.objectionTypeID =" + obj.getFk_objectionTypeID();
+		query = "Select result FROM ObjectionType result WHERE result.objectionTypeID =" + obj.getFk_objectionTypeID();
 		obj.setDescription(em.createQuery(query, ObjectionType.class).getResultList().get(0));
 		em.close();
 		
@@ -182,15 +182,19 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		//add the previous questions to the transcript
 		int previousID = t.getPreviousQuestionID(); 
 		List<String> courtRecord = new ArrayList<String>(); 
+		
 		for (int i = 0; i < numberOfPrevious; i++){
-			query = "Select result.courtQuestion, result.witnessAnswer, result.previousQuestionID FROM Transcript result WHERE result.questionID =" + previousID;
-			typedQuery = em.createQuery(query, Transcript.class);
 			
-			courtRecord.add(0, typedQuery.getResultList().get(0).getCourtQuestion()
+			query = "Select result FROM Transcript result WHERE result.questionID =" + previousID;
+			typedQuery = em.createQuery(query, Transcript.class);
+			if (!typedQuery.getResultList().isEmpty()){
+				courtRecord.add(0, typedQuery.getResultList().get(0).getCourtQuestion()
 							   .concat("\n")
 							   .concat(typedQuery.getResultList().get(0).getWitnessAnswer())
 							);
-			previousID = typedQuery.getResultList().get(0).getPreviousQuestionID();
+				previousID = typedQuery.getResultList().get(0).getPreviousQuestionID();
+				
+			}
 		}
 		t.setPreviousQuestion(courtRecord);
 		em.close();
@@ -200,7 +204,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	public Context getContext(int id) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		String query = "Select result FROM Context result WHERE result.contextID =" + id;
+		String query = "Select result FROM Context result WHERE result.caseID = " + id;
 		TypedQuery<Context> typedQuery = em.createQuery(query, Context.class);
 		Context c = typedQuery.getResultList().get(0);
 		em.close();
@@ -223,6 +227,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		String query = "Select result FROM ObjectionType result WHERE result.objectionTypeID =" + id;
 		TypedQuery<ObjectionType> typedQuery = em.createQuery(query, ObjectionType.class);
 		ObjectionType type = typedQuery.getResultList().get(0);
+		System.out.println("Inside the get. so it worked!");
 		em.close();
 		return type; 
 	
@@ -231,67 +236,62 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	public boolean objectionExists(int id) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		String query = "Select count(result) from Objection result WHERE result.objectionTypeID = " + id;
-		int count = (Integer) em.createQuery(query).getSingleResult();
+		List<Objection> item = em.createQuery("Select result from Objection result WHERE result.objectionID LIKE " + id, Objection.class).getResultList();
 		boolean answer = false;
-		if (count == 1){
+		if (item.size() >= 1 ){
 			answer = true;
 		}
+		em.close();
 		return answer;
 	
 	}
 
 	public boolean transcriptExists(int id) {
 		EntityManager em = emfactory.createEntityManager();
-		System.out.println("I am here!");
 		em.getTransaction().begin();
-		List<Transcript> item = em.createQuery("Select result from questions result WHERE result.question_ID = 5").setParameter(1, id).getResultList();
-		System.out.println("Now I am here!");
-		
-		
+		List<Transcript> item = em.createQuery("Select result from Transcript result WHERE result.questionID LIKE " + id, Transcript.class).getResultList();
 		boolean answer = false;
-		
-		if (item != null ){
+		if (item.size() >= 1 ){
 			answer = true;
 		}
-		System.out.println(answer);
 		em.close();
 		return answer;
+		
 	}
 
 	public boolean contextExists(int id) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		String query = "Select count(result) from Context result WHERE result.caseID = " + id;
-		int count = (Integer) em.createQuery(query).getSingleResult();
+		List<Context> item = em.createQuery("Select result from Context result WHERE result.caseID LIKE " + id, Context.class).getResultList();
 		boolean answer = false;
-		if (count == 1){
+		if (item.size() >= 1 ){
 			answer = true;
 		}
+		em.close();
 		return answer;
 	}
 
 	public boolean witnessExists(int id) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		String query = "Select count(result) from Witness result WHERE result.caseID = " + id;
-		int count = (Integer) em.createQuery(query).getSingleResult();
+		List<Witness> item = em.createQuery("Select result from Witness result WHERE result.witnessID LIKE " + id, Witness.class).getResultList();
 		boolean answer = false;
-		if (count == 1){
+		if (item.size() >= 1 ){
 			answer = true;
 		}
+		em.close();
 		return answer;
 	}
 
 	public boolean objectionTypeExists(int id) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		String query = "Select count(result) from ObjectionType result WHERE result.caseID = " + id;
-		int count = (Integer) em.createQuery(query).getSingleResult();
+		List<ObjectionType> item = em.createQuery("Select result from ObjectionType result WHERE result.objectionTypeID LIKE " + id, ObjectionType.class).getResultList();
 		boolean answer = false;
-		if (count == 1){
+		if (item.size() >= 1 ){
 			answer = true;
 		}
+		em.close();
 		return answer;
 	}
 	
