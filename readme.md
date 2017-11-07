@@ -7,24 +7,28 @@ The java model structure was designed with persistence in mind to establish a pa
 Planned
 - [ ] Admin
 	- [x] Persistence Controller
-- [ ] GUI 
-- [ ] Authentication
+	- [ ] GUI 
+	- [ ] Authentication
+
 - [ ] Game
 	- [x] Controller
 	- [x] Persistence Controller
 	- [ ] GUI
 	- [ ] Objection Timing
 	- [ ] Practice Type
+
 - [x] Database
 	- [x] Relationship table
 	- [x] SQL setup
+	- [ ] Database Entries
 - [ ] Structure
 	- [x] Parallel Java Model
 	- [x] Added JPA to object model
+
 - [ ] Testing
 	- [x] Preliminary Main() testing
-	- [] Extended junit testing 
-- [ ] Database files
+	- [ ] Extended junit testing 
+
 - [ ] Spring
 	- [x] MVC utilities
 	- [x] Bean utilities
