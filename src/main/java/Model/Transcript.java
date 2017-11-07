@@ -39,7 +39,7 @@ public String toString(){
 	s = s.concat("The " + this.sideAskingQuestion + " asks: " +"\"" + this.courtQuestion + "\"").concat("\n");
 	s = s.concat("The witness will answer: " + "\"" + this.witnessAnswer + "\"").concat("\n");
 	s = s.concat("*The previous question(s) were: ").concat("\n");
-	System.out.println(previousQuestion.size());
+
 	if(previousQuestion.size() != 0){
 		for (String string : previousQuestion){
 			s = s.concat(i + " question ago: ");

@@ -227,7 +227,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		String query = "Select result FROM ObjectionType result WHERE result.objectionTypeID =" + id;
 		TypedQuery<ObjectionType> typedQuery = em.createQuery(query, ObjectionType.class);
 		ObjectionType type = typedQuery.getResultList().get(0);
-		System.out.println("Inside the get. so it worked!");
+	
 		em.close();
 		return type; 
 	

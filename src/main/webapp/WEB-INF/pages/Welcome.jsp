@@ -12,7 +12,7 @@
 <title>Welcome to the Game!</title>
 </head>
 <body>
-<h2>Hello World</h2>
+<h2>Welcome to the Objection Database!</h2>
 
 <a href="all.mvc">
    <button >Push to show Database</button>

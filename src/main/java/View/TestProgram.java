@@ -26,13 +26,16 @@ public class TestProgram {
 		AdminDatabaseServicesBean db = applicationContext.getBean("db", AdminDatabaseServicesBean.class);
 		
 		//tests to make sure the questions are in memory
+		System.out.println("********** This tests the toString function of objects in memory");
 		System.out.println(serve.toString());
 	
 		//adds a list of questions to the database
+		System.out.println("********** This tests the the AdminDatabaseServices by adding the question in memory to the mySQL database");
 		boolean x = db.addQuestions(serve.getList());
 		System.out.println(x);
 		
 	//tests pulling question information from the database using the known ids from current questions in memory.
+		System.out.println("********** This tests pulling information back out of the database");
 		//obj type
 		ObjectionType obType = db.getObjectionType(serve.getList().get(0).getCorrectObjections().get(0).getFk_objectionTypeID());
 		System.out.println(obType.toString());
