@@ -2,7 +2,8 @@ package Model;
 
 import java.util.List;
 
-
+//this is the question class used to store and centrally
+//located each question for the game with its counterpart in the database
 public class Question {
 	
 	private Context context;
