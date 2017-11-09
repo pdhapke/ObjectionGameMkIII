@@ -63,3 +63,4 @@ $RECYCLE.BIN/
 *.lnk
 src/main/java/Model/databaseInformation.java
 src/main/java/Model/databaseInformation.java
+src/main/java/Model/databaseInformationLocal.java
