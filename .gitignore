@@ -62,3 +62,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 src/main/java/Model/databaseInformation.java
+src/main/java/Model/databaseInformation.java
