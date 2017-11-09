@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import Control.beans.AdminDatabaseServicesBean;
 import Control.beans.BeanConfiguration;
 import Control.beans.QuestionServiceBean;
+import Model.databaseInformation;
 
 import java.util.List;
 
@@ -19,11 +20,13 @@ public class gameController {
 	AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(BeanConfiguration.class); 
 	QuestionServiceBean serve = applicationContext.getBean("service", QuestionServiceBean.class);
 	AdminDatabaseServicesBean db = applicationContext.getBean("db", AdminDatabaseServicesBean.class);
+	databaseInformation dbInfo = applicationContext.getBean("dbInfo", databaseInformation.class);
 	
 	@RequestMapping(value="/Welcome" )
 	public  ModelAndView mainpage(){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("Welcome");
+		modelAndView.addObject("signIn", dbInfo.getGoogleClientID());
 		return modelAndView;
 	}
 	

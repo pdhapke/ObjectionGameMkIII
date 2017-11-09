@@ -17,7 +17,7 @@ public class Context {
 	private int caseID; 
 	@Column(name="context")
 	private String context;
-	
+
 	public Context(){};
 	public Context(int ID, String con){
 		this.caseID = ID;

@@ -1,26 +1,26 @@
 package Model;
 
 public class databaseInformation {
-	private static String password; 
-	private static String username; 
-	private static String googleclientID = "your id here"; 
-	private static String googleclientSecret = "your secret here";
+	private String password; 
+	private String username; 
+	private String googleClientID = "your id here"; 
+	private String googleClientSecret = "your secret here";
 	
 	
-	public static String getGoogleclientID() {
-		return googleclientID;
+	public String getGoogleClientID() {
+		return googleClientID;
 	}
-	public static String getGoogleclientSecret() {
-		return googleclientSecret;
+	public String getGoogleClientSecret() {
+		return googleClientSecret;
 	}
 
 	
 	
 	
-	public static String password(){
+	public String password(){
 		return password; 
 		}
-	public static String user(){
+	public String user(){
 		return username; 
 		}
 	

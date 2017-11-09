@@ -75,7 +75,19 @@
     	<artifactId>jstl</artifactId>
     	<version>1.2</version>
      </dependency>
-    
+     <!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client -->
+	<dependency>
+    	<groupId>com.google.api-client</groupId>
+   		<artifactId>google-api-client</artifactId>
+    	<version>1.8.0-beta</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/com.google.api-client/google-api-client-appengine -->
+	<dependency>
+    	<groupId>com.google.api-client</groupId>
+    	<artifactId>google-api-client-appengine</artifactId>
+    	<version>1.23.0</version>
+	</dependency>
+	
   </dependencies>
   <build>
     <finalName>ObjectionGameMkIII</finalName>

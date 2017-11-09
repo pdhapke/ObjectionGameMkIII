@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Configuration;
 
 import Control.beans.AdminDatabaseServicesBean;
 import Model.beans.QuestionListBean;
-
+import Model.databaseInformation;
+import Model.databaseInformationLocal;
 
 @Configuration
 public class BeanConfiguration {
@@ -28,6 +29,10 @@ public class BeanConfiguration {
 		AdminDatabaseServicesBean bean = new AdminDatabaseServicesBean(); 
 		return bean;		
 	}
-	
+	@Bean 
+	public databaseInformation dbInfo(){
+		databaseInformation bean = new databaseInformationLocal(); 
+		return bean;		
+	}
 	
 }
