@@ -6,8 +6,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
+
+import com.fasterxml.jackson.core.JsonFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -17,8 +17,8 @@ import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 
 public class GoogleAuthenticatorServiceBean{
 	NetHttpTransport transport = new NetHttpTransport();
-	private JsonFactory jsonFactory= new GsonFactory(); 
-	private GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier(transport, jsonFactory, null);
+	private JsonFactory jsonFactory= new JsonFactory(); 
+	private GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory).build();
 			
 	public AuthenticatedUser verify(String userToken){
 		GoogleIdToken idToken = verifier.verify(userToken);

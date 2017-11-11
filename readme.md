@@ -4,7 +4,7 @@ This repository is the program structure in progress for an objection game to be
 ## Structure
 The java model structure was designed with persistence in mind to establish a parity between the database tables in order to preserve the one to many relationships and add table items individually. Using separate entities later GUIs will also be able to update using drop down lists of relationships reducing the size of each question entry. Packages are separated into definitional groups and functional groups (beans) for easier bean configuration. 
 
-Planned
+Planned 
 - [ ] Admin
 	- [x] Persistence Controller
 	- [ ] GUI 
@@ -36,6 +36,8 @@ Planned
 	- [ ] Beans
 	
 
+**SCRUM status & backlog** <br>
 
+ [SCRUM Spreadsheet Sprint 1](https://docs.google.com/spreadsheets/d/1tdWSuC_HPGky3ifocHwHV5q5-KExHlzkDwGL0fNDGMg/edit?usp=sharing)
 
 
