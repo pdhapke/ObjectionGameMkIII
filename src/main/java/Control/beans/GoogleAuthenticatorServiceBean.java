@@ -1,27 +1,43 @@
 package Control.beans;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Collections;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier.*;
+
+import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
+import Control.beans.ClientDatabaseServicesBean;
 import Model.AuthenticatedUser;
 
-import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
+
 
 public class GoogleAuthenticatorServiceBean{
-	NetHttpTransport transport = new NetHttpTransport();
-	private JsonFactory jsonFactory= new JsonFactory(); 
+	HttpTransport transport = new NetHttpTransport();
+	private GsonFactory  jsonFactory= new GsonFactory(); 
 	private GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory).build();
 			
 	public AuthenticatedUser verify(String userToken){
-		GoogleIdToken idToken = verifier.verify(userToken);
+		//GeneralSecurityException
+		//IOException
+		GoogleIdToken idToken;
+		try {
+			idToken = verifier.verify(userToken);
+		} catch (GeneralSecurityException e) {
+//add error info here
+			idToken = null;
+		} catch (IOException e) {
+//add error info here
+			idToken = null; 
+		}
+		
+		AuthenticatedUser user;  
+		ClientDatabaseServicesBean cService = new ClientDatabaseServicesBean(); 
 		if (idToken != null) {
 		  Payload payload = idToken.getPayload();
 
@@ -31,15 +47,16 @@ public class GoogleAuthenticatorServiceBean{
 
 		  // Get profile information from payload
 		  String email = payload.getEmail();
-		  boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
-		  String name = (String) payload.get("name");
-		  String pictureUrl = (String) payload.get("picture");
-		  String locale = (String) payload.get("locale");
 		  String familyName = (String) payload.get("family_name");
 		  String givenName = (String) payload.get("given_name");
-		AuthenticatedUser user = new AuthenticatedUser(); 
-		
-		return user; 
-	}
+		  user = cService.getAuthenticatedUser(email, givenName, familyName);
+		  user.setVerified(Boolean.valueOf(payload.getEmailVerified()));
+		  } else {
+			 user = null;  
+		  }
+		cService.close();
+		  
+		 return user; 
+		}
 		
 }

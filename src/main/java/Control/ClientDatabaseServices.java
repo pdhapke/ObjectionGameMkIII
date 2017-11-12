@@ -1,5 +1,6 @@
 package Control;
 import Model.Question;
+import Model.AuthenticatedUser;
 import Model.Context;
 import Model.Objection;
 import Model.ObjectionType;
@@ -28,6 +29,7 @@ public interface ClientDatabaseServices {
 	public Context getContext(int id); 
 	public Witness getWitness(int id); 
 	public ObjectionType getObjectionType(int id); 
+	public AuthenticatedUser getAuthenticatedUser(String email, String firstname, String lastname); 
 	
 	//check to make sure item exists
 	public boolean objectionExists(int id); 

@@ -34,5 +34,10 @@ public class BeanConfiguration {
 		databaseInformation bean = new databaseInformationLocal(); 
 		return bean;		
 	}
+	@Bean 
+	public GoogleAuthenticatorServiceBean google(){
+		GoogleAuthenticatorServiceBean bean = new GoogleAuthenticatorServiceBean(); 
+		return bean;		
+	}
 	
 }

@@ -62,7 +62,7 @@ CREATE TABLE objection (
 -- primary key is the correct_objection_ID, functions also as a bridging table using two foreign keys question_id and objection_id. 
 -- one to many relationship with witnesses, one to many relationship with objections
     
-    CREATE TABLE correct_objection (
+CREATE TABLE correct_objection (
 	correct_objection_id int PRIMARY KEY AUTO_INCREMENT, 
 	objection_rule_number int, 
 	question_id int, 
@@ -77,10 +77,13 @@ FOREIGN KEY (question_id)
 	REFERENCES questions (question_id)
 	);
 
+CREATE TABLE users (
+email VARCHAR(40) PRIMARY KEY, 
+admin BOOLEAN, 
+highscore INT, 
+firstname VARCHAR(30), 
+lastname VARCHAR(30),
 
-desc correct_objection;
-
-SELECT * FROM context;
-SELECT * FROM witnesses;
-
+INDEX(email)
+); 
 

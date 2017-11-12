@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.ArrayList; 
 import Control.QuestionService;
 import Model.Question;
+import Model.AuthenticatedUser;
 import Model.Objection;
 import Model.beans.QuestionList;
 
 public class QuestionServiceBean implements QuestionService{
 	private int score; 
 	private QuestionList list; 
-	
+	private AuthenticatedUser user; 
 	private List<Integer> completedQuestions; 
 	private int nextQuestion; 
 	private String objectionPracticeType; 
@@ -39,6 +40,12 @@ public class QuestionServiceBean implements QuestionService{
 		this.nextQuestion = 0; 
 		this.numberOfQuestionsRequested = numberOfQuestions; 
 		this.objectionPracticeType = null; 
+	}
+	public AuthenticatedUser getUser() {
+		return user;
+	}
+	public void setUser(AuthenticatedUser user) {
+		this.user = user;
 	}
 	public String getObjectionPracticeType() {
 		return objectionPracticeType;

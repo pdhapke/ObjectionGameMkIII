@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 
 import Control.ClientDatabaseServices;
+import Model.AuthenticatedUser;
 import Model.Context;
 import Model.Objection;
 import Model.ObjectionType;
@@ -232,7 +233,25 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		return type; 
 	
 	}
-
+	public AuthenticatedUser getAuthenticatedUser(String email, String firstname, String lastname) {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		
+		String query = "Select result FROM AuthenticatedUser result WHERE result.email = \"" + email + "\"";
+		TypedQuery<AuthenticatedUser> typedQuery = em.createQuery(query, AuthenticatedUser.class);
+		
+		AuthenticatedUser user; 
+		if (typedQuery.getResultList().size() != 0){
+		user = typedQuery.getResultList().get(0); 
+		} else {
+		user = new AuthenticatedUser(email, firstname, lastname); 
+		em.persist(user);
+		em.getTransaction().commit();
+		}
+		em.close();
+		return user; 
+		
+	}
 	public boolean objectionExists(int id) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
@@ -294,6 +313,8 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		em.close();
 		return answer;
 	}
+
+	
 	
 	
 }

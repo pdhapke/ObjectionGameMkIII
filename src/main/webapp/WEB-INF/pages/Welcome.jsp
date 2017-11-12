@@ -17,14 +17,16 @@
 	 	alert('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 		  var profile = googleUser.getBasicProfile();
 		  var id_token = googleUser.getAuthResponse().id_token;
-		  var xhr = new XMLHttpRequest();
-		  xhr.open('POST', 'all.mvc');
-		  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		  xhr.onload = function() {
-		    console.log('Signed in as: ' + xhr.responseText);
-		  };
-		  xhr.send('idtoken=' + id_token);
-		  xhr.close()
+		  var postRequest = new XMLHttpRequest();
+		  postRequest.open('POST', 'processSignIn.mvc');
+		  postRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		  postRequest.onreadystatechange = function() {
+			     if (this.readyState == 4 && this.status == 200) {
+		     	 document.getElementById("reply").innerHTML = this.responseText;
+		    	 }
+		  }
+		  postRequest.send('idtoken=' + id_token);
+		  postRequest.close()
 		}
 	</script>
 	
@@ -36,9 +38,12 @@
 
 <body>
 	<h2>Welcome to the Objection Database!</h2>
-	<a href="all.mvc">
-  	  <button >Push to show Database</button>
+
+<div id="reply">
+	Please sign in to continue
+	<div class="g-signin2" data-onsuccess="onSignIn"></div>
+		<a href="all.mvc"> <button >Push to show Database</button>
 	</a>
-<div class="g-signin2" data-onsuccess="onSignIn"></div>
+</div>
 </body>
 </html>
