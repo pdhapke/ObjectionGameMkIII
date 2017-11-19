@@ -221,98 +221,247 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 	}
 
 	public boolean updateWitness(Witness w) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		Witness oldW = em.find(Witness.class, w.getWitnessID()); 
+		oldW.update(w); 
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	public boolean updateTranscript(Transcript t) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		Transcript oldT = em.find(Transcript.class, t.getQuestionID()); 
+		oldT.update(t); 
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	public boolean updateObjection(Objection obj) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		Objection oldO = em.find(Objection.class, obj.getObjectionID()); 
+		oldO.update(obj); 
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	public boolean updateObjectionType(ObjectionType type) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		ObjectionType oldOT = em.find(ObjectionType.class, type.getObjectionTypeID()); 
+		oldOT.update(type); 
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
-
 	public boolean deleteContext(Context c) {
-		// TODO Auto-generated method stub
-		return false;
+		return deleteContext(c.getCaseID());
 	}
 
 	public boolean deleteWitness(Witness w) {
-		// TODO Auto-generated method stub
-		return false;
+		return deleteWitness(w.getWitnessID()); 
 	}
 
 	public boolean deleteTranscript(Transcript t) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		return deleteTranscript(t.getQuestionID()); 
+		}
 
 	public boolean deleteObjection(Objection obj) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		return deleteObjection(obj.getObjectionID()); 
+		}
 
 	public boolean deleteObjectionType(ObjectionType type) {
-		// TODO Auto-generated method stub
-		return false;
+		return deleteObjectionType(type.getObjectionTypeID());
 	}
 
 	public boolean deleteContext(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		Context c = em.find(Context.class, id); 
+		em.remove(c);
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	public boolean deleteWitness(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		Witness w = em.find(Witness.class, id); 
+		em.remove(w);
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	public boolean deleteTranscript(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		Transcript t = em.find(Transcript.class, id); 
+		em.remove(t);
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	public boolean deleteObjection(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		Objection obj = em.find(Objection.class, id); 
+		em.remove(obj);
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	public boolean deleteObjectionType(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		ObjectionType type = em.find(ObjectionType.class, id); 
+		em.remove(type);
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	public boolean updateContext(int ID, String con) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		Context oldC = em.find(Context.class, ID); 
+		oldC.update(ID, con); 
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		
+		em.close();
+		return answer;
 	}
 
 	public boolean updateWitness(String fname, String lname, String aff, String side, int witID, int caseID) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		Witness oldW = em.find(Witness.class, witID); 
+		oldW.update( fname, lname, aff, side, witID, caseID); 
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	public boolean updateTranscript(String side, String current, String answer, int qID, int preID, int fk) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean reply = false; 
+		try{	
+		Transcript oldT = em.find(Transcript.class, qID); 
+		oldT.update(side, current, answer, qID, preID, fk); 
+		em.getTransaction().commit();
+		reply = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return reply;
 	}
 
 	public boolean updateObjection(String exp, String time, int objID, int fkQ, int fkOT) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		Objection oldO = em.find(Objection.class, objID); 
+		oldO.update(exp, time, objID, fkQ, fkOT); 
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	public boolean updateObjectionType(String type, String info, int typeID) {
-		// TODO Auto-generated method stub
-		return false;
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		boolean answer = false; 
+		try{	
+		ObjectionType oldOT = em.find(ObjectionType.class, typeID); 
+		oldOT.update(type, info, typeID); 
+		em.getTransaction().commit();
+		answer = true;
+		} catch(Error e){
+			System.out.println(e.getMessage());
+		}
+		em.close();
+		return answer;
 	}
 
 	
