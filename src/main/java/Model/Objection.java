@@ -105,5 +105,18 @@ public String getTiming() {
 public void setTiming(String timing) {
 	this.timing = timing;
 }
-
+public void update(Objection ob){
+	this.explanation = ob.getExplanation(); 
+	this.timing = ob.getTiming(); 
+	this.objectionID = ob.getObjectionID(); 
+	this.fk_questionID = ob.getFk_questionID(); 
+	this.fk_objectionTypeID = ob.getFk_objectionTypeID();
+}
+public void update(String exp, String time, int objID, int fkQ, int fkOT){
+	this.explanation = exp; 
+	this.timing = time; 
+	this.objectionID = objID; 
+	this.fk_questionID = fkQ; 
+	this.fk_objectionTypeID = fkOT;
+}
 }

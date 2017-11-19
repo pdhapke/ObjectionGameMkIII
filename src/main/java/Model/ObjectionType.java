@@ -52,5 +52,14 @@ public class ObjectionType {
 	public void setObjectionInformation(String objectionInformation) {
 		this.objectionInformation = objectionInformation;
 	}
-	
+	public void update(ObjectionType type){
+		this.objectionInformation = type.getObjectionInformation(); 
+		this.objectionType = type.getObjectionType(); 
+		this.objectionTypeID = type.getObjectionTypeID(); 
+	}
+	public void update(String type, String info, int typeID){
+		this.objectionInformation = info; 
+		this.objectionType = type; 
+		this.objectionTypeID = typeID; 
+	}
 }

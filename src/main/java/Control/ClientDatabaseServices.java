@@ -22,14 +22,26 @@ public interface ClientDatabaseServices {
 	public List<Question> getQuestions(String type, int numberOfQuestions, List<Integer> history ); 
 	public Question getQuestion(String type, List<Integer> history);
 	
+	//full question by id
+	public Question getQuestion(int id); 
+	public Question getQuestion(int id, int numnberOfPrevious); 
 	//read each object by id
-	public List<Objection> getObjections(int questionID);
+	
 	public Objection getObjection(int id);
 	public Transcript getTranscript(int id); 
+	public Transcript getTranscript(int id, int numberOfPrevious); 
 	public Context getContext(int id); 
 	public Witness getWitness(int id); 
 	public ObjectionType getObjectionType(int id); 
-	public AuthenticatedUser getAuthenticatedUser(String email, String firstname, String lastname); 
+	public AuthenticatedUser initializeAuthenticatedUser(String email, String firstname, String lastname, String id); 
+	public AuthenticatedUser getAuthenticatedUser(String email); 
+	
+	//read by relationship or total
+	public List<Context> getAllCases(); 
+	public List<Witness> getWitnessesByCaseId(int caseID); 
+	public List<Objection> getObjectionsByQuestion(int questionID);
+	public List<Transcript> getAllTranscriptsForWitness(int witnessID); 
+	public List<ObjectionType> getAllObjectionTypes(); 
 	
 	//check to make sure item exists
 	public boolean objectionExists(int id); 

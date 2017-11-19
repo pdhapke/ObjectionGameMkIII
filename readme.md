@@ -8,7 +8,7 @@ Planned
 - [ ] Admin
 	- [x] Persistence Controller
 	- [ ] GUI 
-	- [ ] Authentication
+	- [x] Authentication
 
 - [ ] Game
 	- [x] Controller

@@ -83,7 +83,14 @@ admin BOOLEAN,
 highscore INT, 
 firstname VARCHAR(30), 
 lastname VARCHAR(30),
+session_id VARCHAR(50), 
+session_exp DATE,
 
 INDEX(email)
 ); 
 
+SELECT * FROM users; 
+
+UPDATE users
+SET admin = true
+WHERE lastname = "Hapke"; 

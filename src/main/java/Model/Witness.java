@@ -50,7 +50,6 @@ public String toString(){
 	return s;
 	
 }
-	
 
 public int getFk_caseID() {
 	return fk_caseID;
@@ -68,52 +67,51 @@ public void setFk_caseID(int fk_caseID) {
 public String getFirstname() {
 	return firstname;
 }
-
-
 public void setFirstname(String firstname) {
 	this.firstname = firstname;
 }
-
-
 
 public String getLastname() {
 	return lastname;
 }
 
-
-
 public void setLastname(String lastname) {
 	this.lastname = lastname;
 }
-
-
 
 public String getAffidavit() {
 	return affidavit;
 }
 
-
-
 public void setAffidavit(String affidavit) {
 	this.affidavit = affidavit;
 }
-
-
 
 public String getSide() {
 	return side;
 }
 
-
-
 public void setSide(String side) {
 	this.side = side;
 }
 
-
 public String name(){
 	return this.firstname + " " + this.lastname;
 }
-
-
+public void update(String fname, String lname, String aff, String side,  int witID, int caseID){
+	this.firstname = fname; 
+	this.lastname = lname; 
+	this.affidavit = aff; 
+	this.side = side; 
+	this.fk_caseID = caseID; 
+	this.witnessID = witID; 
+}
+public void update(Witness w){
+	this.firstname = w.getFirstname(); 
+	this.lastname = w.getLastname(); 
+	this.affidavit = w.getAffidavit(); 
+	this.side = w.getSide(); 
+	this.fk_caseID = w.getFk_caseID(); 
+	this.witnessID = w.getWitnessID(); 
+}
 }

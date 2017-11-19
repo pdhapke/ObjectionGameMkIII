@@ -1,6 +1,8 @@
 package Control.beans;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +23,12 @@ import Model.ObjectionType;
 import Model.Question;
 import Model.Transcript;
 import Model.Witness;
-import Model.databaseInformation;
+
 
 
 public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII");
-	
+	final private int TWENTY_MINUTES = 1000 * 60 * 20; 
 	public void close(){
 		emfactory.close();
 	}
@@ -51,7 +53,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		for(int i = 0; i < numberOfQuestions; i++){
 			wit = getWitness(transcripts.get(i).getFk_witnessID());
 			cont = getContext(wit.getFk_caseID());
-			correct = getObjections(transcripts.get(i).getQuestionID());
+			correct = getObjectionsByQuestion(transcripts.get(i).getQuestionID());
 			list.add(new Question(cont, wit, transcripts.get(i), correct));
 		}
 		return list;
@@ -72,7 +74,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		for(int i = 0; i < transcripts.size(); i++){
 			wit = getWitness(transcripts.get(i).getFk_witnessID());
 			cont = getContext(wit.getFk_caseID());
-			correct = getObjections(transcripts.get(i).getQuestionID());
+			correct = getObjectionsByQuestion(transcripts.get(i).getQuestionID());
 			list.add(new Question(cont, wit, transcripts.get(i), correct));
 		}
 		return list;
@@ -95,7 +97,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		Collections.shuffle(transcripts);
 		em.close();
 		for(int i = 0; i < numberOfQuestions; i++){
-			correct = getObjections(transcripts.get(i).getQuestionID());
+			correct = getObjectionsByQuestion(transcripts.get(i).getQuestionID());
 			for (Objection objection : correct){
 				if (objection.getObjectionType().equals(type)){
 					wit = getWitness(transcripts.get(i).getFk_witnessID());
@@ -108,6 +110,8 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		return list;
 	}
 
+	
+	
 	public Question getQuestion(String type, List<Integer> history) {
 		List<Question> list = new ArrayList<Question>(); 
 		Witness wit; 
@@ -126,7 +130,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		Collections.shuffle(transcripts);
 		em.close();
 		for(int i = 0; i < transcripts.size(); i++){
-			correct = getObjections(transcripts.get(i).getQuestionID());
+			correct = getObjectionsByQuestion(transcripts.get(i).getQuestionID());
 			for (Objection objection : correct){
 				if (objection.getObjectionType().equals(type)){
 					wit = getWitness(transcripts.get(i).getFk_witnessID());
@@ -142,7 +146,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 
 	
 	//Get information by ID
-	public List<Objection> getObjections(int questionID) {
+	public List<Objection> getObjectionsByQuestion(int questionID) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		String query = "Select result FROM Objection result WHERE result.fk_questionID =" + questionID;
@@ -233,25 +237,37 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		return type; 
 	
 	}
-	public AuthenticatedUser getAuthenticatedUser(String email, String firstname, String lastname) {
+	public AuthenticatedUser initializeAuthenticatedUser(String email, String firstname, String lastname, String id) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		
-		String query = "Select result FROM AuthenticatedUser result WHERE result.email = \"" + email + "\"";
-		TypedQuery<AuthenticatedUser> typedQuery = em.createQuery(query, AuthenticatedUser.class);
-		
-		AuthenticatedUser user; 
-		if (typedQuery.getResultList().size() != 0){
-		user = typedQuery.getResultList().get(0); 
+			
+		AuthenticatedUser user = em.find(AuthenticatedUser.class, email); 
+		if (user != null){
+		user.setSession_id(id);
+		Date exp = new java.sql.Date(Calendar.getInstance().getTimeInMillis());; 
+		user.setSession_exp(exp);
+		em.getTransaction().commit();
 		} else {
 		user = new AuthenticatedUser(email, firstname, lastname); 
+		Date exp = new java.sql.Date(Calendar.getInstance().getTimeInMillis() + TWENTY_MINUTES); 
+		user.setSession_exp(exp);
+		user.setSession_id(id);
 		em.persist(user);
 		em.getTransaction().commit();
 		}
+				
 		em.close();
 		return user; 
 		
 	}
+	public AuthenticatedUser getAuthenticatedUser(String email){
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		AuthenticatedUser user = em.find(AuthenticatedUser.class, email); 
+		
+		return user;
+	}
+	
 	public boolean objectionExists(int id) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
@@ -314,6 +330,63 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		return answer;
 	}
 
+	public List<Context> getAllCases() {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		List<Context> list = em.createQuery("Select result from Context result", Context.class).getResultList();
+		em.close();
+		return list;
+		
+	}
+
+	public List<Witness> getWitnessesByCaseId(int caseID) {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		List<Witness> list = em.createQuery("Select result from Witness result", Witness.class).getResultList();
+		em.close();
+		return list;
+	}
+
+	public List<Transcript> getAllTranscriptsForWitness(int witnessID) {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		List<Transcript> list = em.createQuery("Select result from Transcript result", Transcript.class).getResultList();
+		em.close();
+		return list;
+	}
+
+	public List<ObjectionType> getAllObjectionTypes() {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		List<ObjectionType> list = em.createQuery("Select result from ObjectionType result", ObjectionType.class).getResultList();
+		em.close();
+		return list;
+	}
+
+	public Question getQuestion(int id, int numberOfPrevious) {
+		// TODO Auto-generated method stub
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		
+		Transcript tran = getTranscript(id, numberOfPrevious);
+		Witness wit = getWitness(tran.getFk_witnessID()); 
+		Context cont = getContext(wit.getFk_caseID()); 
+		List<Objection> correct = getObjectionsByQuestion(id); 
+		return  new Question(cont, wit, tran, correct);
+		
+	}
+	public Question getQuestion(int id) {
+		// TODO Auto-generated method stub
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		
+		Transcript tran = getTranscript(id);
+		Witness wit = getWitness(tran.getFk_witnessID()); 
+		Context cont = getContext(wit.getFk_caseID()); 
+		List<Objection> correct = getObjectionsByQuestion(id); 
+		return  new Question(cont, wit, tran, correct);
+		
+	}
 	
 	
 	

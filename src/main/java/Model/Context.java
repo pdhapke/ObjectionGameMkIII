@@ -41,6 +41,12 @@ public class Context {
 	public void setContext(String context) {
 		this.context = context;
 	}
-	
-	
+	public void update(Context c){
+		this.caseID = c.getCaseID();
+		this.context = c.getContext();
+	}
+	public void update(int ID, String con){
+		this.caseID = ID;
+		this.context = con;
+	}
 }

@@ -1,6 +1,7 @@
 package Control.beans;
 
 import java.util.List;
+import java.sql.Date;
 import java.util.ArrayList; 
 import Control.QuestionService;
 import Model.Question;
@@ -46,6 +47,7 @@ public class QuestionServiceBean implements QuestionService{
 	}
 	public void setUser(AuthenticatedUser user) {
 		this.user = user;
+		
 	}
 	public String getObjectionPracticeType() {
 		return objectionPracticeType;

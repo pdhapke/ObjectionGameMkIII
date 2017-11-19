@@ -22,7 +22,7 @@ public class GoogleAuthenticatorServiceBean{
 	private GsonFactory  jsonFactory= new GsonFactory(); 
 	private GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory).build();
 			
-	public AuthenticatedUser verify(String userToken){
+	public AuthenticatedUser verify(String userToken, String id){
 		//GeneralSecurityException
 		//IOException
 		GoogleIdToken idToken;
@@ -49,7 +49,7 @@ public class GoogleAuthenticatorServiceBean{
 		  String email = payload.getEmail();
 		  String familyName = (String) payload.get("family_name");
 		  String givenName = (String) payload.get("given_name");
-		  user = cService.getAuthenticatedUser(email, givenName, familyName);
+		  user = cService.initializeAuthenticatedUser(email, givenName, familyName, id);
 		  user.setVerified(Boolean.valueOf(payload.getEmailVerified()));
 		  } else {
 			 user = null;  

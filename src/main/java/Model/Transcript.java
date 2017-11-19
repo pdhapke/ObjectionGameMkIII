@@ -107,7 +107,21 @@ public int getQuestionID() {
 public void setQuestionID(int questionID) {
 	this.questionID = questionID;
 }
-
-
+public void update(String side, String current, String answer,  int qID, int preID, int fk){
+	this.courtQuestion = current; 
+	this.witnessAnswer = answer; 
+	this.sideAskingQuestion = side;
+	this.questionID = qID; 	
+	this.fk_witnessID = fk; 
+	this.previousQuestionID = preID;
+}
+public void update(Transcript t){
+	this.courtQuestion = t.getCourtQuestion(); 
+	this.witnessAnswer = t.getWitnessAnswer(); 
+	this.sideAskingQuestion = t.getSideAskingQuestion();
+	this.questionID = t.getQuestionID(); 	
+	this.fk_witnessID = t.getFk_witnessID(); 
+	this.previousQuestionID = t.getPreviousQuestionID();
+}
 
 }

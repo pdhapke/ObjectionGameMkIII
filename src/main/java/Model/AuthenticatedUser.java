@@ -1,5 +1,7 @@
 package Model;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,6 +24,12 @@ public class AuthenticatedUser {
 	private String firstname; 
 	@Column(name="lastname")
 	private String lastname;
+	@Column(name = "session_id")
+	private String session_id; 
+	
+	@Column(name = "session_exp")
+	private Date session_exp; 
+	
 	
 	public AuthenticatedUser(){};
 	public AuthenticatedUser(String em, String fname, String lname){
@@ -31,6 +39,7 @@ public class AuthenticatedUser {
 		this.verified = false; 
 		this.admin = false; 
 		this.highscore = 0; 
+		this.session_id = null; 
 		}
 	
 	public boolean isAdmin() {
@@ -68,5 +77,17 @@ public class AuthenticatedUser {
 	}
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+	}
+	public String getSession_id() {
+		return session_id;
+	}
+	public void setSession_id(String session_id) {
+		this.session_id = session_id;
+	}
+	public Date getSession_exp() {
+		return session_exp;
+	}
+	public void setSession_exp(Date session_exp) {
+		this.session_exp = session_exp;
 	}
 }
