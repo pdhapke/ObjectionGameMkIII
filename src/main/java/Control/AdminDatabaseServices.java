@@ -18,8 +18,7 @@ public interface AdminDatabaseServices extends ClientDatabaseServices {
 	public boolean addTranscript(Transcript t); 
 	public boolean addObjection(Objection obj); 
 	public boolean addObjectionType(ObjectionType type); 
-	
-	
+		
 	//Read
 	//client services extended for question reading
 	
@@ -28,7 +27,6 @@ public interface AdminDatabaseServices extends ClientDatabaseServices {
 	public boolean updateQuestion(Gson gson); 
 	
 	//Update individual
-	
 	public boolean updateContext(Context c); 
 	public boolean updateWitness(Witness w); 
 	public boolean updateTranscript(Transcript t); 
@@ -40,10 +38,7 @@ public interface AdminDatabaseServices extends ClientDatabaseServices {
 	public boolean updateTranscript(String side, String current, String answer,  int qID, int preID, int fk); 
 	public boolean updateObjection(String exp, String time, int objID, int fkQ, int fkOT); 
 	public boolean updateObjectionType(String type, String info, int typeID); 
-	
-	
-	
-	
+		
 	//Delete
 	public boolean deleteQuestion(Question q); 
 	public boolean deleteQuestion(int questionID); 

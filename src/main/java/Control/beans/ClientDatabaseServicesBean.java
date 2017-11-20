@@ -109,8 +109,6 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		}
 		return list;
 	}
-
-	
 	
 	public Question getQuestion(String type, List<Integer> history) {
 		List<Question> list = new ArrayList<Question>(); 
@@ -364,7 +362,6 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	}
 
 	public Question getQuestion(int id, int numberOfPrevious) {
-		// TODO Auto-generated method stub
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		
@@ -376,7 +373,6 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		
 	}
 	public Question getQuestion(int id) {
-		// TODO Auto-generated method stub
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		
@@ -386,6 +382,30 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		List<Objection> correct = getObjectionsByQuestion(id); 
 		return  new Question(cont, wit, tran, correct);
 		
+	}
+
+	public List<Witness> getAllWitnesses() {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		List<Witness> list = em.createQuery("Select result from Witness result", Witness.class).getResultList();
+		em.close();
+		return list;
+	}
+
+	public List<Objection> getAllObjections() {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		List<Objection> list = em.createQuery("Select result from Objection result", Objection.class).getResultList();
+		em.close();
+		return list;
+	}
+
+	public List<Transcript> getAllTranscripts() {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		List<Transcript> list = em.createQuery("Select result from Transcript result", Transcript.class).getResultList();
+		em.close();
+		return list;
 	}
 	
 	

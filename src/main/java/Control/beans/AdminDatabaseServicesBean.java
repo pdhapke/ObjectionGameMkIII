@@ -463,7 +463,4 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 		em.close();
 		return answer;
 	}
-
-	
-	
 }

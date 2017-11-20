@@ -36,12 +36,16 @@ public interface ClientDatabaseServices {
 	public AuthenticatedUser initializeAuthenticatedUser(String email, String firstname, String lastname, String id); 
 	public AuthenticatedUser getAuthenticatedUser(String email); 
 	
-	//read by relationship or total
+	//read by relationship and total
 	public List<Context> getAllCases(); 
+	public List<Witness> getAllWitnesses(); 
 	public List<Witness> getWitnessesByCaseId(int caseID); 
+	public List<Objection> getAllObjections();
 	public List<Objection> getObjectionsByQuestion(int questionID);
+	public List<Transcript> getAllTranscripts(); 
 	public List<Transcript> getAllTranscriptsForWitness(int witnessID); 
 	public List<ObjectionType> getAllObjectionTypes(); 
+	
 	
 	//check to make sure item exists
 	public boolean objectionExists(int id); 
