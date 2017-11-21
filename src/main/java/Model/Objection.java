@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.google.gson.Gson;
+
 
 @Entity
 @Table (name = "correct_objection")
@@ -118,5 +120,13 @@ public void update(String exp, String time, int objID, int fkQ, int fkOT){
 	this.objectionID = objID; 
 	this.fk_questionID = fkQ; 
 	this.fk_objectionTypeID = fkOT;
+}
+public String getJsonString(){
+	System.out.println("In jsonifier");
+	Gson json = new Gson();
+	Objection ob = this; 
+	String output = json.toJson(ob); 
+	System.out.println(output);
+	return output;
 }
 }

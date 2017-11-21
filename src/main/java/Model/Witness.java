@@ -48,7 +48,6 @@ public String toString(){
 	s = s.concat("Witness ID: " + this.witnessID);
 	
 	return s;
-	
 }
 
 public int getFk_caseID() {
@@ -96,6 +95,9 @@ public void setSide(String side) {
 }
 
 public String name(){
+	return this.firstname + " " + this.lastname;
+}
+public String getName(){
 	return this.firstname + " " + this.lastname;
 }
 public void update(String fname, String lname, String aff, String side,  int witID, int caseID){

@@ -17,6 +17,7 @@ import Control.beans.QuestionServiceBean;
 import Model.AuthenticatedUser;
 import Model.databaseInformation;
 
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -59,7 +60,6 @@ public class gameController {
 		} else {
 			modelAndView.setViewName("playerOptions");
 		}
-		
 		return modelAndView;
 	}
 	
@@ -86,6 +86,7 @@ public class gameController {
 					ModelAndView modelAndView = new ModelAndView();
 					//***build the modelAndView***
 						modelAndView.setViewName("enter-new");	
+						modelAndView.addObject("cases", db.getAllCases()); 
 					//***     end building     ***
 					return modelAndView; 
 				}
@@ -94,9 +95,7 @@ public class gameController {
 		}
 	
 	//get contexts
-	
-		
-	@RequestMapping(value = "/get-context", method = RequestMethod.POST)
+		@RequestMapping(value = "/get-context", method = RequestMethod.POST)
 	public ModelAndView get_context(HttpServletRequest req){
 		Model model = new Model(){
 			public ModelAndView view(HttpServletRequest req){
@@ -106,8 +105,8 @@ public class gameController {
 					int caseID = -1; 
 					try{
 						caseID = (Integer) req.getAttribute("caseID");
-					} catch (Error e){
-						System.out.println(e.getMessage());
+					} catch (NullPointerException e){
+						//this is normal
 					}
 					if(caseID == -1){
 					modelAndView.addObject("cases", db.getAllCases()); 
@@ -127,26 +126,30 @@ public class gameController {
 			public ModelAndView view(HttpServletRequest req){
 				ModelAndView modelAndView = new ModelAndView();
 				//***build the modelAndView***
-					 int caseID = -1; 
-					 try{
-						 caseID = (Integer) req.getAttribute("caseID");
-					 } catch (Error e){
-						 System.out.println(e.getMessage());
-					 }
-					 if(caseID == -1){
+					 modelAndView.setViewName("get-witnesses");
+					 int caseID; 
+					 String cID = req.getParameter("caseID"); 
+					 				
+					 if(cID == null || cID.equals("-1")){
 						 modelAndView.addObject("witnesses", db.getAllWitnesses()); 
 					 } else {
-						 modelAndView.addObject("witnesses", db.getWitnessesByCaseId(caseID)); 
+						 
+						 try{
+							 caseID = Integer.parseInt(cID);
+							 modelAndView.addObject("witnesses", db.getWitnessesByCaseId(caseID)); 
+						 } catch (NumberFormatException e){
+							 System.out.println("Number Format Exception:" + cID );
+							 modelAndView.addObject("witnesses", db.getAllWitnesses()); 
+						 }
+						
 					 }
+					
 				//***     end building     ***
 				return modelAndView; 
 			}
 		};
 		return admin(req, model);
 	}
-	
-	// get questions
-	
 	
 	//get objection
 	@RequestMapping(value = "/get-objections", method = RequestMethod.POST)
@@ -155,17 +158,21 @@ public class gameController {
 			public ModelAndView view(HttpServletRequest req){
 				ModelAndView modelAndView = new ModelAndView();
 				//***build the modelAndView***
-					 int questionID = -1; 
-					 try{
-						 questionID = (Integer) req.getAttribute("questionID");
-					 } catch (Error e){
-						 System.out.println(e.getMessage());
-					 }
-					 if(questionID == -1){
-						 modelAndView.addObject("objections", db.getAllObjections()); 
-					 } else {
+				 modelAndView.setViewName("get-objections");
+				 int questionID; 
+				 String qID = req.getParameter("questionID"); 
+				 				
+				 if(qID == null || qID.equals("-1")){
+					 modelAndView.addObject("objections", db.getAllObjections()); 
+				 } else {
+					  try{
+						 questionID = Integer.parseInt(qID);
 						 modelAndView.addObject("objections", db.getObjectionsByQuestion(questionID)); 
+					 } catch (NumberFormatException e){
+						 System.out.println("Number Format Exception:" + qID );
+						 modelAndView.addObject("objections", db.getAllObjections()); 
 					 }
+				 }
 				//***     end building     ***
 				return modelAndView; 
 			}
@@ -173,18 +180,19 @@ public class gameController {
 		return admin(req, model);
 	}
 	
-	//get transcripts
+	//get transcripts / questions
 	@RequestMapping(value = "/get-questions", method = RequestMethod.POST)
 	public ModelAndView get_questions(HttpServletRequest req){
 		Model model = new Model(){
 			public ModelAndView view(HttpServletRequest req){
 				ModelAndView modelAndView = new ModelAndView();
 				//***build the modelAndView***
+					 modelAndView.setViewName("get-questions");
 					 int witnessID = -1; 
 					 try{
 						 witnessID = (Integer) req.getAttribute("witnessID");
-					 } catch (Error e){
-						 System.out.println(e.getMessage());
+					 } catch (NullPointerException e){
+						//this is normal
 					 }
 					 if(witnessID == -1){
 						 modelAndView.addObject("questions", db.getAllTranscripts()); 
@@ -200,6 +208,8 @@ public class gameController {
 	//get objection type
 	
 	
+	
+	//admin function to verify if the user is authorized before running 
 	public ModelAndView admin(HttpServletRequest req, Model model){
 		ModelAndView modelAndView = new ModelAndView();
 		HttpSession session = req.getSession();
@@ -224,6 +234,7 @@ public class gameController {
 	 		
 	//this template uses the anonymous class and method in order to avoid doing database operations 
 	//until after the user has been authenticated. 
+
 		@RequestMapping(value = "/template2", method = RequestMethod.POST)
 		public ModelAndView template2(HttpServletRequest req){
 			Model model = new Model(){
@@ -238,6 +249,7 @@ public class gameController {
 			};
 			return admin(req, model);
 		}
+		
 		*/
 }
 	

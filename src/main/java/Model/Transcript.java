@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -10,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.gson.Gson;
 
 @Entity
 @Table (name = "questions")
@@ -122,6 +126,24 @@ public void update(Transcript t){
 	this.questionID = t.getQuestionID(); 	
 	this.fk_witnessID = t.getFk_witnessID(); 
 	this.previousQuestionID = t.getPreviousQuestionID();
+}
+
+public String getJsonString(){
+	System.out.println("In jsonifier");
+	Gson json = new Gson();
+	Transcript t = this; 
+	String output = json.toJson(t); 
+	System.out.println(output);
+	return output;
+}
+public String getPastQuestionsString(){
+	String text=""; 
+	if(previousQuestion.size() != 0){
+		for (String string : previousQuestion){
+			text = string + text; 
+		}
+	}
+	return text;
 }
 
 }

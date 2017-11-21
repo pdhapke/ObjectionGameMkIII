@@ -340,7 +340,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	public List<Witness> getWitnessesByCaseId(int caseID) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		List<Witness> list = em.createQuery("Select result from Witness result", Witness.class).getResultList();
+		List<Witness> list = em.createQuery("Select result from Witness result WHERE result.fk_caseID =" + caseID, Witness.class).getResultList();
 		em.close();
 		return list;
 	}
@@ -348,7 +348,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	public List<Transcript> getAllTranscriptsForWitness(int witnessID) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		List<Transcript> list = em.createQuery("Select result from Transcript result", Transcript.class).getResultList();
+		List<Transcript> list = em.createQuery("Select result from Transcript result WHERE result.fk_witnessID =" + witnessID, Transcript.class).getResultList();
 		em.close();
 		return list;
 	}
