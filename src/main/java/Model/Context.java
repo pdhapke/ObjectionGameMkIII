@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.google.gson.Gson;
+
 @Entity
 @Table (name = "context")
 public class Context {
@@ -48,5 +50,13 @@ public class Context {
 	public void update(int ID, String con){
 		this.caseID = ID;
 		this.context = con;
+	}
+	public String getJsonString(){
+		System.out.println("In jsonifier");
+		Gson json = new Gson();
+		Context c = this; 
+		String output = json.toJson(c); 
+		System.out.println(output);
+		return output;
 	}
 }

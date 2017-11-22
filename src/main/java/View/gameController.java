@@ -15,9 +15,12 @@ import Control.beans.BeanConfiguration;
 import Control.beans.GoogleAuthenticatorServiceBean;
 import Control.beans.QuestionServiceBean;
 import Model.AuthenticatedUser;
+import Model.ObjectionType;
 import Model.databaseInformation;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -206,8 +209,35 @@ public class gameController {
 		return admin(req, model);
 	}
 	//get objection type
-	
-	
+	@RequestMapping(value = "/get-objectiontypes", method = RequestMethod.POST)
+	public ModelAndView get_objections_types(HttpServletRequest req){
+		Model model = new Model(){
+			public ModelAndView view(HttpServletRequest req){
+				ModelAndView modelAndView = new ModelAndView();
+				//***build the modelAndView***
+				 modelAndView.setViewName("get-objectiontypes");
+				 int typeID; 
+				 String tID = req.getParameter("typeID"); 
+				 				
+				 if(tID == null || tID.equals("-1")){
+					 modelAndView.addObject("objectionTypes", db.getAllObjectionTypes()); 
+				 } else {
+					  try{
+						 typeID = Integer.parseInt(tID);
+						 List<ObjectionType> objectionTypes = new ArrayList<ObjectionType>();
+						 objectionTypes.add(db.getObjectionType(typeID));
+						 modelAndView.addObject("objectionTypes", objectionTypes); 
+					 } catch (NumberFormatException e){
+						 System.out.println("Number Format Exception:" + tID );
+						 modelAndView.addObject("objectionTypes", db.getAllObjections()); 
+					 }
+				 }
+				//***     end building     ***
+				return modelAndView; 
+			}
+		};
+		return admin(req, model);
+	}
 	
 	//admin function to verify if the user is authorized before running 
 	public ModelAndView admin(HttpServletRequest req, Model model){

@@ -25,7 +25,7 @@ private int objectionID;
 @Column (name = "question_id")
 private int fk_questionID; 
 
-@Column(name = "objection_rule_number")
+@Column(name = "objection_key")
 private int fk_objectionTypeID;
 @Column(name="correct_reason")
 private String explanation; //more detailed reason for why it is correct
@@ -54,6 +54,16 @@ public Objection(ObjectionType objType, String exp, String time, int objID, int 
 	this.fk_questionID = fkQ; 
 	this.fk_objectionTypeID = fkOT;
 }
+
+public Objection(ObjectionType objType, String exp, String time, int objID, int fkQ){
+	this.description = objType;
+	this.explanation = exp; 
+	this.timing = time; 
+	this.objectionID = objID; 
+	this.fk_questionID = fkQ; 
+	this.fk_objectionTypeID = objType.getObjectionTypeID();
+}
+
 public int getObjectionID() {
 	return objectionID;
 }

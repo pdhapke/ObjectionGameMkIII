@@ -4,8 +4,12 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <select id="context" name="context">
-   		<option value="custom"> - Enter a new case - </option>
+   		<option  data-json= "{}"  value="-1"> - Enter a new case - </option>
     <c:forEach items="${cases}" var="courtcase">
-    	<option value="${courtcase.caseID}">Case ID#${courtcase.caseID} - ${courtcase.context} </option>
+    	<option 
+    	value="${courtcase.caseID}"
+    	data-json='${courcase.jsonString}'
+    	id="${courtcase.caseID}"
+    	>Case ID#${courtcase.caseID} - ${courtcase.context} </option>
     </c:forEach>
 </select>

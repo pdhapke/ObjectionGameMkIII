@@ -2,6 +2,8 @@ package Model;
 
 import java.util.List;
 
+import com.google.gson.Gson;
+
 //this is the question class used to store and centrally
 //located each question for the game with its counterpart in the database
 public class Question {
@@ -74,6 +76,14 @@ public class Question {
 	}
 	public int getQuestionID(){
 		return this.transcript.getQuestionID();
+	}
+	public String getJsonString(){
+		System.out.println("In jsonifier");
+		Gson json = new Gson();
+		Question q = this; 
+		String output = json.toJson(q); 
+		System.out.println(output);
+		return output;
 	}
 
 }

@@ -18,10 +18,10 @@ public List<Question> list = new ArrayList<Question>();
 		Transcript transcript1 = new Transcript(previousQuestion1, "Prosecution",  "What did you see?", "I heard timmy saying he saw the murder", 5, 4, 1); 
 		
 		List<Objection> correctObjections1 = new ArrayList<Objection>();
-				ObjectionType hearsay = new ObjectionType("Hearsay", "Blah Blah...rule 802", 802); 
-				ObjectionType ultimate = new ObjectionType("Ultimate Issue", "Blah Blah...rule 704(b)", 704); 
-			Objection obj1 = new Objection(hearsay, "This response is hearsay, it is an out of court statement being offered for the truth of the matter asserted", "answer", 1, 5, 802); 
-			Objection obj2 = new Objection(ultimate, "This response is going to the ultimate issue (really only experts are subject)", "answer", 2, 5, 704);
+				ObjectionType hearsay = new ObjectionType("Hearsay", "Blah Blah...rule 802", 802, 1); 
+				ObjectionType ultimate = new ObjectionType("Ultimate Issue", "Blah Blah...rule 704(b)", 704, 2); 
+			Objection obj1 = new Objection(hearsay, "This response is hearsay, it is an out of court statement being offered for the truth of the matter asserted", "answer", 1, 5, hearsay.getObjectionTypeID()); 
+			Objection obj2 = new Objection(ultimate, "This response is going to the ultimate issue (really only experts are subject)", "answer", 2, 5, ultimate.getObjectionTypeID());
 			correctObjections1.add(obj1); 
 			correctObjections1.add(obj2); 
 						
@@ -40,10 +40,10 @@ public List<Question> list = new ArrayList<Question>();
 		Transcript transcript2 = new Transcript(previousQuestion2, "Defense", "Were you negligent?", "No, of course not", 20, 19, 2); 
 		
 		List<Objection> correctObjections2 = new ArrayList<Objection>();
-				ObjectionType lackOfFoundation = new ObjectionType("Lack of Foundation", "Blah Blah...rule 602", 602); 
-				ObjectionType ultimate = new ObjectionType("Ultimate Issue", "Blah Blah...rule 704(b)", 704); 
-			Objection obj3 = new Objection(lackOfFoundation, "This response is hearsay, it is an out of court statement being offered for the truth of the matter asserted", "question", 3, 20, 802); 
-			Objection obj4 = new Objection(ultimate, "This response is going to the ultimate issue", "question", 4, 20, 704);
+				ObjectionType lackOfFoundation = new ObjectionType("Lack of Foundation", "Blah Blah...rule 602", 602, 3); 
+				ObjectionType ultimate = new ObjectionType("Ultimate Issue", "Blah Blah...rule 704(b)", 704, 2); 
+			Objection obj3 = new Objection(lackOfFoundation, "This response is hearsay, it is an out of court statement being offered for the truth of the matter asserted", "question", 3, 20, lackOfFoundation.getObjectionTypeID()); 
+			Objection obj4 = new Objection(ultimate, "This response is going to the ultimate issue", "question", 4, 20, ultimate.getObjectionTypeID());
 			correctObjections2.add(obj3); 
 			correctObjections2.add(obj4); 
 						

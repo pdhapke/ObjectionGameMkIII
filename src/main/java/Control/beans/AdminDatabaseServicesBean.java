@@ -50,7 +50,7 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			List<Objection> objs = q.getCorrectObjections();
 			for (Objection singleObj : objs){		
 				if (objectionExists(singleObj.getObjectionID()) != true){
-					if(objectionTypeExists(singleObj.getFk_objectionTypeID()) != true){
+					if(objectionTypeExists(singleObj.getDescription().getObjectionTypeID()) != true){
 					addObjectionType(singleObj.getDescription());					
 					}					
 					addObjection(singleObj);

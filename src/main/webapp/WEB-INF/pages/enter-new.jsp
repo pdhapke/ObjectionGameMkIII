@@ -62,15 +62,34 @@
 		  
 		  postRequest.onreadystatechange = function() {
 			     if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("objecctionInput").innerHTML= this.response;
+					document.getElementById("objectionInput").innerHTML= this.response;
 		    	 }
 		  }
 		  postRequest.send("questionID=" + questionID)
 		  console.log('sending...');
 		
 	}
-	function getRule(){
+	function getObjectionTypes(){
+		let obID = document.getElementById("correctObjection").value; 
+		let type = JSON.parse(document.getElementById(obID).getAttribute("data-json")); 
+		//TO DO add in the ui element of the objection type so it can be read
 		
+		
+		let postRequest = new XMLHttpRequest();
+		  postRequest.open('POST', 'get-objectiontypes.mvc', true);
+		  postRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		  let typeID = document.getElementById("correctObjection").value; 
+		  
+		  postRequest.onreadystatechange = function() {
+			     if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("objectionTypeInput").innerHTML= this.response;
+		    	 }
+		  }
+		  postRequest.send("typeID=" + typeID)
+		  console.log('sending...');
+		
+	}
+	function getRule(){
 		
 	}
 	
@@ -99,7 +118,7 @@
     </c:forEach>
     </select>
   </div>
-  <div id="newContextform" hidden="true"></div>
+  <div id="Contextform" hidden="true"></div>
   
   <!-- This is the witness drop down -->
   <div id="witnessInput"> 
@@ -107,7 +126,7 @@
    		<option value="-1"> - Enter a new witness - </option>
     </select>
   </div>
-  <div id="newWitnessform" hidden="true"></div>
+  <div id="Witnessform" hidden="true"></div>
   
     <!-- This is the court question drop down -->
   <div id="questionInput"> 
@@ -115,16 +134,27 @@
    		<option value="-1"> - Enter a new question - </option>
     </select>
   </div>
-  <div id="newQuestionform" hidden="true"></div>
+  <div id="Questionform" hidden="true"></div>
   
     
     <!-- This is the objections possible drop down -->
   <div id="objectionInput"> 
-  	<select id="correctObjection" name="correctObjection" onchange="getRule()">
+  	<select id="correctObjection" name="correctObjection" onchange="getObjectionTypes()">
    		<option value="-1"> - Enter a new possible objection - </option>
     </select>
   </div>
-  <div id="newObjectionForm" hidden="true"></div>
+  <div id="ObjectionForm" hidden="true"></div>
+  
+  <!-- This is the objections rule drop down -->
+  <div id="objectionTypeInput"> 
+  	<select id="objectionID" name="objectionID" onchange="getRule">
+   		<option value="-1"> - Enter a new type of Objection- </option>
+    </select>
+  </div>
+  <div id="ObjectionTypeForm" hidden="true"></div>
+  
+  
+  
   
   
   <!--  This will submit the form -->>

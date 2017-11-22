@@ -4,7 +4,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <select id="question" name="question" onchange="getObjections()">
-   		<option value="-1"> - Enter a new question - </option>
+   		<option  data-json= "{}" value="-1"> - Enter a new question - </option>
     <c:forEach items="${questions}" var="q">
     	<option 
     	data-json='${q.jsonString}'

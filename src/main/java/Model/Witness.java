@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.google.gson.Gson;
+
 @Entity
 @Table(name = "witnesses")
 public class Witness {
@@ -115,5 +117,13 @@ public void update(Witness w){
 	this.side = w.getSide(); 
 	this.fk_caseID = w.getFk_caseID(); 
 	this.witnessID = w.getWitnessID(); 
+}
+public String getJsonString(){
+	System.out.println("In jsonifier");
+	Gson json = new Gson();
+	Witness w = this; 
+	String output = json.toJson(w); 
+	System.out.println(output);
+	return output;
 }
 }

@@ -51,11 +51,12 @@ FOREIGN KEY (witness_id)
 -- one to many relationship with correct_objection table
 
 CREATE TABLE objection (
-	objection_rule_number int PRIMARY KEY,
-	objection_type VARCHAR(20),
+	objection_key int PRIMARY KEY AUTO_INCREMENT, 
+    objection_rule_number int,
+    objection_type VARCHAR(20),
     explanation VARCHAR(2000),
 	
-	INDEX(objection_rule_number)
+	INDEX(objection_key)
 	);
 
 -- this will create the correct_objection table
@@ -64,15 +65,15 @@ CREATE TABLE objection (
     
 CREATE TABLE correct_objection (
 	correct_objection_id int PRIMARY KEY AUTO_INCREMENT, 
-	objection_rule_number int, 
+	objection_key int, 
 	question_id int, 
 	correct_reason VARCHAR(500),
 	correct_time VARCHAR(20), 
 	
-INDEX(Objection_rule_number), 
+INDEX(objection_key), 
 INDEX(question_id), 
-FOREIGN KEY (objection_rule_number)
-	REFERENCES objection (objection_rule_number),
+FOREIGN KEY (objection_key)
+	REFERENCES objection (objection_key),
 FOREIGN KEY (question_id)
 	REFERENCES questions (question_id)
 	);
@@ -90,6 +91,10 @@ INDEX(email)
 ); 
 
 SELECT * FROM users; 
+SELECT * FROM objection;
+SELECT * FROM correct_objection;
+
+
 
 UPDATE users
 SET admin = true
