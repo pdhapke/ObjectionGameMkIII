@@ -5,6 +5,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style type="text/css" media="screen">
+  div {
+  
+  }
+  .fulldiv {
+  	list-style:none;
+    display: inline-flex;
+    padding:5px;
+  
+  }
+  .inner{
+  list-style:none;
+  float:left;
+  border: solid 1px black;
+  padding:10px;
+;
+   
+  }
+  .inner:nth-child(odd) {
+    background: #e0e0e0;
+   
+  }
+  select {
+  
+  }
+
+ 
+</style>
+
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<script type="text/javascript">
 	function getContexts(){
@@ -30,7 +59,7 @@
 					document.getElementById("witnessInput").innerHTML= this.response;
 		    	 }
 		  }
-		  //postRequest.send(JSON.stringify({caseID:caseID}));
+		
 		  postRequest.send("caseID=" + caseID)
 		  console.log('sending...');
 		}
@@ -42,15 +71,23 @@
 		  
 		  postRequest.onreadystatechange = function() {
 			     if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("questionInput").innerHTML= this.response;
-		    	 }
+					
+			    	document.getElementById("questionInput").innerHTML = this.response;
+			    	let previousQSelect = document.getElementById("questionPrevious");
+			    	
+			    	let list = document.getElementById("question"); 
+			    	for(let i = 1; i < list.options.length; i++){
+			   			
+			    		previousQSelect.add(list.options[i].cloneNode(true));
+			    	}   		
+			     }
 		  }
 		  postRequest.send("witnessID=" + witnessID)
 		  console.log('sending...');
 		} 
 	
 	function getObjections(){
-		let qID = document.getElementById("question").value; 
+		let qID = "question" + document.getElementById("question").value; 
 		let question = JSON.parse(document.getElementById(qID).getAttribute("data-json")); 
 		//TO DO add in the ui element of the question so it can be read
 		
@@ -70,7 +107,7 @@
 		
 	}
 	function getObjectionTypes(){
-		let obID = document.getElementById("correctObjection").value; 
+		let obID = "correctObjection" + document.getElementById("correctObjection").value; 
 		let type = JSON.parse(document.getElementById(obID).getAttribute("data-json")); 
 		//TO DO add in the ui element of the objection type so it can be read
 		
@@ -92,7 +129,6 @@
 	function getRule(){
 		
 	}
-	
 	</script>
 	
 	
@@ -104,55 +140,137 @@
 <body>
 	<h2>Complete the fields below and press add to add a question to the database</h2>
 
-<p>this is to test ${user.getEmail()}</p>
-<p> You are authorized!</p>
+<p>You can choose to enter new information or you can use existing entries from the drop down menus</p>
+
 
 <br>
 <form action="/stub" onsubmit="submitform()">
   <!-- This is the case drop down -->
   <div id="casesInput"> 
   	<select id="context" name="context" onchange="getWitnesses()">
-   		<option value="-1"> - Enter a new case - </option>
+   		<option id="context-1"  value="-1"> - Enter a new case - </option>
     <c:forEach items="${cases}" var="courtcase">
     	<option value="${courtcase.caseID}">Case ID#${courtcase.caseID} - ${courtcase.context} </option>
     </c:forEach>
     </select>
   </div>
-  <div id="Contextform" hidden="true"></div>
+  <div id="Contextform" class="fulldiv" >
+  		<div class="inner">
+  		Enter a brief description of the case in here: <br>
+  		<textarea id="caseBrief" name="caseBrief" rows="4" cols="50" placeholder="Description...." required> </textarea> 
+  		</div>
+  		
+  </div>
+  <br>
+   
+  
   
   <!-- This is the witness drop down -->
   <div id="witnessInput"> 
   	<select id="witness" name="witness" onchange="getQuestions()">
-   		<option value="-1"> - Enter a new witness - </option>
+   		<option id="witness-1"  value="-1"> - Enter a new witness - </option>
     </select>
   </div>
-  <div id="Witnessform" hidden="true"></div>
+  <div id="Witnessform"  class="fulldiv" >
+  		<div class="inner">
+  		Witness's first name:<br>
+  		<input type="text" required id="witnessFirstname" name="witnessFirstname" placeholder="First Name" ><br>
+  		Witness's last name:<br>
+  		<input type="text" required id="witnessLastname" name="witnessLastname" placeholder="Last Name"><br>
+  		Witness is called by the:<br>
+  		<select required name="witnessSide" id="witnessSide" required>
+  			<option value="Plaintiff" >Plaintiff</option>
+  			<option value="Prosecution" >Prosecution</option>
+  			<option value="Defense" >Defense</option>
+  		</select>
+  		</div>
+  		<div class="inner">
+  		Enter the witness affidavit here: <br>
+  		<textarea required name="witnessAffidavit" id="witnessAffidavit" rows="10" cols="50" placeholder="My name is...."></textarea>
+  		</div>
+  </div>
+  <br>
+  
+  
   
     <!-- This is the court question drop down -->
   <div id="questionInput"> 
-  	<select id="question" name="question" onchange="getObections()">
-   		<option value="-1"> - Enter a new question - </option>
+  	<select id="question" name="question" onchange="getObjections()">
+   		<option value="question-1" data-json= "{}"> - Enter a new question - </option>
+   	
     </select>
   </div>
-  <div id="Questionform" hidden="true"></div>
+  <div id="Questionform"  class="fulldiv" >
+  		<div id="inner" class="inner">
+  		Does this question follow from a previous one? <br>
+  		<select required name="questionPrevious" id="questionPrevious" required>
+  			<option  id="questionPrevious-1" value="-1" >No</option>
+  		</select>
+  		<br>What side is asking the question?:<br>
+  		<select required name="questionAskingSide" id="witnessSide" required>
+  			<option value="Plaintiff" >Plaintiff</option>
+  			<option value="Prosecution" >Prosecution</option>
+  			<option value="Defense" >Defense</option>
+  		</select>
+  		</div>
+  		<div class="inner">
+  		Enter the question: <br>
+  		<textarea name="witnessQuestion" rows="3" cols="20" placeholder="What is..."></textarea>
+  		</div>
+  		<div class="inner">
+  		Enter the witness's answer: <br>
+  		<textarea name="witnessAnswer" rows="3" cols="20" placeholder="Yes,..."></textarea>
+  		</div>
+  </div>
+  <br>
+  
+  
   
     
     <!-- This is the objections possible drop down -->
   <div id="objectionInput"> 
   	<select id="correctObjection" name="correctObjection" onchange="getObjectionTypes()">
-   		<option value="-1"> - Enter a new possible objection - </option>
+   		<option data-json="{}" id="correctObjection-1" value="-1"> - Enter a new possible objection - </option>
     </select>
   </div>
-  <div id="ObjectionForm" hidden="true"></div>
+  <div id="ObjectionForm"  class="fulldiv" >
+  		<div class="inner">
+  		Explain this objection: <br>
+  		<textarea id="objectionExplanation" name="objectionExplanation" rows="4" cols="25"> test 1</textarea> 
+  		</div>
+  		<div class="inner">
+  		Select when this objection can first be made: <br>
+  		<select required name="objectionTiming" id="objectionTiming" required>
+  			<option value="question" >During the question</option>
+  			<option value="answer" >During the witness's answer</option>
+  		</select>
+  		</div>
+  </div>
+  <br>
+  
+  
   
   <!-- This is the objections rule drop down -->
+  <script type="text/javascript">getObjectionTypes(); </script>
   <div id="objectionTypeInput"> 
   	<select id="objectionID" name="objectionID" onchange="getRule">
-   		<option value="-1"> - Enter a new type of Objection- </option>
+   		<option  id="objectionID-1" value="-1"> - Enter a new type of Objection- </option>
     </select>
   </div>
-  <div id="ObjectionTypeForm" hidden="true"></div>
-  
+  <div id="ObjectionTypeForm"  class="fulldiv" >
+  		<div class="inner">
+  		Enter the objection rule section number: <br>
+		<input type="number" placeholder="802" id="objectionTypeRuleNumb" name="objectionTypeRuleNumber" min="1" max="2500" step="1"><br>
+  		Enter the objection name: <br>
+  		<input type="text" required id="objectionTypeTitle" name="objectionTypeTitle" placeholder="Hearsay"><br>
+  		</div>
+  		<div class="inner">
+  		Enter the relevant text of the rule  <br>
+  		and any applicable rule identifiers: <br>
+  		<textarea id="objectionTypeExplanation" name="objectionTypeExplanation" rows="3" cols="30" placeholder="801(d)(2)(d)...."> </textarea>
+  		</div>
+  </div>
+  <br>
   
   
   

@@ -17,7 +17,6 @@ public class Witness {
 @GeneratedValue
 @Column(name = "witness_id")
 private int witnessID; 
-
 @Column(name = "case_id")
 private int fk_caseID;
 @Column(name="first_name")

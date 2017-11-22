@@ -22,10 +22,8 @@ public class Transcript {
 @GeneratedValue
 @Column(name = "question_id")
 private int questionID; 
-
 @Column(name = "witness_id")
 private int fk_witnessID; 
-
 @Column(name = "previous_question_id")
 private int previousQuestionID;	
 @Column(name="side")

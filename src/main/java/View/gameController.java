@@ -218,8 +218,9 @@ public class gameController {
 				 modelAndView.setViewName("get-objectiontypes");
 				 int typeID; 
 				 String tID = req.getParameter("typeID"); 
-				 				
+				 	System.out.println("here");			
 				 if(tID == null || tID.equals("-1")){
+					 
 					 modelAndView.addObject("objectionTypes", db.getAllObjectionTypes()); 
 				 } else {
 					  try{

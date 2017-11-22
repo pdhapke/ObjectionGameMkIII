@@ -4,11 +4,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <select id="witness" name="witness" onchange="getQuestions()">
-   		<option  data-json= "{}" value="custom"> - Enter a new Witness - </option>
+   		<option id="witness-1" data-json= "{}" value="custom"> - Enter a new Witness - </option>
     <c:forEach items="${witnesses}" var="witness">
     	<option 
     	value="${witness.witnessID}"
-    	id="${witness.witnessID}"
+    	id="witness${witness.witnessID}"
     	data-json='${witness.jsonString}'
     	>Witness#${witness.witnessID} - ${witness.name} </option>
     </c:forEach>

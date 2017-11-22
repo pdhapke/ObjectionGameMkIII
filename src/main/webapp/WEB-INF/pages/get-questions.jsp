@@ -4,11 +4,13 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <select id="question" name="question" onchange="getObjections()">
-   		<option  data-json= "{}" value="-1"> - Enter a new question - </option>
+   		<option data-json="{}" id="question-1" value="-1"> - Enter a new question - </option>
+  
     <c:forEach items="${questions}" var="q">
     	<option 
     	data-json='${q.jsonString}'
-    	id="${q.questionID}" 
+    	id="question${q.questionID}" 
     	value="${q.questionID}">Question#${q.questionID} - ${q.sideAskingQuestion}: "${q.courtQuestion}" </option>
     </c:forEach>
+    
 </select>
