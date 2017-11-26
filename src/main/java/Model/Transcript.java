@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,7 +20,7 @@ import com.google.gson.Gson;
 @Table (name = "questions")
 public class Transcript {
 @Id
-@GeneratedValue
+@GeneratedValue(strategy=GenerationType.SEQUENCE)
 @Column(name = "question_id")
 private int questionID; 
 @Column(name = "witness_id")

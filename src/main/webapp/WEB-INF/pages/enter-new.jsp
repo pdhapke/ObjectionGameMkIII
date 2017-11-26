@@ -53,7 +53,17 @@
 		  postRequest.open('POST', 'get-witnesses.mvc', true);
 		  postRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		  let caseID = document.getElementById("context").value; 
-		  
+		  if (caseID != "-1"){
+			  let caseOption = document.getElementById(("context" +caseID)); 
+			  let caseJSON = caseOption.getAttribute("data-json")
+			  let caseObject = JSON.parse(caseJSON);
+			  let caseBrief = caseObject.context; 
+			  let caseTextBox =  document.getElementById("caseBrief")
+			  caseTextBox.value = caseBrief; 
+			  caseTextBox.readOnly = true; 
+		  } else {
+			  caseTextBox.readOnly = false;  
+		  }
 		  postRequest.onreadystatechange = function() {
 			     if (this.readyState == 4 && this.status == 200) {
 					document.getElementById("witnessInput").innerHTML= this.response;
@@ -68,6 +78,57 @@
 		  postRequest.open('POST', 'get-questions.mvc', true);
 		  postRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		  let witnessID = document.getElementById("witness").value; 
+		  if (witnessID != "-1"){
+			  let witnessOption = document.getElementById(("witness" +witnessID)); 
+			  let witnessJSON = witnessOption.getAttribute("data-json")
+			  let wO = JSON.parse(witnessJSON);
+			  
+			  let firstname = document.getElementById("witnessFirstname"); 
+			  let lastname = document.getElementById("witnessLastname"); 
+			  let witnessSide = document.getElementById("witnessSide");  
+			  let affidavit = document.getElementById("witnessAffidavit");
+			  
+			  let side = wO.side; 
+			  switch (side.toLowerCase()){
+			  	case "defense":
+				  side = "Defense";
+				  break; 
+			  	case "plaintiff":
+				  side = "Plaintiff";
+				  break; 
+			  	case "prosecution": 
+			  	  side = "Prosecution"; 
+			  	  break; 				  
+			  }
+			  
+			for (let i=0; i< witnessSide.length; i++){
+				if (witnessSide.options[i].value != side){
+					witnessSide.options[i].disabled = true; 
+				}
+			}
+			  
+			  firstname.value = wO.firstname;
+			  lastname.value = wO.lastname;
+			  affidavit.value = wO.affidavit; 
+			  firstname.readOnly = true;
+			  lastname.readOnly = true;
+			  witnessSide.readOnly = true;
+			  affidavit.readOnly = true; 
+			  
+		  } else {
+			  firstname.value = "";
+			  lastname.value = "";
+			  witnessSide.value = "";
+			  affidavit.value = ""; 
+			  
+			  firstname.readOnly = false;
+			  lastname.readOnly = false;
+			  witnessSide.readOnly = false;
+			  affidavit.readOnly = false; 
+			  for (let i=0; i< witnessSide.length; i++){
+					witnessSide.options[i].disabled = false; 
+				}
+		  }
 		  
 		  postRequest.onreadystatechange = function() {
 			     if (this.readyState == 4 && this.status == 200) {
@@ -87,12 +148,7 @@
 		} 
 	
 	function getObjections(){
-		let qID = "question" + document.getElementById("question").value; 
-		let question = JSON.parse(document.getElementById(qID).getAttribute("data-json")); 
-		//TO DO add in the ui element of the question so it can be read
-		
-		
-		let postRequest = new XMLHttpRequest();
+	      let postRequest = new XMLHttpRequest();
 		  postRequest.open('POST', 'get-objections.mvc', true);
 		  postRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		  let questionID = document.getElementById("question").value; 
@@ -102,16 +158,87 @@
 					document.getElementById("objectionInput").innerHTML= this.response;
 		    	 }
 		  }
+		  
+		 //start lock/unlock
+		  if (questionID != "-1"){
+			  let questionOption = document.getElementById(("question" + questionID)); 
+			  let questionJSON = questionOption.getAttribute("data-json")
+			  let q = JSON.parse(questionJSON);
+			  
+			  let question = document.getElementById("questionAsked"); 
+			  let answer = document.getElementById("questionWitnessAnswer"); 
+			  let questionSide = document.getElementById("questionAskingSide");  
+			  let previous = document.getElementById("questionPrevious");
+			  
+			  let side = q.sideAskingQuestion; 
+			  switch (side.toLowerCase()){
+			  	case "defense":
+				  side = "Defense";
+				  break; 
+			  	case "plaintiff":
+				  side = "Plaintiff";
+				  break; 
+			  	case "prosecution": 
+			  	  side = "Prosecution"; 
+			  	  break; 				  
+			  }
+			  
+			for (let i=0; i< questionSide.length; i++){
+				if (questionSide.options[i].value != side){
+					questionSide.options[i].disabled = true; 
+				}
+			}
+			let previousID = q.previousQuestionID;
+			for (let i=0; i< previous.length; i++){
+				if (previous.options[i].id != ("questionPrevious" + previousID)){
+					previous.options[i].disabled = true; 
+				}
+			} 
+			
+			  question.value = q.courtQuestion;
+			  answer.value = q.witnessAnswer;
+			  question.readOnly = true;
+			  answer.readOnly = true;
+			 
+			  
+		  } else {
+			  question.value = "";
+			  answer.value = "";
+			  question.readOnly = false;
+			  answer.readOnly = false;
+				for (let i=0; i< questionSide.length; i++){
+						questionSide.options[i].disabled = false; 
+				}
+				for (let i=0; i< previous.length; i++)
+						previous.options[i].disabled = false; 
+				} 
+		    let objectionSelection = document.getElementById("objectionID"); 
+		    let objectionRuleSection = docuemnt.getElementById("objectionTypeRuleNumber"); 
+			let objectionName = document.getElementById("objectionTypeTitle");
+			let objectionRules = document.getElementbyId("objectionTypeExplanation"); 
+						
+			for (i=0; i<objectionSelection.length;i++){
+					objectionSelection.options[i].disable = false; 
+				}
+			objectionRuleSection.value = ""; 
+			objectionName.value = ""; 
+			objectionRules.value = ""; 
+			objectionRuleSection.readOnly = false; 
+			objectionName.readOnly = false; 
+			objectionRules.readOnly = false;
+			 
+			  
+		  }	 
+		 
+		 
+		 //end unlock
+		  
 		  postRequest.send("questionID=" + questionID)
 		  console.log('sending...');
 		
 	}
 	function getObjectionTypes(){
-		let obID = "correctObjection" + document.getElementById("correctObjection").value; 
-		let type = JSON.parse(document.getElementById(obID).getAttribute("data-json")); 
-		//TO DO add in the ui element of the objection type so it can be read
-		
-		
+			
 		let postRequest = new XMLHttpRequest();
 		  postRequest.open('POST', 'get-objectiontypes.mvc', true);
 		  postRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -120,14 +247,73 @@
 		  postRequest.onreadystatechange = function() {
 			     if (this.readyState == 4 && this.status == 200) {
 					document.getElementById("objectionTypeInput").innerHTML= this.response;
+					
+					let objectionSelection = document.getElementById("objectionID"); 
+					
+					let objectionTypeOption = document.getElementById("objectionID" + typeID); 
+					let objectionTypeJSON = objectionTypeOption.getAttribute("data-json");
+					let oT = JSON.parse(objectionTypeJSON); 
+					
+					let objectionRuleSection = docuemnt.getElementById("objectionTypeRuleNumber"); 
+					let objectionName = document.getElementById("objectionTypeTitle");
+					let objectionRules = document.getElementbyId("objectionTypeExplanation"); 
+					
+					objectionRuleSection.value = oT.objectionRuleNumber; 
+					objectionName.value = oT.objectionType; 
+					objectionRules.value = oT.objectionInformation; 
+					
+					
+					for (i=0; i<objectionSelection.length;i++){
+						if (objectionSelection.options[i].id != "objectionID" + typeID){
+							objectionSelection.options[i].disable = true; 
+						}
+					}
+					objectionRuleSection.readOnly = true; 
+					objectionName.readOnly = true; 
+					objectionRules.readOnly = true;
+					
+					
 		    	 }
 		  }
+		  
+		  //start lock/unlock
+		  if (typeID != "-1"){
+			  let objectionOption = document.getElementById(("correctObjection" + typeID)); 
+			  let objectionJSON = objectionOption.getAttribute("data-json")
+			  let ob = JSON.parse(objectionJSON);
+			  let objectionExplanation = document.getElementById("questionAsked");
+			  let objectioneTiming = document.getElementById("objectionTiming");
+			  
+			  let objectionRuleSection = docuemnt.getElementById("objectionTypeRuleNumber"); 
+			  let objectionName = document.getElementById("objectionTypeTitle");
+			  let objectionRules = document.getElementbyId("objectionTypeExplanation"); 
+			  
+		  	  let timing = ob.timing;
+			  if(timing =! "question"){
+				  objectionTiming.options[0].disabled = true; 
+			  }else{
+				  objectionTiming.options[1].disabled = true; 
+		  	  }
+			  objectionExplanation.value = ob.explanation;
+			  objectionExplanation.readOnly = true;
+			  
+			  					  
+			  } else {
+			  objectionExplanation.value = "";
+			  objectionExplanation.readOnly = false;
+			  objectionTiming.options[0].disabled = false; 
+			  objectionTiming.options[1].disabled = false; 
+			  
+			  
+		  }	 
+		  //end unlock
 		  postRequest.send("typeID=" + typeID)
 		  console.log('sending...');
 		
 	}
+
+	
 	function getRule(){
-		
 	}
 	</script>
 	
@@ -144,16 +330,21 @@
 
 
 <br>
-<form action="/stub" onsubmit="submitform()">
+<form action="/submit-new-question" method="POST" >
   <!-- This is the case drop down -->
   <div id="casesInput"> 
   	<select id="context" name="context" onchange="getWitnesses()">
-   		<option id="context-1"  value="-1"> - Enter a new case - </option>
+   		<option id="context-1" data-json= '{}'  value="-1"> - Enter a new case - </option>
     <c:forEach items="${cases}" var="courtcase">
-    	<option value="${courtcase.caseID}">Case ID#${courtcase.caseID} - ${courtcase.context} </option>
+    	<option 
+    	value="${courtcase.caseID}"
+    	data-json='${courtcase.jsonString}'
+    	id="context${courtcase.caseID}"
+    	>Case ID#${courtcase.caseID} - ${courtcase.context} </option>
     </c:forEach>
     </select>
   </div>
+  
   <div id="Contextform" class="fulldiv" >
   		<div class="inner">
   		Enter a brief description of the case in here: <br>
@@ -215,11 +406,11 @@
   		</div>
   		<div class="inner">
   		Enter the question: <br>
-  		<textarea name="witnessQuestion" rows="3" cols="20" placeholder="What is..."></textarea>
+  		<textarea name="questionAsked" rows="3" cols="20" placeholder="What is..."></textarea>
   		</div>
   		<div class="inner">
   		Enter the witness's answer: <br>
-  		<textarea name="witnessAnswer" rows="3" cols="20" placeholder="Yes,..."></textarea>
+  		<textarea name="questionWitnessAnswer" rows="3" cols="20" placeholder="Yes,..."></textarea>
   		</div>
   </div>
   <br>
@@ -260,7 +451,7 @@
   <div id="ObjectionTypeForm"  class="fulldiv" >
   		<div class="inner">
   		Enter the objection rule section number: <br>
-		<input type="number" placeholder="802" id="objectionTypeRuleNumb" name="objectionTypeRuleNumber" min="1" max="2500" step="1"><br>
+		<input type="number" placeholder="802" id="objectionTypeRuleNumber" name="objectionTypeRuleNumber" min="1" max="2500" step="1"><br>
   		Enter the objection name: <br>
   		<input type="text" required id="objectionTypeTitle" name="objectionTypeTitle" placeholder="Hearsay"><br>
   		</div>
@@ -271,9 +462,7 @@
   		</div>
   </div>
   <br>
-  
-  
-  
+   
   
   <!--  This will submit the form -->>
   <input type="submit">

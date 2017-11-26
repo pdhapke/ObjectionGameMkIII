@@ -17,13 +17,27 @@ import Model.Witness;
 
 
 public class TestProgram {
-
-	public static void main(String args[]){
-		
 		//Sets up the beans
-		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(BeanConfiguration.class); 
-		QuestionServiceBean serve = applicationContext.getBean("service", QuestionServiceBean.class);
-		AdminDatabaseServicesBean db = applicationContext.getBean("db", AdminDatabaseServicesBean.class);
+		private static AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(BeanConfiguration.class); 
+		private static QuestionServiceBean serve = applicationContext.getBean("service", QuestionServiceBean.class);
+		private static AdminDatabaseServicesBean db = applicationContext.getBean("db", AdminDatabaseServicesBean.class);
+		
+	
+	
+	public static void main(String args[]){
+		//databaseTests(); 
+		
+		Context idTest = new Context(); 
+		idTest.setContext("A man is sued about a horse");
+		db.addContext(idTest); 
+		
+		
+		applicationContext.close();		
+	}
+	
+	
+	public static void databaseTests(){
+		
 		
 		//tests to make sure the questions are in memory
 		System.out.println("********** This tests the toString function of objects in memory");
@@ -56,7 +70,7 @@ public class TestProgram {
 		System.out.println(db.getQuestions().toString());
 		
 		
-		applicationContext.close();
+		
 	}
 	
 	

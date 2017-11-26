@@ -5,6 +5,7 @@ package Model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,7 +19,7 @@ import com.google.gson.Gson;
 @Table (name = "correct_objection")
 public class Objection {
 @Id
-@GeneratedValue
+@GeneratedValue(strategy=GenerationType.SEQUENCE)
 @Column(name="correct_objection_id")
 private int objectionID; 
 

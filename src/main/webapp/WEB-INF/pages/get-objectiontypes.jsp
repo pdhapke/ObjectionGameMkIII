@@ -4,7 +4,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <select id="objectionID" name="objectionID" onchange="getRule()">
-   		<option id="objectionID-1" data-json= "{}" value="-1"> - Enter a new type of Objection - </option>
+   	  <option id="objectionID-1" data-json= "{}" value="-1"> - Enter a new type of Objection - </option>
     
     <c:forEach items="${objectionTypes}" var="type">
     	<option 
