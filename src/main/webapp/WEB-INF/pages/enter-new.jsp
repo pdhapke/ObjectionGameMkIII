@@ -53,12 +53,12 @@
 		  postRequest.open('POST', 'get-witnesses.mvc', true);
 		  postRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		  let caseID = document.getElementById("context").value; 
+		  let caseTextBox =  document.getElementById("caseBrief");
 		  if (caseID != "-1"){
 			  let caseOption = document.getElementById(("context" +caseID)); 
 			  let caseJSON = caseOption.getAttribute("data-json")
 			  let caseObject = JSON.parse(caseJSON);
 			  let caseBrief = caseObject.context; 
-			  let caseTextBox =  document.getElementById("caseBrief")
 			  caseTextBox.value = caseBrief; 
 			  caseTextBox.readOnly = true; 
 		  } else {
@@ -104,6 +104,8 @@
 			for (let i=0; i< witnessSide.length; i++){
 				if (witnessSide.options[i].value != side){
 					witnessSide.options[i].disabled = true; 
+				} else{
+					witnessSide.options[i].selected = true; 
 				}
 			}
 			  
@@ -186,12 +188,16 @@
 			for (let i=0; i< questionSide.length; i++){
 				if (questionSide.options[i].value != side){
 					questionSide.options[i].disabled = true; 
+				} else {
+					questionSide.options[i].selected = true; 
 				}
 			}
 			let previousID = q.previousQuestionID;
 			for (let i=0; i< previous.length; i++){
-				if (previous.options[i].id != ("questionPrevious" + previousID)){
+				if (previous.options[i].value != (previousID)){
 					previous.options[i].disabled = true; 
+				} else {
+					previous.options[i].selected = true; 
 				}
 			} 
 			
@@ -209,25 +215,10 @@
 				for (let i=0; i< questionSide.length; i++){
 						questionSide.options[i].disabled = false; 
 				}
-				for (let i=0; i< previous.length; i++)
+				for (let i=0; i< previous.length; i++){
 						previous.options[i].disabled = false; 
 				} 
-		    let objectionSelection = document.getElementById("objectionID"); 
-		    let objectionRuleSection = docuemnt.getElementById("objectionTypeRuleNumber"); 
-			let objectionName = document.getElementById("objectionTypeTitle");
-			let objectionRules = document.getElementbyId("objectionTypeExplanation"); 
-						
-			for (i=0; i<objectionSelection.length;i++){
-					objectionSelection.options[i].disable = false; 
-				}
-			objectionRuleSection.value = ""; 
-			objectionName.value = ""; 
-			objectionRules.value = ""; 
-			objectionRuleSection.readOnly = false; 
-			objectionName.readOnly = false; 
-			objectionRules.readOnly = false;
-			 
-			  
+		    			  
 		  }	 
 		 
 		 
@@ -247,31 +238,13 @@
 		  postRequest.onreadystatechange = function() {
 			     if (this.readyState == 4 && this.status == 200) {
 					document.getElementById("objectionTypeInput").innerHTML= this.response;
-					
 					let objectionSelection = document.getElementById("objectionID"); 
-					
-					let objectionTypeOption = document.getElementById("objectionID" + typeID); 
-					let objectionTypeJSON = objectionTypeOption.getAttribute("data-json");
-					let oT = JSON.parse(objectionTypeJSON); 
-					
-					let objectionRuleSection = docuemnt.getElementById("objectionTypeRuleNumber"); 
-					let objectionName = document.getElementById("objectionTypeTitle");
-					let objectionRules = document.getElementbyId("objectionTypeExplanation"); 
-					
-					objectionRuleSection.value = oT.objectionRuleNumber; 
-					objectionName.value = oT.objectionType; 
-					objectionRules.value = oT.objectionInformation; 
-					
-					
-					for (i=0; i<objectionSelection.length;i++){
-						if (objectionSelection.options[i].id != "objectionID" + typeID){
-							objectionSelection.options[i].disable = true; 
+					for(let i = 0; i < objectionSelection.length; i++){
+						if(objectionSelection.options[i].value == typeID){
+							objectionSelection.options[i].selected = true; 
 						}
 					}
-					objectionRuleSection.readOnly = true; 
-					objectionName.readOnly = true; 
-					objectionRules.readOnly = true;
-					
+					getRule(); 
 					
 		    	 }
 		  }
@@ -284,9 +257,9 @@
 			  let objectionExplanation = document.getElementById("questionAsked");
 			  let objectioneTiming = document.getElementById("objectionTiming");
 			  
-			  let objectionRuleSection = docuemnt.getElementById("objectionTypeRuleNumber"); 
+			  let objectionRuleSection = document.getElementById("objectionTypeRuleNumber"); 
 			  let objectionName = document.getElementById("objectionTypeTitle");
-			  let objectionRules = document.getElementbyId("objectionTypeExplanation"); 
+			  let objectionRules = document.getElementById("objectionTypeExplanation"); 
 			  
 		  	  let timing = ob.timing;
 			  if(timing =! "question"){
@@ -314,6 +287,45 @@
 
 	
 	function getRule(){
+		let objectionSelection = document.getElementById("objectionID"); 
+		let typeID = objectionSelection.value; 
+		let objectionTypeOption = document.getElementById("objectionID" + typeID); 
+		let objectionTypeJSON = objectionTypeOption.getAttribute("data-json");
+		let oT = JSON.parse(objectionTypeJSON); 
+		
+		let objectionRuleSection = document.getElementById("objectionTypeRuleNumber"); 
+		let objectionName = document.getElementById("objectionTypeTitle");
+		let objectionRules = document.getElementById("objectionTypeExplanation"); 
+		
+		if(typeID == "-1"){
+			for (i=0; i<objectionSelection.length;i++){
+				objectionSelection.options[i].disable = false; 
+			}
+		objectionRuleSection.value = ""; 
+		objectionName.value = ""; 
+		objectionRules.value = ""; 
+		objectionRuleSection.readOnly = false; 
+		objectionName.readOnly = false; 
+		objectionRules.readOnly = false;
+			
+		} else {
+		
+		objectionRuleSection.value = oT.objectionRuleNumber; 
+		objectionName.value = oT.objectionType; 
+		objectionRules.value = oT.objectionInformation; 
+		
+		
+		for (i=0; i<objectionSelection.length;i++){
+			if (objectionSelection.options[i].id != "objectionID" + typeID){
+				objectionSelection.options[i].disable = true; 
+			} else {
+				objectionSelection.options[i].selected =true; 
+			}
+		}
+		objectionRuleSection.readOnly = true; 
+		objectionName.readOnly = true; 
+		objectionRules.readOnly = true;
+		}
 	}
 	</script>
 	
@@ -387,7 +399,7 @@
     <!-- This is the court question drop down -->
   <div id="questionInput"> 
   	<select id="question" name="question" onchange="getObjections()">
-   		<option value="question-1" data-json= "{}"> - Enter a new question - </option>
+   		<option  value="-1" id="question-1" data-json= "{}"> - Enter a new question - </option>
    	
     </select>
   </div>
@@ -398,7 +410,7 @@
   			<option  id="questionPrevious-1" value="-1" >No</option>
   		</select>
   		<br>What side is asking the question?:<br>
-  		<select required name="questionAskingSide" id="witnessSide" required>
+  		<select required name="questionAskingSide" id="questionAskingSide" required>
   			<option value="Plaintiff" >Plaintiff</option>
   			<option value="Prosecution" >Prosecution</option>
   			<option value="Defense" >Defense</option>
@@ -406,11 +418,11 @@
   		</div>
   		<div class="inner">
   		Enter the question: <br>
-  		<textarea name="questionAsked" rows="3" cols="20" placeholder="What is..."></textarea>
+  		<textarea id="questionAsked" name="questionAsked" rows="3" cols="20" placeholder="What is..."></textarea>
   		</div>
   		<div class="inner">
   		Enter the witness's answer: <br>
-  		<textarea name="questionWitnessAnswer" rows="3" cols="20" placeholder="Yes,..."></textarea>
+  		<textarea  id="questionWitnessAnswer" name="questionWitnessAnswer" rows="3" cols="20" placeholder="Yes,..."></textarea>
   		</div>
   </div>
   <br>
@@ -444,7 +456,7 @@
   <!-- This is the objections rule drop down -->
   <script type="text/javascript">getObjectionTypes(); </script>
   <div id="objectionTypeInput"> 
-  	<select id="objectionID" name="objectionID" onchange="getRule">
+  	<select id="objectionID" name="objectionID" onchange="getRule()">
    		<option  id="objectionID-1" value="-1"> - Enter a new type of Objection- </option>
     </select>
   </div>

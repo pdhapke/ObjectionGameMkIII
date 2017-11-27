@@ -65,6 +65,14 @@ public Objection(ObjectionType objType, String exp, String time, int objID, int 
 	this.fk_objectionTypeID = objType.getObjectionTypeID();
 }
 
+public Objection(ObjectionType objType, String exp, String time, int fkQ){
+	this.description = objType;
+	this.explanation = exp; 
+	this.timing = time; 
+	this.fk_questionID = fkQ; 
+	this.fk_objectionTypeID = objType.getObjectionTypeID();
+}
+
 public int getObjectionID() {
 	return objectionID;
 }

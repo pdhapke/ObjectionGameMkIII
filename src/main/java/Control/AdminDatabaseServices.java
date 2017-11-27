@@ -13,11 +13,11 @@ public interface AdminDatabaseServices extends ClientDatabaseServices {
 	//Create
 	public boolean addQuestions(List<Question> list);
 	public boolean addQuestion(Question q);
-	public boolean addContext(Context c); 
-	public boolean addWitness(Witness w); 
-	public boolean addTranscript(Transcript t); 
-	public boolean addObjection(Objection obj); 
-	public boolean addObjectionType(ObjectionType type); 
+	public int addContext(Context c); 
+	public int addWitness(Witness w); 
+	public int addTranscript(Transcript t); 
+	public int addObjection(Objection obj); 
+	public int addObjectionType(ObjectionType type); 
 		
 	//Read
 	//client services extended for question reading

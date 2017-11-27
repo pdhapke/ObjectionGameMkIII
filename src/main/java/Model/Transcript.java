@@ -67,6 +67,13 @@ public Transcript(List<String> previous, String side, String current, String ans
 	this.fk_witnessID = fk; 
 	this.previousQuestionID = preID;
 }
+public Transcript(String side, String current, String answer, int fk){
+	this.courtQuestion = current; 
+	this.witnessAnswer = answer; 
+	this.sideAskingQuestion = side;
+	this.fk_witnessID = fk; 
+}
+
 public int getPreviousQuestionID() {
 	return previousQuestionID;
 }

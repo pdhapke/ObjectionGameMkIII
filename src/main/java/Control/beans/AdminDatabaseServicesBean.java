@@ -63,84 +63,86 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 		return success;
 	}
 
-	public boolean addContext(Context c) {
-		boolean success = false; 
-		try {
+	public int addContext(Context c) {
 		EntityManager em = emfactory.createEntityManager();
-		em.getTransaction().begin();
-		em.persist(c);
-		em.getTransaction().commit();
-		em.close();
-		success = true; 
+		try {
+		
+			em.getTransaction().begin();
+			em.persist(c);
+			em.getTransaction().commit();
+	
 		} catch (Exception e) {
-			success = false; 
+		
+		}finally{
+			em.close();
 		}
 				
-		return success;
+		return c.getCaseID();
 	}
 
-	public boolean addWitness(Witness w) {
-		boolean success = false; 
-		try {
+	public int addWitness(Witness w) {
 		EntityManager em = emfactory.createEntityManager();
-		em.getTransaction().begin();
-		em.persist(w);
-		em.getTransaction().commit();
-		em.close();
-		success = true; 
-		} catch (Exception e) {
-			success = false; 
+		try {
+			em.getTransaction().begin();
+			em.persist(w);
+			em.getTransaction().commit();
+		
+			} catch (Exception e) {
+			
+		} finally{
+			em.close();
 		}
 				
-		return success;
+		return w.getWitnessID();
 	}
 
-	public boolean addTranscript(Transcript t) {
-		boolean success = false; 
-		try {
+	public int addTranscript(Transcript t) {
 		EntityManager em = emfactory.createEntityManager();
-		em.getTransaction().begin();
-		em.persist(t);
-		em.getTransaction().commit();
-		em.close();
-		success = true; 
+		try {
+	
+			em.getTransaction().begin();
+			em.persist(t);
+			em.getTransaction().commit();
+		
 		} catch (Exception e) {
-			success = false; 
+			
+		} finally{
+			em.close();
 		}
 				
-		return success;
+		return t.getQuestionID();
 	}
 
-	public boolean addObjection(Objection obj) {
-		boolean success = false; 
-		try {
+	public int addObjection(Objection obj) {
 		EntityManager em = emfactory.createEntityManager();
-		em.getTransaction().begin();
-		em.persist(obj);
-		em.getTransaction().commit();
-		em.close();
-		success = true; 
+		try {
+		
+			em.getTransaction().begin();
+			em.persist(obj);
+			em.getTransaction().commit();
+				
 		} catch (Exception e) {
-			success = false; 
+		
+		} finally{
+			em.close();
 		}
 				
-		return success;
+		return obj.getObjectionID();
 	}
 
-	public boolean addObjectionType(ObjectionType type) {
-		boolean success = false; 
-		try {
+	public int addObjectionType(ObjectionType type) {
 		EntityManager em = emfactory.createEntityManager();
-		em.getTransaction().begin();
-		em.persist(type);
-		em.getTransaction().commit();
-		em.close();
-		success = true; 
+		try {
+			em.getTransaction().begin();
+			em.persist(type);
+			em.getTransaction().commit();
 		} catch (Exception e) {
-			success = false; 
+		
+		} finally{
+			em.close();
 		}
 				
-		return success;
+		return type.getObjectionTypeID();
 	}
 
 	

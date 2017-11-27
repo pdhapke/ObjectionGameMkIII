@@ -28,9 +28,9 @@ public class TestProgram {
 		//databaseTests(); 
 		
 		Context idTest = new Context(); 
-		idTest.setContext("A man is sued about a horse");
-		db.addContext(idTest); 
-		
+		idTest.setContext("a horse is murdered, viciously");
+		int caseID = db.addContext(idTest); 
+		System.out.println(caseID);
 		
 		applicationContext.close();		
 	}

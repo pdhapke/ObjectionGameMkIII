@@ -42,6 +42,12 @@ public Witness(String fname, String lname, String aff, String side,  int witID, 
 	this.fk_caseID = caseID; 
 	this.witnessID = witID; 
 }
+public Witness(String fname, String lname, String aff, String side){
+	this.firstname = fname; 
+	this.lastname = lname; 
+	this.affidavit = aff; 
+	this.side = side; 
+}
 public String toString(){
 	String s = ""; 
 	s = s.concat("Witness - " + this.firstname + " " + this.lastname + ", Side:  " + this.side).concat("\n");
