@@ -125,11 +125,9 @@ public void update(Witness w){
 	this.witnessID = w.getWitnessID(); 
 }
 public String getJsonString(){
-	System.out.println("In jsonifier");
 	Gson json = new Gson();
 	Witness w = this; 
 	String output = json.toJson(w); 
-	System.out.println(output);
 	return output;
 }
 }

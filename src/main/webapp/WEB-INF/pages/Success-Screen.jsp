@@ -9,9 +9,11 @@
 <%! String pq=""; %>
 <%! String objs=""; %>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>All Questions</title>
+<title>Success!</title>
 </head>
 <body>
+<h3>Your information was added successfully!</h3>
+<p>Please check to make sure all the information is correct. </p>
 	<table>
 		<tr>
 			<th> Case ID # </th>
@@ -23,24 +25,27 @@
 			<th> Question </th>
 			<th> Previous Questions </th>
 			<th> Correct Objection </th>
+			
+			<th> Rule </th>
+			
 		</tr>
-		<c:forEach items="${question}" var="q">
+		
 		
 			<tr>
 				<!-- Context -->
-				<td>${q.caseID}</td>
-				<td>${q.context}</td>
+				<td>${question.caseID}</td>
+				<td>${question.context}</td>
 				<!--  Witness -->
-				<td>${q.witness.witnessID}</td>
-				<td>${q.witness.firstname } ${q.witness.lastname}</td>
-				<td>${q.witness.side}</td>
-				<td>${q.witness.affidavit}</td>
+				<td>${question.witness.witnessID}</td>
+				<td>${question.witness.firstname } ${q.witness.lastname}</td>
+				<td>${question.witness.side}</td>
+				<td>${question.witness.affidavit}</td>
 				<!-- Question -->
-				<td>ID#${q.transcript.questionID}: ${q.transcript.sideAskingQuestion}: ${q.transcript.courtQuestion} </td>
+				<td>ID#${question.transcript.questionID}: ${question.transcript.sideAskingQuestion}: ${question.transcript.courtQuestion} </td>
 				<td>
 					<c:choose>
-						<c:when test="${!q.transcript.previousQuestion.isEmpty()}">
-							<c:forEach items="${q.transcript.previousQuestion}" var="i">
+						<c:when test="${!question.transcript.previousQuestion.isEmpty()}">
+							<c:forEach items="${question.transcript.previousQuestion}" var="i">
 								${i}
 	      						<br>
 							</c:forEach>
@@ -55,10 +60,26 @@
 				<!-- Objections  -->
 				<td>
 					<c:choose>
-						<c:when test="${!q.correctObjections.isEmpty()}">
+						<c:when test="${!question.correctObjections.isEmpty()}">
 							
-							<c:forEach items="${q.correctObjections}" var="ob">
-								${ob.fk_objectionTypeID}  During ${ob.timing} - Explanation: ${ob.explanation}
+							<c:forEach items="${question.correctObjections}" var="ob">
+								During ${ob.timing} - Explanation: ${ob.explanation}
+								<br>
+							</c:forEach>
+							
+						</c:when>
+ 							<c:otherwise>
+    							(None)
+    						</c:otherwise>
+   					</c:choose>
+				</td>
+				<!-- rule -->
+				<td>
+					<c:choose>
+						<c:when test="${!question.correctObjections.isEmpty()}">
+							
+							<c:forEach items="${question.correctObjections}" var="ob">
+								${ob.description.objectionRuleNumber}  - ${ob.description.objectionType} - Explanation: ${ob.description.objectionInformation}
 								<br>
 							</c:forEach>
 							
@@ -70,7 +91,7 @@
 				</td>
 			</tr>
 		
-		</c:forEach>
+	
 	
 	</table>
 	

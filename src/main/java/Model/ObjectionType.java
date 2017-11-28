@@ -82,11 +82,9 @@ public class ObjectionType {
 		this.objectionTypeID = typeID; 
 	}
 	public String getJsonString(){
-		System.out.println("In jsonifier");
 		Gson json = new Gson();
 		ObjectionType type = this; 
 		String output = json.toJson(type); 
-		System.out.println(output);
 		return output;
 	}
 }

@@ -9,9 +9,9 @@ public List<Question> list = new ArrayList<Question>();
 	
 	//question 1
 	{
-		//requires 4 pieces Conntext, Witness, Transcript, List<Objection> 
-		Context context1 = new Context(3, "Jimmy is being tried for murder");
-		Witness witness1 = new Witness("John", "Holmes", "I was told about the murder by timmy outside a bar.", "prosecution", 1, 3); 
+		//requires 4 pieces Context, Witness, Transcript, List<Objection> 
+		Context context1 = new Context(1, "Jimmy is being tried for murder");
+		Witness witness1 = new Witness("John", "Holmes", "I was told about the murder by timmy outside a bar.", "prosecution", 1, 1); 
 			
 			List<String> previousQuestion1 = new ArrayList<String>();
 			previousQuestion1.add("Prosecution Question: Where you there that night? Answer: I was outside the bar");
@@ -32,8 +32,8 @@ public List<Question> list = new ArrayList<Question>();
 	//question 2
 	{
 		//requires 4 pieces Conntext, Witness, Transcript, List<Objection> 
-		Context context2 = new Context(4, "Widgets inc. is being sued for negligence");
-		Witness witness2 = new Witness("Samantha", "Doe", "I worked on the widget project and that product is safe", "defense", 2, 4); 
+		Context context2 = new Context(2, "Widgets inc. is being sued for negligence");
+		Witness witness2 = new Witness("Samantha", "Doe", "I worked on the widget project and that product is safe", "defense", 2, 2); 
 			
 			List<String> previousQuestion2 = new ArrayList<String>();
 			previousQuestion2.add("Defense Question: What is your name? Answer: My name is Samantha Doe");

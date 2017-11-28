@@ -25,12 +25,12 @@ public class TestProgram {
 	
 	
 	public static void main(String args[]){
-		//databaseTests(); 
+		databaseTests(); 
 		
 		Context idTest = new Context(); 
-		idTest.setContext("a horse is murdered, viciously");
-		int caseID = db.addContext(idTest); 
-		System.out.println(caseID);
+		//idTest.setContext("a horse is murdered, viciously");
+		//int caseID = db.addContext(idTest); 
+		//System.out.println(caseID);
 		
 		applicationContext.close();		
 	}

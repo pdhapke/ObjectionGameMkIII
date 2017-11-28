@@ -295,12 +295,14 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	public boolean contextExists(int id) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		List<Context> item = em.createQuery("Select result from Context result WHERE result.caseID LIKE " + id, Context.class).getResultList();
+		List<Context> item = em.createQuery("Select result from Context result WHERE result.caseID=" + id, Context.class).getResultList();
+		
 		boolean answer = false;
 		if (item.size() >= 1 ){
 			answer = true;
 		}
 		em.close();
+		
 		return answer;
 	}
 
@@ -348,7 +350,12 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	public List<Transcript> getAllTranscriptsForWitness(int witnessID) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		List<Transcript> list = em.createQuery("Select result from Transcript result WHERE result.fk_witnessID =" + witnessID, Transcript.class).getResultList();
+		TypedQuery<Transcript> query = em.createQuery("Select result from Transcript result WHERE result.fk_witnessID = :witID", Transcript.class);
+		System.out.println(witnessID);
+		query.setParameter("witID", new Long(witnessID));
+		System.out.println("query made");
+		List<Transcript> list = query.getResultList();
+		System.out.print(list.toString());
 		em.close();
 		return list;
 	}

@@ -54,11 +54,9 @@ public class Context {
 		this.context = con;
 	}
 	public String getJsonString(){
-		System.out.println("In jsonifier");
 		Gson json = new Gson();
 		Context c = this; 
 		String output = json.toJson(c); 
-		System.out.println(output);
 		return output;
 	}
 }

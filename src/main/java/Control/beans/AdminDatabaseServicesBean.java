@@ -32,27 +32,36 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 	public boolean addQuestion(Question q) {
 			boolean success = false; 
 			Context c = q.getContextObject();
+			int caseID = c.getCaseID();
 			if (contextExists(c.getCaseID()) != true){
-				addContext(c);
+				caseID = addContext(c);
 			}
 			
-			Witness w = q.getWitness(); 
+			Witness w = q.getWitness();
+			int witID = w.getWitnessID();
 			if (witnessExists(w.getWitnessID()) != true){
-				addWitness(w);
+				w.setFk_caseID(caseID);
+				witID = addWitness(w);
 			}
 			
 			
 			Transcript t = q.getTranscript(); 
+			int qID = t.getQuestionID(); 
 			if (transcriptExists(t.getQuestionID())!= true){
-				addTranscript(t);
+				t.setFk_witnessID(witID);
+				qID = addTranscript(t);
 				}
 				
 			List<Objection> objs = q.getCorrectObjections();
+			int typeID; 
 			for (Objection singleObj : objs){		
+				typeID = singleObj.getFk_objectionTypeID();
 				if (objectionExists(singleObj.getObjectionID()) != true){
 					if(objectionTypeExists(singleObj.getDescription().getObjectionTypeID()) != true){
-					addObjectionType(singleObj.getDescription());					
-					}					
+					typeID = addObjectionType(singleObj.getDescription());					
+					}	
+					singleObj.setFk_questionID(qID);
+					singleObj.setFk_objectionTypeID(typeID);
 					addObjection(singleObj);
 				}	
 			}

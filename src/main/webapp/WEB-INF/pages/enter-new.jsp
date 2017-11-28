@@ -82,13 +82,12 @@
 			  let witnessOption = document.getElementById(("witness" +witnessID)); 
 			  let witnessJSON = witnessOption.getAttribute("data-json")
 			  let wO = JSON.parse(witnessJSON);
-			  
 			  let firstname = document.getElementById("witnessFirstname"); 
 			  let lastname = document.getElementById("witnessLastname"); 
 			  let witnessSide = document.getElementById("witnessSide");  
 			  let affidavit = document.getElementById("witnessAffidavit");
-			  
 			  let side = wO.side; 
+			
 			  switch (side.toLowerCase()){
 			  	case "defense":
 				  side = "Defense";
@@ -342,7 +341,7 @@
 
 
 <br>
-<form action="/submit-new-question" method="POST" >
+<form action="submit-new-question.mvc" method="POST" >
   <!-- This is the case drop down -->
   <div id="casesInput"> 
   	<select id="context" name="context" onchange="getWitnesses()">
@@ -407,7 +406,7 @@
   		<div id="inner" class="inner">
   		Does this question follow from a previous one? <br>
   		<select required name="questionPrevious" id="questionPrevious" required>
-  			<option  id="questionPrevious-1" value="-1" >No</option>
+  			<option selected="selected"  id="questionPrevious-1" value="-1" >No</option>
   		</select>
   		<br>What side is asking the question?:<br>
   		<select required name="questionAskingSide" id="questionAskingSide" required>

@@ -141,11 +141,9 @@ public void update(String exp, String time, int objID, int fkQ, int fkOT){
 	this.fk_objectionTypeID = fkOT;
 }
 public String getJsonString(){
-	System.out.println("In jsonifier");
 	Gson json = new Gson();
 	Objection ob = this; 
 	String output = json.toJson(ob); 
-	System.out.println(output);
 	return output;
 }
 }

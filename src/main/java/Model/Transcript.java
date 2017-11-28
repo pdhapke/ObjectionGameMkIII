@@ -126,20 +126,25 @@ public void update(String side, String current, String answer,  int qID, int pre
 	this.previousQuestionID = preID;
 }
 public void update(Transcript t){
-	this.courtQuestion = t.getCourtQuestion(); 
-	this.witnessAnswer = t.getWitnessAnswer(); 
-	this.sideAskingQuestion = t.getSideAskingQuestion();
-	this.questionID = t.getQuestionID(); 	
+	if(t.getCourtQuestion() !=null){
+		this.courtQuestion = t.getCourtQuestion();	
+	}
+	if(t.getCourtQuestion() !=null){
+		this.witnessAnswer = t.getWitnessAnswer();
+	}
+	if(t.getCourtQuestion() !=null){
+		this.sideAskingQuestion = t.getSideAskingQuestion();
+	}
+	this.questionID = t.getQuestionID(); 
 	this.fk_witnessID = t.getFk_witnessID(); 
 	this.previousQuestionID = t.getPreviousQuestionID();
-}
+	
+	}
 
 public String getJsonString(){
-	System.out.println("In jsonifier");
 	Gson json = new Gson();
 	Transcript t = this; 
 	String output = json.toJson(t); 
-	System.out.println(output);
 	return output;
 }
 public String getPastQuestionsString(){
