@@ -12,7 +12,7 @@ function testAuth(){
 }
 </script>
 </head>
-
+<body>
 <h2>Admin Options</h2>
 <form action="enter-new.mvc" method="post">
     <input type="submit" value="Push to Add a Question" />
@@ -22,9 +22,8 @@ function testAuth(){
 </form>
 
 <button onclick="testAuth()">Press</button>
-<div id="playerOptions">
-<h2>Player Options</h2>
-<%@include file="playerOptions.jsp" %>
-</div>
-<div id="all"></div>
 
+<%@include file="playerOptions.jsp" %>
+
+<div id="all"></div>
+</body>

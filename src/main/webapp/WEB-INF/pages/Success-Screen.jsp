@@ -25,7 +25,6 @@
 			<th> Question </th>
 			<th> Previous Questions </th>
 			<th> Correct Objection </th>
-			
 			<th> Rule </th>
 			
 		</tr>
