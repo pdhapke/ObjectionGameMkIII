@@ -5,6 +5,7 @@
 <script type="text/javascript"> 
 
 </script>
+
 </head>
 <body>
 
@@ -15,6 +16,7 @@
 <div id="playerInfo">
 
 </div>
+
 <div id="gameScreen">
 
 </div>
@@ -22,3 +24,4 @@
 <%@include file="GameFunctions.jsp" %>
 
 </body>
+

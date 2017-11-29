@@ -6,30 +6,113 @@
  * Game setup functions used to retrieve questions form the database
  */
 
-//to add a question use new createQuestion(objectionType, question, witnessWouldAnswer, objectionableQuestion, objectionableAnswer, explanation, statement, newStory = undefined)
-//TODO 
+//make some globals
+ var questionElement; //this is the div with the question material
+ var questionBox     //this is the box with the attorney's question
+ var storyElement;   //this is the div with the affadavit
+ var resetButton;    //this is the button to reset the game
+ var mainDiv;        //this is the button to create the main in game panel
+ var break1;         //this is a break...for later
+ var witnessBox;     //this is the box for the witnesses answer
+ var storyBox;       //this is the box for the affidavit
+ var typeSelectQuestion;
+ var typeSelectWitness;
+ var questionBoxExplanation; 
+ var previousQuestionBox;
+ var previousQuestion;
+ var objectionButtonQuestion;
+ var objectionButtonWitness;
+ var noObjection;
+ var blankObjection; 
+ var questionNumber = 0; 
+ var questionList = [];
+ var askedQuestions = [];
+ var questionBank = document.createElement("div");
+ questionBank.style.display = "none";
+ 
 
-var createQuestion = function questioncreator(objectionType, question, witnessWouldAnswer, objectionableQuestion, objectionableAnswer, explanation, statementName, newStory = undefined, previousQuestion="No previous Question"){
+function resetGame(){
+    document.body.removeChild(mainDiv);
+    document.body.removeChild(resetButton);
+    document.body.removeChild(break1);
+    document.body.appendChild(openingPanel);
+    questionList = []; 
+    questionNumber = 0;
+typeSelectQuestion = null;
+typeSelectWitness = null;
+    
+}
+function pauseGame(){
+    document.body.removeChild(mainDiv);
+    document.body.removeChild(resetButton);
+    document.body.removeChild(break1);
+    document.body.appendChild(pausePanel);
+}
+function resumeGame(){
+    document.body.appendChild(mainDiv);
+    document.body.appendChild(resetButton);
+    document.body.appendChild(break1);
+    document.body.removeChild(pausePanel);
+}
+
+var questionList = [];
+var createQuestion = function questionCreator(q){
+	this.context = q.context.context;
+	this.caseID = q.context.caseID; 
+	this.witness = q.witness;
+	this.fullname = (this.witness.firstname + " " + this.witness.lastname);
+	this.transcript = q.transcript; 
+	this.correctObjections = q.correctObjections;
+
+	for (let i = 0; i <  this.correctObjections.length; i++){
+		if (this.correctObjections[i].timing.toLowerCase() == "question"){
+				this.correctObjections[i].objectionableQuestion = true; 
+				this.correctObjections[i].objectionableAnswer = false; 
+			} else if (timing.toLowerCase() == "answer"){
+				this.correctObjections[i].objectionableQuestion = false; 
+				this.correctObjections[i].objectionableAnswer = true; 
+			}
+	}
+	this.previousQuestion = function generatePreviousText(){
+	let answer = "";
+	for(let i = 0; i < this.transcript.previousQuestion.length; i++){
+		answer = answer + "\n" this.transcript.previousQuestion[i] + "\n";
+	}
+		return answer; 
+	}
+	this.question = function questionFormater(){
+		let answer = "The " + this.transcript.sideAskingQuestion + " asks the witness: \n" + this.transcript.courtQuestion; 
+		return answer; 
+	}
+	this.story = function createStory(){
+		 let answer = ""; 
+		 answer = answer + "The case: \n";
+		 answer = answer + this.context;
+		 answer = answer + "\n\n";
+		 answer = answer + this.fullname + "\n"; 
+		 answer = answer + witness.affidavit;
+		 return answer;	 
+		  }
+	 
  
- if (newStory){ 
-     statements[statementName] = newStory;
- }
- 
- this.objectionType = objectionType; 
- this.question = question; 
- this.witness = witnessWouldAnswer; 
- this.objectionableQuestion = objectionableQuestion;
- this.objectionableAnswer = objectionableAnswer;
- this.statementName = statementName; 
- this.explanation = explanation;
- this.previousQuestion = previousQuestion;
- allQuestions.push(this); 
+ 	questionList.add(this); 
+}
+
+blankObjection = {
+		objectionID: -1, 
+		fk_objectionTypeID: -1,
+		explanation: "This question is not objectionable",
+		timing: "none", 
+		description: {
+			objectionTypeID: -1,
+			objectionRuleNumber:50, 
+			objectionType: "none", 
+			objectionInformation: "Sometimes no objections can be made" 
+		};
 }
 
 
-var statements = {};
-var allQuestions = [];
-var objectionTypeList = [
+var correctObjectionsList = [
 'Argumentative (1101 & 103)',
 'Badgering (1101 & 103)',
 'Relevance (402)',
@@ -59,70 +142,107 @@ var objectionTypeList = [
 'Unfair Extrapolation (1107)'
  ];
  
-objectionTypeList.sort();
-
-
-var questionList = [];
-
-
-
+correctObjectionsList.sort();
 
 
 /**
  *Game functions and control 
  */
 
-function startGame(objectionName){
+function startGame(objectionTypeID){
     document.body.removeChild(openingPanel);
-    
     drawGame();                         //this will draw the game
-    prepareQuestions(objectionName);    //this will prepare all the questions asked for
-    askNextQuestion();                  //this will ask the first question
+    prepareQuestions(objectionTypeID);    //this will prepare all the questions asked for
     
+}
+
+function prepareQuestions(typeID){
+    questionNumber = 0;
+    previousJSON = JSON.stringify(askedQuestions); 
+    let getRequest = new XMLHttpRequest();
+	getRequest.open('GET', 'get-game-questions.mvc', true);
+	getRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    getRequest.onreadystatechange = function() {
+	     if (this.readyState == 4 && this.status == 200) {
+			 questionBank.innerHTML = this.response;
+			 dataStorage = document.getElementById("dataStorage");
+			 data = dataStorage.getAttribute("data-json");
+			 let list = JSON.parse(data); 
+			 
+			 for(let i = 0; i< list.length; i++){
+				 createQuestion(list[i]);
+			 }
+		   }
+			 
+		 }
+			 
+	}
+  
+        getRequest.send("typeID=" + typeID + "&previous=" +previousJSON)
 }
 
 function askNextQuestion(){
     
     if(questionList[questionNumber]){
-    previousQuestionBox.value = questionList[questionNumber].previousQuestion;
-    questionBox.value = questionList[questionNumber].question;
-    witnessBox.value = questionList[questionNumber].witness;
-    storyBox.value = statements[questionList[questionNumber].statementName];
+   	 	previousQuestionBox.value = questionList[questionNumber].previousQuestion();
+    	questionBox.value = questionList[questionNumber].transcript.question();
+    	witnessBox.value = questionList[questionNumber].transcript.witnessAnswer;
+    	storyBox.value = questionList[questionNumber].story();
     } else {
-        alert("You have finished all the questions in this category! \n \n The game will now reset");
+        alert("You have finished all the questions in this round! \n \n The game will now reset");
         resetGame();
     }
      
 }
 
+
+
+
+
+
+
+
+
 function scoreAndUpdateWitness(){
-        if(typeSelectWitness.value == questionList[questionNumber].objectionType){
-    scoreAndUpdate(questionList[questionNumber].objectionableAnswer);
-    } else {
-        alert("this is why");
-        scoreAndUpdate(false);
-    }
+	let type = typeSelectQuestion.value; 
+	scoreAndUpdateAll(type, "answer");
 }
 function scoreAndUpdateQuestion(){
-   if(typeSelectQuestion.value ==questionList[questionNumber].objectionType){
-    scoreAndUpdate(questionList[questionNumber].objectionableQuestion);
-    } else {
-        scoreAndUpdate(false);
-    }
+	let type =typeSelectAnswer.value; 
+	scoreAndUpdateAll(type, "question");
     
 }
-
 function scoreAndUpdateNoObjection(){
-   var temp = false; 
- 
-   if(questionList[questionNumber].objectionableAnswer === false){
-    alert();
-   if(questionList[questionNumber].objectionableQuestion === false){
-       
-       temp = true;
-   } 
-   }
-    scoreAndUpdate(temp);
+	scoreAndUpdateAll(-1, "none");
+}
+function scoreAndUpdateAll(type, time = "none"){
+	let objs = questionList[questionNumber].correctObjections
+	let objection; 
+	let correct = false; 
+	if (objs.length == 0){
+		correct = true; 
+		objection = blankObjection; 
+	} else {
+		objection = questionList[questionNumber].correctObjections[0];
+	}
+	
+		
+	objs.forEach(function checkobjections(ob){
+		if(ob.objectionTypeID == type){
+			if (ob.timing.toLowerCase() == time) {
+				objection = ob; 
+				correct = true; 
+			}
+		
+			 
+		}
+		
+		
+	}); 
+	
+	
+	
 }
 
 
@@ -148,40 +268,9 @@ function scoreAndUpdate(score){
    
     scoreBoard.panelUpdate(score);
     questionNumber++;
+    previousQ
     askNextQuestion();
 }
-
-function prepareQuestions(objectionName){
-    questionNumber = 0;
-    if(objectionName == "All Objections"){
-        questionList = allQuestions;
-    }else{
-    for(var k in allQuestions){
-        if(allQuestions[k].objectionType == objectionName){
-            questionList.push(allQuestions[k]);
-        }
-        
-     }
-    }
-}
-
-
-
-
-function resetGame(){
-    document.body.removeChild(mainDiv);
-    document.body.removeChild(resetButton);
-    document.body.removeChild(break1);
-    document.body.appendChild(openingPanel);
-    questionList = []; 
-typeSelectQuestion = null;
-typeSelectWitness = null;
-    
-    
-
-}
-
-
 
 
 
@@ -321,26 +410,7 @@ document.body.appendChild(resetButton);
 /*
  * Render the start screen
  */
-//make some globals
-var questionElement; //this is the div with the question material
-var questionBox     //this is the box with the attorney's question
-var storyElement;   //this is the div with the affadavit
-var resetButton;    //this is the button to reset the game
-var mainDiv;        //this is the button to create the main in game panel
-var break1;         //this is a break...for later
-var witnessBox;     //this is the box for the witnesses answer
-var storyBox;       //this is the box for the affidavit
-var typeSelectQuestion;
-var typeSelectWitness;
-var questionBoxExplanation; 
-var previousQuestionBox;
-var previousQuestion;
-var objectionButtonQuestion;
-var objectionButtonWitness;
-var noObjection;
 
-
-var questionNumber = 0; 
 
 //this is the player score  panel
 var scoreBoard={
@@ -373,13 +443,13 @@ typeSelectWitness = document.createElement('select');
 var selectionChoicesQ=[]; 
 var selectionChoicesW=[];
 if(allowedObjection == "All Objections"){
-for(var x in objectionTypeList){
+for(var x in correctObjectionsList){
  
   selectionChoicesQ[x] = document.createElement('option');
-  selectionChoicesQ[x].innerText = objectionTypeList[x];
+  selectionChoicesQ[x].innerText = correctObjectionsList[x];
    
   selectionChoicesW[x] = document.createElement('option');
-  selectionChoicesW[x].innerText = objectionTypeList[x];
+  selectionChoicesW[x].innerText = correctObjectionsList[x];
   
    typeSelectQuestion.appendChild(selectionChoicesQ[x]);
    typeSelectWitness.appendChild(selectionChoicesW[x]);
@@ -430,14 +500,14 @@ return document.getElementById(objectionName)
 }
 
 //this will now add all the objections in the objection list
-var objectionTypeButtons = [];
-for (var i in objectionTypeList){
- objectionTypeButtons[i] = createButton(objectionTypeList[i]); 
+var correctObjectionsButtons = [];
+for (var i in correctObjectionsList){
+ correctObjectionsButtons[i] = createButton(correctObjectionsList[i]); 
 };
 
 var allObjectionsButton = new createButton("All Objections"); 
 
-objectionTypeButtons.push(allObjectionsButton);
+correctObjectionsButtons.push(allObjectionsButton);
 
 
 /*
@@ -467,5 +537,11 @@ openingPanel.appendChild(practiceButtons);
 
 //add the opening panel to the webpage
 document.body.appendChild(openingPanel);
+
+
+//create the pause panel
+var openingPanel = document.createElement('div'); 
+
+
 
 </script>

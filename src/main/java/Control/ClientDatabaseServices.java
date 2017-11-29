@@ -19,8 +19,8 @@ public interface ClientDatabaseServices {
 	
 	//Get full questions
 	public List<Question> getQuestions(int numberOfQuestions, List<Integer> history); 
-	public List<Question> getQuestions(String type, int numberOfQuestions, List<Integer> history ); 
-	public Question getQuestion(String type, List<Integer> history);
+	public List<Question> getQuestions(int type, int numberOfQuestions, List<Integer> history ); 
+	public Question getQuestion(int type, List<Integer> history);
 	
 	//full question by id
 	public Question getQuestion(int id); 

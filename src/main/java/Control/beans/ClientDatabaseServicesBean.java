@@ -38,39 +38,30 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		Witness wit; 
 		Context cont; 
 		List<Objection> correct; 
-		String historyString = ""; 
-		for (int k : history) {
-			historyString = historyString.concat(", ").concat(String.valueOf(k)); 
+		Transcript tran; 
+		List<Transcript> transcripts = getTranscripts(numberOfQuestions, history);
+			
+		int i = 0; 
+		while(i < numberOfQuestions && i < transcripts.size()){
+			tran = transcripts.get(i);
+			wit = getWitness(tran.getFk_witnessID());
+			cont = getContext(wit.getFk_caseID());
+			correct = getObjectionsByQuestion(tran.getQuestionID());
+			list.add(new Question(cont, wit, tran, correct));
+			i++; 
 		}
 		
-		EntityManager em = emfactory.createEntityManager();
-		em.getTransaction().begin();
-		String query = "Select result FROM Transcript result WHERE result.questionID NOT IN(" + historyString.substring(1) +")";
-		TypedQuery<Transcript> transcriptQuery = em.createQuery(query, Transcript.class);
-		List<Transcript> transcripts = transcriptQuery.getResultList();
-		Collections.shuffle(transcripts);
-		em.close();
-		for(int i = 0; i < numberOfQuestions; i++){
-			wit = getWitness(transcripts.get(i).getFk_witnessID());
-			cont = getContext(wit.getFk_caseID());
-			correct = getObjectionsByQuestion(transcripts.get(i).getQuestionID());
-			list.add(new Question(cont, wit, transcripts.get(i), correct));
-		}
+	
 		return list;
 	}
+	
 	public List<Question> getQuestions() {
 		List<Question> list = new ArrayList<Question>(); 
 		Witness wit; 
 		Context cont; 
 		List<Objection> correct; 
-				
-		EntityManager em = emfactory.createEntityManager();
-		em.getTransaction().begin();
-		String query = "Select result FROM Transcript result";
-		TypedQuery<Transcript> transcriptQuery = em.createQuery(query, Transcript.class);
-		List<Transcript> transcripts = transcriptQuery.getResultList();
-		Collections.shuffle(transcripts);
-		em.close();
+		List<Transcript> transcripts = getTranscripts();
+		
 		for(int i = 0; i < transcripts.size(); i++){
 			wit = getWitness(transcripts.get(i).getFk_witnessID());
 			cont = getContext(wit.getFk_caseID());
@@ -79,69 +70,31 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		}
 		return list;
 	}
-	public List<Question> getQuestions(String type, int numberOfQuestions, List<Integer> history) {
+	
+	public Question getQuestion(int type, List<Integer> history) {
+		return getQuestions(1, type, history).get(0);
+	}
+	public List<Question> getQuestions( int numberOfQuestions, int type, List<Integer> history) {
 		List<Question> list = new ArrayList<Question>(); 
 		Witness wit; 
 		Context cont; 
 		List<Objection> correct; 
-		String historyString = ""; 
-		for (int k : history) {
-			historyString = historyString.concat(", ").concat(String.valueOf(k)); 
+		Transcript tran; 
+		List<Transcript> transcripts = getTranscripts(numberOfQuestions, history, type);
+			
+		int i = 0; 
+		while(i < numberOfQuestions && i < transcripts.size()){
+			tran = transcripts.get(i);
+			wit = getWitness(tran.getFk_witnessID());
+			cont = getContext(wit.getFk_caseID());
+			correct = getObjectionsByQuestion(tran.getQuestionID());
+			list.add(new Question(cont, wit, tran, correct));
+			i++; 
 		}
 		
-		EntityManager em = emfactory.createEntityManager();
-		em.getTransaction().begin();
-		String query = "Select result FROM Transcript result WHERE result.questionID NOT IN(" + historyString.substring(1) +")";
-		TypedQuery<Transcript> transcriptQuery = em.createQuery(query, Transcript.class);
-		List<Transcript> transcripts = transcriptQuery.getResultList();
-		Collections.shuffle(transcripts);
-		em.close();
-		for(int i = 0; i < numberOfQuestions; i++){
-			correct = getObjectionsByQuestion(transcripts.get(i).getQuestionID());
-			for (Objection objection : correct){
-				if (objection.getObjectionType().equals(type)){
-					wit = getWitness(transcripts.get(i).getFk_witnessID());
-					cont = getContext(wit.getFk_caseID());
-					list.add(new Question(cont, wit, transcripts.get(i), correct));
-				}
-			}
-			
-		}
+	
 		return list;
 	}
-	
-	public Question getQuestion(String type, List<Integer> history) {
-		List<Question> list = new ArrayList<Question>(); 
-		Witness wit; 
-		Context cont; 
-		List<Objection> correct; 
-		String historyString = ""; 
-		for (int k : history) {
-			historyString = historyString.concat(", ").concat(String.valueOf(k)); 
-		}
-		
-		EntityManager em = emfactory.createEntityManager();
-		em.getTransaction().begin();
-		String query = "Select result FROM Transcript result WHERE result.questionID NOT IN(" + historyString.substring(1) +")";
-		TypedQuery<Transcript> transcriptQuery = em.createQuery(query, Transcript.class);
-		List<Transcript> transcripts = transcriptQuery.getResultList();
-		Collections.shuffle(transcripts);
-		em.close();
-		for(int i = 0; i < transcripts.size(); i++){
-			correct = getObjectionsByQuestion(transcripts.get(i).getQuestionID());
-			for (Objection objection : correct){
-				if (objection.getObjectionType().equals(type)){
-					wit = getWitness(transcripts.get(i).getFk_witnessID());
-					cont = getContext(wit.getFk_caseID());
-					list.add(new Question(cont, wit, transcripts.get(i), correct));
-					break;
-				}
-			}
-			
-		}
-		return list.get(0);
-	}
-
 	
 	//Get information by ID
 	public List<Objection> getObjectionsByQuestion(int questionID) {
@@ -169,6 +122,80 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		
 		return obj;
 	}
+	
+	public List<Transcript> getTranscripts(){
+		List<Integer> history = new ArrayList<Integer>();
+		history.add(0);
+		return getTranscripts(10, history, -1, 2); 
+	}
+	public List<Transcript> getTranscripts(List<Integer> history){
+		return getTranscripts(10, history, -1, 2); 
+	}
+	
+	public List<Transcript> getTranscripts(int number,  List<Integer> history){
+		return getTranscripts(number, history, -1, 2); 
+	}
+	public List<Transcript> getTranscripts(int number,  List<Integer> history, int type){
+		return getTranscripts(number, history, type, 2); 
+	}
+	
+	public List<Transcript> getTranscripts(int number,  List<Integer> history, int type, int numberOfPrevious){
+		List<Transcript> list = new ArrayList<Transcript>();
+		String historyString = ""; 
+		for (int k : history) {
+			historyString = historyString.concat(", ").concat(String.valueOf(k)); 
+		}
+		
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		String query; 
+		TypedQuery<Transcript> transcriptQuery;
+		if(type == -1){
+			query = "Select result FROM Transcript result WHERE result.questionID NOT IN(:hist)";
+			transcriptQuery = em.createQuery(query, Transcript.class);
+			transcriptQuery.setParameter("hist", historyString.substring(1));
+		} else {
+			query = "Select result FROM Transcript result WHERE result.questionID NOT IN(:hist) AND result.questionID IN (:avail)";
+			String subquery = "SELECT result.fk_questionID FROM Objection result WHERE result.fk_objectionTypeID =" + type; 
+			transcriptQuery = em.createQuery(query, Transcript.class);
+			transcriptQuery.setParameter("hist", historyString.substring(1));
+			transcriptQuery.setParameter("avail", subquery);
+		}
+				
+		List<Transcript> transcripts = transcriptQuery.getResultList();
+		Collections.shuffle(transcripts);
+		int i = 0; 
+		Transcript t; 
+		int previousID; 
+		TypedQuery<Transcript> typedQuery;
+		List<String> courtRecord; 
+		while(i < number && i < transcripts.size()){
+			t = transcripts.get(i); 
+			previousID = t.getPreviousQuestionID();
+			courtRecord = new ArrayList<String>();
+			for (int k = 0; k < numberOfPrevious; k++){
+				query = "Select result FROM Transcript result WHERE result.questionID =" + previousID;
+				typedQuery = em.createQuery(query, Transcript.class);
+				
+				if (!typedQuery.getResultList().isEmpty()){
+					courtRecord.add(0, typedQuery.getResultList().get(0).getCourtQuestion()
+								   .concat("\n")
+								   .concat(typedQuery.getResultList().get(0).getWitnessAnswer())
+								);
+					previousID = typedQuery.getResultList().get(0).getPreviousQuestionID();
+					
+				} else {
+					k = numberOfPrevious; 
+				}
+			}
+			t.setPreviousQuestion(courtRecord);
+			list.add(t);
+			i++;
+		}
+		em.close();
+	return list;
+	}
+	
 	public Transcript getTranscript(int id) {
 		return getTranscript(id, 2);
 	}
@@ -414,7 +441,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		em.close();
 		return list;
 	}
-	
-	
+
+		
 	
 }

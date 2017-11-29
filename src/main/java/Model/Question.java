@@ -78,11 +78,9 @@ public class Question {
 		return this.transcript.getQuestionID();
 	}
 	public String getJsonString(){
-		System.out.println("In jsonifier");
 		Gson json = new Gson();
 		Question q = this; 
 		String output = json.toJson(q); 
-		System.out.println(output);
 		return output;
 	}
 

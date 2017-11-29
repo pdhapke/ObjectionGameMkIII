@@ -58,7 +58,7 @@ public class gameController {
 		//String StartingId = session.getId(); //initialize the session id
 		req.changeSessionId();
 		AuthenticatedUser user = google.verify(token, session.getId());
-		session.setAttribute("email", user.getEmail() );
+		session.setAttribute("email", user.getEmail());
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("signIn", dbInfo.getGoogleClientID());
 		modelAndView.addObject("user", user); 
