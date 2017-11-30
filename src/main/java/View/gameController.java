@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import Control.beans.AdminDatabaseServicesBean;
 import Control.beans.BeanConfiguration;
+import Control.beans.ClientDatabaseServicesBean;
 import Control.beans.GoogleAuthenticatorServiceBean;
 import Control.beans.QuestionServiceBean;
 import Model.AuthenticatedUser;
@@ -39,10 +43,14 @@ public class gameController {
 	AdminDatabaseServicesBean db = applicationContext.getBean("db", AdminDatabaseServicesBean.class);
 	databaseInformation dbInfo = applicationContext.getBean("dbInfo", databaseInformation.class);
 	GoogleAuthenticatorServiceBean google = applicationContext.getBean("google", GoogleAuthenticatorServiceBean.class);
-	
+	ClientDatabaseServicesBean client = applicationContext.getBean("client", ClientDatabaseServicesBean.class);
 	interface Model {
 	    public ModelAndView view(HttpServletRequest req);
 	}
+	/*
+	 * General servers for all below
+	 * 
+	 */
 	
 	@RequestMapping(value="/Welcome" )
 	public  ModelAndView mainpage(){
@@ -62,15 +70,69 @@ public class gameController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("signIn", dbInfo.getGoogleClientID());
 		modelAndView.addObject("user", user); 
-			
+		modelAndView.addObject("ObjectionTypes", client.getAllObjectionTypes()); 	
 		if(user.isAdmin()){
 			modelAndView.setViewName("adminOptions");
 		} else {
 			modelAndView.setViewName("playerOptions");
 		}
+		
 		return modelAndView;
 	}
 	
+	/*
+	 * Player and non-admin servers below
+	 * 
+	 */
+	
+	@RequestMapping(value = "/get-game-questions", method = RequestMethod.GET)
+	public ModelAndView getGameQuestions(HttpServletRequest req){
+		Model model = new Model(){
+			
+			@SuppressWarnings("unchecked")
+			public ModelAndView view(HttpServletRequest req){
+				//build the modelAndView 
+					ModelAndView modelAndView = new ModelAndView();
+					modelAndView.setViewName("get-game-questions");
+					String objectionrRequestString = req.getParameter("typeID");
+					String historyJSON = req.getParameter("previous"); 
+					int typeID; 
+					List<Integer> history; 
+					if (historyJSON == null || historyJSON.equals("-1")){
+						try{
+							Gson gson = new GsonBuilder().create();
+							history = gson.fromJson(historyJSON, ArrayList.class);
+						} catch(Error e){
+							history = new ArrayList<Integer>(); 
+						} 
+					} else {
+						history = new ArrayList<Integer>(); 
+					}
+					
+					if(objectionrRequestString == null || objectionrRequestString.equals("-1")){
+						modelAndView.addObject("questions", client.getQuestions());
+					} else {
+						try{
+							typeID = Integer.parseInt(objectionrRequestString);
+							modelAndView.addObject("questions", client.getQuestions(typeID, history));
+						} catch (NumberFormatException e){
+							System.out.println("Number Format Exception:" + objectionrRequestString );
+							modelAndView.addObject("questions", client.getQuestions());
+						}}
+			
+				//end building
+			
+			return modelAndView; 
+				}
+			};
+				
+		return model.view(req);
+	}
+	
+	
+	/*
+	 * Admin functions and servlets below
+	 */
 	
 	@RequestMapping(value = "/all", method = RequestMethod.POST)
 	public ModelAndView showAll(HttpServletRequest req){
@@ -249,24 +311,7 @@ public class gameController {
 		return admin(req, model);
 	}
 	
-	//admin function to verify if the user is authorized before running 
-	public ModelAndView admin(HttpServletRequest req, Model model){
-		ModelAndView modelAndView = new ModelAndView();
-		HttpSession session = req.getSession();
-		AuthenticatedUser user = db.getAuthenticatedUser(session.getAttribute("email").toString());
-		if(user.getSession_id().equals(session.getId())){
-			if(user.isAdmin()){
-				//add the view name and the objects needed
-					modelAndView = model.view(req); 
-					modelAndView.addObject("user", user);
-				} else {
-					modelAndView.setViewName("Not-Authorized");
-				}
-			} else {
-				modelAndView.setViewName("Not-Signed-In"); 
-			}
-			return modelAndView;
-		}
+	
 	
 	@RequestMapping(value = "/submit-new-question", method = RequestMethod.POST)
 	public ModelAndView submit_new_question(HttpServletRequest req){
@@ -393,11 +438,28 @@ public class gameController {
 		return admin(req, model);
 	}
 	
+	//admin function to verify if the user is authorized before running 
+	public ModelAndView admin(HttpServletRequest req, Model model){
+		ModelAndView modelAndView = new ModelAndView();
+		HttpSession session = req.getSession();
+		AuthenticatedUser user = db.getAuthenticatedUser(session.getAttribute("email").toString());
+		if(user.getSession_id().equals(session.getId())){
+			if(user.isAdmin()){
+				//add the view name and the objects needed
+					modelAndView = model.view(req); 
+					modelAndView.addObject("user", user);
+				} else {
+					modelAndView.setViewName("Not-Authorized");
+				}
+			} else {
+				modelAndView.setViewName("Not-Signed-In"); 
+			}
+			return modelAndView;
+		}
 	
 	/* 
 	 * Admin template 
-	
-	 		
+		 		
 	//this template uses the anonymous class and method in order to avoid doing database operations 
 	//until after the user has been authenticated. 
 

@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://www.springframework.org/tags/form" prefix= "mvc"  %>    
 <%@ page isELIgnored="false" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <script>
 /*
  * Game setup functions used to retrieve questions form the database
@@ -27,11 +29,42 @@
  var questionNumber = 0; 
  var questionList = [];
  var askedQuestions = [];
- var questionBank = document.createElement("div");
- questionBank.style.display = "none";
+ var questionBank 
+ var possibleObjections = []; 
  
 
 function resetGame(){
+	mainDiv.style.display = "none";
+	resetButton.style.display = "none";
+	break1.style.display = "none";
+	openingPanel.style.display = "inline-table";
+    questionList = []; 
+    questionNumber = 0;
+typeSelectQuestion = null;
+typeSelectWitness = null;  
+}
+function showGame(){
+	mainDiv.style.display = 'inline-table';
+	resetButton.style.display = 'inline-table';
+	break1.style.display = 'inline-table';
+	openingPanel.style.display = "none";
+}
+
+function pauseGame(){
+	mainDiv.style.display = "none";
+	resetButton.style.display = "none";
+	break1.style.display = "none";
+	pausePanel.style.display = 'inline-table';
+    
+}
+function resumeGame(){
+	mainDiv.style.display = 'inline-table';
+	resetButton.style.display = 'inline-table';
+	break1.style.display = 'inline-table';
+    pausePanel.style.display = "none";
+}
+
+function resetGame2(){
     document.body.removeChild(mainDiv);
     document.body.removeChild(resetButton);
     document.body.removeChild(break1);
@@ -42,20 +75,20 @@ typeSelectQuestion = null;
 typeSelectWitness = null;
     
 }
-function pauseGame(){
+function pauseGame2(){
     document.body.removeChild(mainDiv);
     document.body.removeChild(resetButton);
     document.body.removeChild(break1);
     document.body.appendChild(pausePanel);
 }
-function resumeGame(){
+function resumeGame2(){
     document.body.appendChild(mainDiv);
     document.body.appendChild(resetButton);
     document.body.appendChild(break1);
     document.body.removeChild(pausePanel);
 }
 
-var questionList = [];
+
 var createQuestion = function questionCreator(q){
 	this.context = q.context.context;
 	this.caseID = q.context.caseID; 
@@ -76,7 +109,7 @@ var createQuestion = function questionCreator(q){
 	this.previousQuestion = function generatePreviousText(){
 	let answer = "";
 	for(let i = 0; i < this.transcript.previousQuestion.length; i++){
-		answer = answer + "\n" this.transcript.previousQuestion[i] + "\n";
+		answer = answer + "\n" + this.transcript.previousQuestion[i] + "\n";
 	}
 		return answer; 
 	}
@@ -92,11 +125,10 @@ var createQuestion = function questionCreator(q){
 		 answer = answer + this.fullname + "\n"; 
 		 answer = answer + witness.affidavit;
 		 return answer;	 
-		  }
-	 
- 
- 	questionList.add(this); 
-}
+		 };
+	
+	 questionList.push(this);
+	}
 
 blankObjection = {
 		objectionID: -1, 
@@ -108,8 +140,24 @@ blankObjection = {
 			objectionRuleNumber:50, 
 			objectionType: "none", 
 			objectionInformation: "Sometimes no objections can be made" 
-		};
+		}
 }
+
+possibleObjections = []; 
+
+<c:forEach items="${ObjectionTypes}" var="type">
+	possibleObjections.push({
+		objectionTypeID: ${type.objectionTypeID},
+		objectionRuleNumber: ${type.objectionRuleNumber}, 
+		objectionType: "${type.objectionType}", 
+		objectionInformation: "${type.objectionInformation}"
+		})
+</c:forEach>
+
+possibleObjections.sort(function(first, second){
+	return - (first.objectionRuleNumber - second.objectionRuleNumber || first.objectionType.localeCompare(second.objectionType));
+}); 
+
 
 
 var correctObjectionsList = [
@@ -149,11 +197,9 @@ correctObjectionsList.sort();
  *Game functions and control 
  */
 
-function startGame(objectionTypeID){
-    document.body.removeChild(openingPanel);
-    drawGame();                         //this will draw the game
-    prepareQuestions(objectionTypeID);    //this will prepare all the questions asked for
-    
+function startGame(objectionID){
+	prepareQuestions(objectionID);                  
+    showGame();  
 }
 
 function prepareQuestions(typeID){
@@ -176,11 +222,8 @@ function prepareQuestions(typeID){
 		   }
 			 
 		 }
-			 
+    	getRequest.send("typeID=" + typeID + "&previous=" +previousJSON)	 
 	}
-  
-        getRequest.send("typeID=" + typeID + "&previous=" +previousJSON)
-}
 
 function askNextQuestion(){
     
@@ -195,13 +238,6 @@ function askNextQuestion(){
     }
      
 }
-
-
-
-
-
-
-
 
 
 function scoreAndUpdateWitness(){
@@ -234,45 +270,43 @@ function scoreAndUpdateAll(type, time = "none"){
 				objection = ob; 
 				correct = true; 
 			}
-		
-			 
+		 
 		}
 		
 		
 	}); 
+	let text; 
 	
-	
-	
+	if(correct === true){
+        
+	     text = randomPositive() + "\n You got the question correct and have gained a point. See the explanation below for more information on the question \n\n Explanation: \n" + objection.explanation;
+	    }else {
+	        text = "See the explanation below for the correct answer.  \n\n Explanation: \n" + objection.explanation;
+	    }
+	    
+	    showResults(text); 
+	    	   
+	    scoreBoard.panelUpdate(score);
+	    questionNumber++;
+	    askNextQuestion();
 }
 
+function showResults(text){
+	//this is a stub that will be changed later to a better form
+	//currently uses an alert to explain the objection and results
+	alert(text); 
+}
 
 function randomPositive(){
-    var temp = "Great job! ";
+    //add in random positive exlamations
+	var temp = "Great job! ";
     
     return temp
 }
 
-function scoreAndUpdate(score){
-    var text; 
-    
-    if(score === true){
-        
-    text = randomPositive() + "\n You got the question correct and have gained a point. See the explanation below for more information on the question \n\n Explanation: \n" + questionList[questionNumber].explanation;
-    }else {
-        text = "See the explanation below for the correct answer.  \n\n Explanation: \n" + questionList[questionNumber].explanation;
-    }
-    
-    alert(text); 
-    
-    
-   
-    scoreBoard.panelUpdate(score);
-    questionNumber++;
-    previousQ
-    askNextQuestion();
-}
-
-
+/*
+ * Game UI and panels
+ */
 
 
 function drawGame(){
@@ -325,6 +359,9 @@ objectionButtonQuestion = document.createElement('button');
 objectionButtonQuestion.innerText = "Objection! The question calls for...";
 objectionButtonQuestion.onclick = scoreAndUpdateQuestion;
 
+//create the type select drop downs for use by the buttons
+typeSelectQuestion = document.createElement('select');
+typeSelectWitness = document.createElement('select');
 
 questionElement.appendChild(document.createElement("br"));
 
@@ -405,6 +442,17 @@ resetButton.innerText = "Reset";
 resetButton.style.backgroundColor="red"; 
 document.body.appendChild(resetButton);
 
+//hide the three components to start
+mainDiv.style.display = "none";
+resetButton.style.display = "none";
+break1.style.display = "none";
+
+
+//finally add the three components
+document.body.appendChild(mainDiv);
+document.body.appendChild(resetButton);
+document.body.appendChild(break1);
+
 }
 
 /*
@@ -412,7 +460,7 @@ document.body.appendChild(resetButton);
  */
 
 
-//this is the player score  panel
+//this is the player score  panel -- migrate this to the player options
 var scoreBoard={
   correct:0,
   incorrect:0, 
@@ -435,36 +483,39 @@ document.body.appendChild(document.createElement("br"))
 
 
 
-function makeSelectionOptions(allowedObjection){
-typeSelectQuestion = document.createElement('select');
-
-typeSelectWitness = document.createElement('select');
-
+function makeSelectionOptions(objection){
 var selectionChoicesQ=[]; 
 var selectionChoicesW=[];
-if(allowedObjection == "All Objections"){
-for(var x in correctObjectionsList){
+
+if(objection.objectionType == "All Objections"){
+for(let x = 0; x < possibleObjections.length; x++){
  
   selectionChoicesQ[x] = document.createElement('option');
-  selectionChoicesQ[x].innerText = correctObjectionsList[x];
-   
+  selectionChoicesQ[x].innerText = possibleObjections[x].objectionRuleNumber + " - " + possibleObjections[x].objectionType;
+  selectionChoicesQ[x].value = possibleObjections[x].objectionTypeID; 
+  
   selectionChoicesW[x] = document.createElement('option');
-  selectionChoicesW[x].innerText = correctObjectionsList[x];
+  selectionChoicesW[x].innerText = possibleObjections[x].objectionRuleNumber + " - " + possibleObjections[x].objectionType;
+  selectionChoicesW[x].value = possibleObjections[x].objectionTypeID; 
   
    typeSelectQuestion.appendChild(selectionChoicesQ[x]);
    typeSelectWitness.appendChild(selectionChoicesW[x]);
    
 }
 } else {
- selectionChoicesQ = document.createElement('option');
-  selectionChoicesQ.innerText = allowedObjection;
+   selectionChoicesQ = document.createElement('option');
+   selectionChoicesQ.innerText = objection.objectionRuleNumber + " - " + objection.objectionType;
+   selectionChoicesQ.value = objection.objectionTypeID; 
+   selectionChoicesQ.selected = true; 
    
-  selectionChoicesW = document.createElement('option');
-  selectionChoicesW.innerText = allowedObjection;
+   selectionChoicesW = document.createElement('option');
+   selectionChoicesW.innerText = objection.objectionRuleNumber + " - " + objection.objectionType;
+   selectionChoicesW.value = objection.objectionTypeID; 
+   selectionChoicesW.selected = true; 
   
    typeSelectQuestion.appendChild(selectionChoicesQ);
    typeSelectWitness.appendChild(selectionChoicesW); 
-}
+   }
 }
 
 
@@ -483,53 +534,33 @@ openingPanel.appendChild(openingText);
 //create the button div
 var practiceButtons = document.createElement("div");
 
-var createButton = function myButtonCreator(objectionName) {
-var temp = document.createElement('button');
-temp.id = objectionName;
+var createButton = function myButtonCreator(objection) {
+	var temp = document.createElement('button');
+	temp.id = "TypeID" + objection.objectionTypeID;
 
-temp.innerText = "I want to Practice \n " + objectionName; 
-temp.onclick = function(){
-  makeSelectionOptions(objectionName);
-  startGame(objectionName);
-  
-  
-}; 
-temp.style.margin = "3px";
-practiceButtons.appendChild(temp);  
-return document.getElementById(objectionName)
+	temp.innerText = "I want to Practice \n " + objection.objectionType; 
+	temp.onclick = function(){
+ 		makeSelectionOptions(objection);
+  		startGame(objection.objectionTypeID);
+	};  
+	temp.style.margin = "3px";
+	practiceButtons.appendChild(temp);  
+	return document.getElementById(temp.id);
 }
 
 //this will now add all the objections in the objection list
 var correctObjectionsButtons = [];
-for (var i in correctObjectionsList){
- correctObjectionsButtons[i] = createButton(correctObjectionsList[i]); 
-};
-
-var allObjectionsButton = new createButton("All Objections"); 
-
+var allObjectionsButton = new createButton({
+	objectionTypeID:  -1,
+	objectionRuleNumber: 0, 
+	objectionType: "All Objections", 
+	objectionInformation:  "All Objections"
+	}); 
 correctObjectionsButtons.push(allObjectionsButton);
 
-
-/*
-//add the hearsay button
-var practiceHearsay = document.createElement('button'); 
-practiceHearsay.innerText = "I want to Practice \n Hearsay"; 
-practiceHearsay.onclick = startGame; 
-practiceHearsay.style.margin = "3px";
-practiceButtons.appendChild(practiceHearsay);
-
-//add the lack of foundation button
-var practiceLoF = document.createElement('button'); 
-practiceLoF.innerText = "I want to  Practice \n Lack of Foundation"; 
-practiceLoF.onclick = startGame; 
-practiceButtons.appendChild(practiceLoF);
-practiceHearsay.style.margin = "3px";
-
-var lackofKnowledge = createButton("Lack of Knowledge", startGame);
-*/
-
-
-
+possibleObjections.forEach(function(item){
+	correctObjectionsButtons.push(createButton(item)); 
+});
 
 
 //add the buttons to the opening panel
@@ -537,11 +568,28 @@ openingPanel.appendChild(practiceButtons);
 
 //add the opening panel to the webpage
 document.body.appendChild(openingPanel);
+//draw the rest of the game while choosing
+drawGame(); 
 
 
 //create the pause panel
-var openingPanel = document.createElement('div'); 
+var pausePanel = document.createElement('div'); 
 
 
+//create receptical for the data transfer
+questionBank = document.createElement("div");
+questionBank.style.display = "none";
+document.body.appendChild(questionBank); 
+
+
+
+/* 
+ * Starting the game once the functions are in place
+ */
+ 
+//add the opening panel to the webpage
+document.body.appendChild(openingPanel);
+//draw the rest of the game while choosing
+drawGame(); 
 
 </script>

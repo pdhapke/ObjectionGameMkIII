@@ -153,12 +153,12 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		if(type == -1){
 			query = "Select result FROM Transcript result WHERE result.questionID NOT IN(:hist)";
 			transcriptQuery = em.createQuery(query, Transcript.class);
-			transcriptQuery.setParameter("hist", historyString.substring(1));
+			transcriptQuery.setParameter("hist", history);
 		} else {
 			query = "Select result FROM Transcript result WHERE result.questionID NOT IN(:hist) AND result.questionID IN (:avail)";
 			String subquery = "SELECT result.fk_questionID FROM Objection result WHERE result.fk_objectionTypeID =" + type; 
 			transcriptQuery = em.createQuery(query, Transcript.class);
-			transcriptQuery.setParameter("hist", historyString.substring(1));
+			transcriptQuery.setParameter("hist", history);
 			transcriptQuery.setParameter("avail", subquery);
 		}
 				

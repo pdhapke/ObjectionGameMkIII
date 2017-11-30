@@ -7,14 +7,14 @@ The java model structure was designed with persistence in mind to establish a pa
 Planned 
 - [ ] Admin
 	- [x] Persistence Controller
-	- [ ] GUI 
+	- [x] GUI 
 	- [x] Authentication
 
 - [ ] Game
 	- [x] Controller
 	- [x] Persistence Controller
 	- [ ] GUI
-	- [ ] Objection Timing
+	- [x] Objection Timing
 	- [ ] Practice Type
 
 - [x] Database
@@ -32,8 +32,8 @@ Planned
 - [ ] Spring
 	- [x] MVC utilities
 	- [x] Bean utilities
-	- [ ] MVC
-	- [ ] Beans
+	- [x] MVC
+	- [x] Beans
 	
 
 **SCRUM status & backlog** <br>

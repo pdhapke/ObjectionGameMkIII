@@ -40,4 +40,9 @@ public class BeanConfiguration {
 		return bean;		
 	}
 	
+	@Bean
+	public ClientDatabaseServicesBean client(){
+		ClientDatabaseServicesBean bean = new ClientDatabaseServicesBean(); 
+		return bean;
+	}
 }
