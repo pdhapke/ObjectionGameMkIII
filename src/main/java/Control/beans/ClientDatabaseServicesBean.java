@@ -151,7 +151,7 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		String query; 
 		TypedQuery<Transcript> transcriptQuery;
 		if(type == -1){
-			query = "Select result FROM Transcript result WHERE result.questionID NOT IN(:hist)";
+			query = "Select result FROM Transcript result WHERE result.questionID NOT IN :hist";
 			transcriptQuery = em.createQuery(query, Transcript.class);
 			transcriptQuery.setParameter("hist", history);
 		} else {
