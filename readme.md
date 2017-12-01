@@ -39,5 +39,5 @@ Planned
 **SCRUM status & backlog** <br>
 
  [SCRUM Spreadsheet Sprint 1](https://docs.google.com/spreadsheets/d/1tdWSuC_HPGky3ifocHwHV5q5-KExHlzkDwGL0fNDGMg/edit?usp=sharing)
- [SCRUM Spreadsheet Sprint 2] (https://docs.google.com/spreadsheets/d/1caK8YbuOVIuel1xAZ0KVAj9y6eJFfQM6k7t4evQiBAA/edit?usp=sharing)
+ [SCRUM Spreadsheet Sprint 2](https://docs.google.com/spreadsheets/d/1caK8YbuOVIuel1xAZ0KVAj9y6eJFfQM6k7t4evQiBAA/edit?usp=sharing)
 
