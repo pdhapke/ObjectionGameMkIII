@@ -28,7 +28,7 @@ import Model.Witness;
 
 public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII");
-	final private int TWENTY_MINUTES = 1000 * 60 * 20; 
+	final private int TWENTY_MINUTES = 1000 * 60 * 1; 
 	public void close(){
 		emfactory.close();
 	}

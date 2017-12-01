@@ -59,13 +59,17 @@ public class gameController {
 		modelAndView.addObject("signIn", dbInfo.getGoogleClientID());
 		return modelAndView;
 	}
-	@RequestMapping(value="/processSignIn", method = RequestMethod.POST )
+	@RequestMapping(value="/processSignIn", method = {RequestMethod.POST, RequestMethod.GET})
 	public  ModelAndView processUser(HttpServletRequest req, @RequestParam(value="idtoken") String token){
 		System.out.println(token);
 		HttpSession session = req.getSession(); 
 		//String StartingId = session.getId(); //initialize the session id
 		req.changeSessionId();
 		AuthenticatedUser user = google.verify(token, session.getId());
+				
+		if (user == null){
+			return new ModelAndView("redirect:/Welcome.mvc");
+		}
 		
 		session.setAttribute("email", user.getEmail());
 		ModelAndView modelAndView = new ModelAndView();
@@ -447,7 +451,10 @@ public class gameController {
 		ModelAndView modelAndView = new ModelAndView();
 		HttpSession session = req.getSession();
 		AuthenticatedUser user = db.getAuthenticatedUser(session.getAttribute("email").toString());
-		if(user.getSession_id().equals(session.getId())){
+		
+		if(user == null){
+			return new ModelAndView("redirect:/Welcome.mvc");
+		} else if(user.getSession_id().equals(session.getId())){
 			if(user.isAdmin()){
 				//add the view name and the objects needed
 					modelAndView = model.view(req); 
@@ -455,8 +462,8 @@ public class gameController {
 				} else {
 					modelAndView.setViewName("Not-Authorized");
 				}
-			} else {
-				modelAndView.setViewName("Not-Signed-In"); 
+		} else {
+				return new ModelAndView("redirect:/Welcome.mvc");
 			}
 			return modelAndView;
 		}
