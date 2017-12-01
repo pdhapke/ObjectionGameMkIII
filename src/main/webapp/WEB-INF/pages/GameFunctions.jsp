@@ -90,18 +90,19 @@ function resumeGame2(){
 
 
 var createQuestion = function questionCreator(q){
+	 alert(q.context.context);
 	this.context = q.context.context;
 	this.caseID = q.context.caseID; 
 	this.witness = q.witness;
 	this.fullname = (this.witness.firstname + " " + this.witness.lastname);
 	this.transcript = q.transcript; 
 	this.correctObjections = q.correctObjections;
-
+	
 	for (let i = 0; i <  this.correctObjections.length; i++){
 		if (this.correctObjections[i].timing.toLowerCase() == "question"){
 				this.correctObjections[i].objectionableQuestion = true; 
 				this.correctObjections[i].objectionableAnswer = false; 
-			} else if (timing.toLowerCase() == "answer"){
+			} else if (this.correctObjections[i].timing.toLowerCase() == "answer"){
 				this.correctObjections[i].objectionableQuestion = false; 
 				this.correctObjections[i].objectionableAnswer = true; 
 			}
@@ -113,9 +114,8 @@ var createQuestion = function questionCreator(q){
 	}
 		return answer; 
 	}
-	this.question = function questionFormater(){
-		let answer = "The " + this.transcript.sideAskingQuestion + " asks the witness: \n" + this.transcript.courtQuestion; 
-		return answer; 
+	this.question = function compileQuestion() {
+	return	"The " + this.transcript.sideAskingQuestion + " asks the witness: \n" + this.transcript.courtQuestion; 
 	}
 	this.story = function createStory(){
 		 let answer = ""; 
@@ -123,11 +123,9 @@ var createQuestion = function questionCreator(q){
 		 answer = answer + this.context;
 		 answer = answer + "\n\n";
 		 answer = answer + this.fullname + "\n"; 
-		 answer = answer + witness.affidavit;
+		 answer = answer + this.witness.affidavit;
 		 return answer;	 
 		 };
-	
-	 questionList.push(this);
 	}
 
 blankObjection = {
@@ -147,7 +145,7 @@ possibleObjections = [];
 
 <c:forEach items="${ObjectionTypes}" var="type">
 	possibleObjections.push({
-		objectionTypeID: ${type.objectionTypeID},
+		objectionTypeID:${type.objectionTypeID},
 		objectionRuleNumber: ${type.objectionRuleNumber}, 
 		objectionType: "${type.objectionType}", 
 		objectionInformation: "${type.objectionInformation}"
@@ -211,14 +209,16 @@ function prepareQuestions(typeID){
 
     getRequest.onreadystatechange = function() {
 	     if (this.readyState == 4 && this.status == 200) {
-			 questionBank.innerHTML = this.response;
-			 dataStorage = document.getElementById("dataStorage");
+	    	 questionBank.innerHTML = this.response;
+			 let dataStorage = document.getElementById("dataStorage");
 			 data = dataStorage.getAttribute("data-json");
 			 let list = JSON.parse(data); 
 			 
 			 for(let i = 0; i< list.length; i++){
-				 createQuestion(list[i]);
+				questionList.push(new createQuestion(list[i]));
 			 }
+			
+			 askNextQuestion();
 		   }
 			 
 		 }
@@ -226,12 +226,14 @@ function prepareQuestions(typeID){
 	}
 
 function askNextQuestion(){
-    
+	
     if(questionList[questionNumber]){
-   	 	previousQuestionBox.value = questionList[questionNumber].previousQuestion();
-    	questionBox.value = questionList[questionNumber].transcript.question();
+    	
+    	previousQuestionBox.value = questionList[questionNumber].previousQuestion();
+    	questionBox.value = questionList[questionNumber].question();
     	witnessBox.value = questionList[questionNumber].transcript.witnessAnswer;
     	storyBox.value = questionList[questionNumber].story();
+    	
     } else {
         alert("You have finished all the questions in this round! \n \n The game will now reset");
         resetGame();
@@ -245,7 +247,7 @@ function scoreAndUpdateWitness(){
 	scoreAndUpdateAll(type, "answer");
 }
 function scoreAndUpdateQuestion(){
-	let type =typeSelectAnswer.value; 
+	let type =typeSelectQuestion.value; 
 	scoreAndUpdateAll(type, "question");
     
 }
@@ -265,7 +267,7 @@ function scoreAndUpdateAll(type, time = "none"){
 	
 		
 	objs.forEach(function checkobjections(ob){
-		if(ob.objectionTypeID == type){
+		if(ob.fk_objectionTypeID == type){
 			if (ob.timing.toLowerCase() == time) {
 				objection = ob; 
 				correct = true; 
@@ -286,7 +288,7 @@ function scoreAndUpdateAll(type, time = "none"){
 	    
 	    showResults(text); 
 	    	   
-	    scoreBoard.panelUpdate(score);
+	    scoreBoard.panelUpdate(correct);
 	    questionNumber++;
 	    askNextQuestion();
 }
@@ -566,22 +568,13 @@ possibleObjections.forEach(function(item){
 //add the buttons to the opening panel
 openingPanel.appendChild(practiceButtons);
 
-//add the opening panel to the webpage
-document.body.appendChild(openingPanel);
-//draw the rest of the game while choosing
-drawGame(); 
-
-
 //create the pause panel
 var pausePanel = document.createElement('div'); 
-
 
 //create receptical for the data transfer
 questionBank = document.createElement("div");
 questionBank.style.display = "none";
 document.body.appendChild(questionBank); 
-
-
 
 /* 
  * Starting the game once the functions are in place

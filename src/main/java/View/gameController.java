@@ -66,6 +66,7 @@ public class gameController {
 		//String StartingId = session.getId(); //initialize the session id
 		req.changeSessionId();
 		AuthenticatedUser user = google.verify(token, session.getId());
+		
 		session.setAttribute("email", user.getEmail());
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("signIn", dbInfo.getGoogleClientID());
@@ -98,6 +99,7 @@ public class gameController {
 					String historyJSON = req.getParameter("previous"); 
 					int typeID; 
 					List<Integer> history; 
+					List<Question> generatedQuestions; 
 					if (historyJSON == null || historyJSON.equals("-1")){
 						try{
 							Gson gson = new GsonBuilder().create();
@@ -110,16 +112,18 @@ public class gameController {
 					}
 					
 					if(objectionrRequestString == null || objectionrRequestString.equals("-1")){
-						modelAndView.addObject("questions", client.getQuestions());
+						generatedQuestions = client.getQuestions();
 					} else {
 						try{
 							typeID = Integer.parseInt(objectionrRequestString);
-							modelAndView.addObject("questions", client.getQuestions(typeID, history));
+							generatedQuestions = client.getQuestions(typeID, history);
 						} catch (NumberFormatException e){
-							System.out.println("Number Format Exception:" + objectionrRequestString );
-							modelAndView.addObject("questions", client.getQuestions());
+							System.out.println("Number Format Exception:" + objectionrRequestString);
+							generatedQuestions = client.getQuestions();
 						}}
-			
+					Gson json = new Gson();
+					String questionJSON = json.toJson(generatedQuestions); 
+					modelAndView.addObject("questions", questionJSON);
 				//end building
 			
 			return modelAndView; 

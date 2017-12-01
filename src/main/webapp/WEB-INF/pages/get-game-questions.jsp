@@ -3,13 +3,8 @@
 <%@ page isELIgnored="false" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<select id="correctObjection" name="correctObjection" onchange="getObjectionTypes()">
-   		<option  id="correctObjection-1" data-json= "{}" value="-1"> - Enter a new possible objection - </option>
-    <c:forEach items="${objections}" var="ob">
-    	<option 
-    	value="${ob.fk_objectionTypeID}"
-    	id="correctObjection${ob.objectionID}"
-    	data-json='${ob.jsonString}'
-    	>Rule ${ob.description.objectionRuleNumber } : ${ob.description.objectionType} </option>
-    </c:forEach>
-</select>
+ 
+<div  id="dataStorage" style="display:none" data-json ='${questions}'>
+
+</div>
+
