@@ -141,10 +141,8 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 	
 	public List<Transcript> getTranscripts(int number,  List<Integer> history, int type, int numberOfPrevious){
 		List<Transcript> list = new ArrayList<Transcript>();
-		String historyString = ""; 
-		for (int k : history) {
-			historyString = historyString.concat(", ").concat(String.valueOf(k)); 
-		}
+		history.add(0);
+		
 		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
@@ -155,11 +153,18 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 			transcriptQuery = em.createQuery(query, Transcript.class);
 			transcriptQuery.setParameter("hist", history);
 		} else {
+			List<Objection> subquery = getAllObjectionsByType(type);
+			
+			List<Integer> availibleQuestions = new ArrayList<Integer>(); 
+			for(Objection item : subquery){
+				availibleQuestions.add(item.getFk_questionID());
+			}
+			
+			
 			query = "Select result FROM Transcript result WHERE result.questionID NOT IN(:hist) AND result.questionID IN (:avail)";
-			String subquery = "SELECT result.fk_questionID FROM Objection result WHERE result.fk_objectionTypeID =" + type; 
 			transcriptQuery = em.createQuery(query, Transcript.class);
 			transcriptQuery.setParameter("hist", history);
-			transcriptQuery.setParameter("avail", subquery);
+			transcriptQuery.setParameter("avail", availibleQuestions);
 		}
 				
 		List<Transcript> transcripts = transcriptQuery.getResultList();
@@ -441,7 +446,13 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		em.close();
 		return list;
 	}
-
+	public List<Objection> getAllObjectionsByType(int typeID) {
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		List<Objection> list = em.createQuery("Select result from Objection result WHERE result.fk_objectionTypeID =" + typeID, Objection.class).getResultList();
+		em.close();
+		return list;
+	}
 		
 	
 }

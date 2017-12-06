@@ -148,7 +148,7 @@ public class gameController {
 	 * 
 	 */
 	
-	@RequestMapping(value = "/get-game-questions", method = RequestMethod.GET)
+	@RequestMapping(value = "/get-game-questions")
 	public ModelAndView getGameQuestions(HttpServletRequest req){
 		Model model = new Model(){
 			
@@ -162,15 +162,20 @@ public class gameController {
 					int typeID; 
 					List<Integer> history; 
 					List<Question> generatedQuestions; 
-					if (historyJSON == null || historyJSON.equals("-1")){
+					Gson gson = new GsonBuilder().create();
+					Gson json = new Gson();
+					System.out.println(historyJSON);
+					System.out.println(objectionrRequestString);
+					
+					if (historyJSON == null || historyJSON.equals("-1") || historyJSON.equals("[]")){
+						history = new ArrayList<Integer>(); 
+					} else {
 						try{
-							Gson gson = new GsonBuilder().create();
 							history = gson.fromJson(historyJSON, ArrayList.class);
 						} catch(Error e){
 							history = new ArrayList<Integer>(); 
+							System.out.println("History failed...");
 						} 
-					} else {
-						history = new ArrayList<Integer>(); 
 					}
 					
 					if(objectionrRequestString == null || objectionrRequestString.equals("-1")){
@@ -178,12 +183,12 @@ public class gameController {
 					} else {
 						try{
 							typeID = Integer.parseInt(objectionrRequestString);
-							generatedQuestions = client.getQuestions(typeID, history);
+							generatedQuestions = client.getQuestions(10, typeID, history);
 						} catch (NumberFormatException e){
 							System.out.println("Number Format Exception:" + objectionrRequestString);
 							generatedQuestions = client.getQuestions();
 						}}
-					Gson json = new Gson();
+					
 					String questionJSON = json.toJson(generatedQuestions); 
 					modelAndView.addObject("questions", questionJSON);
 				//end building
@@ -518,12 +523,6 @@ public class gameController {
 		};
 		return admin(req, model);
 	}
-	
-	
-	
-	//function to register user sessions and direct accordingly
-	
-	
 	
 	
 	//admin function to verify if the user is authorized before running 

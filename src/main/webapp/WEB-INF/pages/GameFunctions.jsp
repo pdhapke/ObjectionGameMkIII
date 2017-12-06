@@ -107,7 +107,6 @@ var createQuestion = function questionCreator(q){
 			}
 		
 		if (currentPracticeType != -1){
-			alert(currentPracticeType);
 			if(this.correctObjections[i].fk_objectionTypeID != currentPracticeType){
 				this.correctObjections[i] = blankObjection;
 			}
@@ -210,9 +209,9 @@ function startGame(objectionID){
 
 function prepareQuestions(typeID){
     questionNumber = 0;
-    previousJSON = JSON.stringify(askedQuestions); 
+    let previousJSON = JSON.stringify(askedQuestions); 
     let getRequest = new XMLHttpRequest();
-	getRequest.open('GET', 'get-game-questions.mvc', true);
+	getRequest.open('POST', 'get-game-questions.mvc', true);
 	getRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
     getRequest.onreadystatechange = function() {
@@ -225,12 +224,13 @@ function prepareQuestions(typeID){
 			 for(let i = 0; i< list.length; i++){
 				questionList.push(new createQuestion(list[i]));
 			 }
-			
 			 askNextQuestion();
 		   }
 			 
 		 }
-    	getRequest.send("typeID=" + typeID + "&previous=" +previousJSON)	 
+    	
+    	let dataString = "typeID=" + typeID + "&previous=" + previousJSON;
+      	getRequest.send(dataString);	 
 	}
 
 function askNextQuestion(){
@@ -267,6 +267,10 @@ function scoreAndUpdateAll(type, time = "none"){
 	let objection; 
 	let correct = false; 
 	let isPossible = false; //used as a double flag for correcting single objection practice
+	
+	//record that the question was asked
+	askedQuestions.push(questionList[questionNumber].transcript.questionID);
+	
 	if (objs.length == 0){
 		correct = true; 
 		objection = blankObjection; 
@@ -275,7 +279,6 @@ function scoreAndUpdateAll(type, time = "none"){
 	}
 	
 	objs.forEach(function checkobjections(ob){
-		alert(ob.explanation);
 		if(ob.fk_objectionTypeID == type){
 			if (ob.timing.toLowerCase() == time) {
 					objection = ob; 

@@ -5,7 +5,7 @@ This repository is the program structure in progress for an objection game to be
 The java model structure was designed with persistence in mind to establish a parity between the database tables in order to preserve the one to many relationships and add table items individually. Using separate entities later GUIs will also be able to update using drop down lists of relationships reducing the size of each question entry. Packages are separated into definitional groups and functional groups (beans) for easier bean configuration. 
 
 Planned 
-- [ ] Admin
+- [x] Admin
 	- [x] Persistence Controller
 	- [x] GUI 
 	- [x] Authentication
@@ -16,6 +16,8 @@ Planned
 	- [x] GUI
 	- [x] Objection Timing
 	- [x] Practice Type
+	- [ ] User Welcome
+	- [ ] Score Tracking
 
 - [x] Database
 	- [x] Relationship table
