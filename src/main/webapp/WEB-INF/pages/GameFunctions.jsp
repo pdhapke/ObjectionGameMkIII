@@ -31,7 +31,7 @@
  var askedQuestions = [];
  var questionBank 
  var possibleObjections = []; 
- 
+ var currentPracticeType; 
 
 function resetGame(){
 	mainDiv.style.display = "none";
@@ -40,8 +40,8 @@ function resetGame(){
 	openingPanel.style.display = "inline-table";
     questionList = []; 
     questionNumber = 0;
-typeSelectQuestion = null;
-typeSelectWitness = null;  
+typeSelectQuestion =  document.createElement('select');
+typeSelectWitness =  document.createElement('select');  
 }
 function showGame(){
 	mainDiv.style.display = 'inline-table';
@@ -71,8 +71,8 @@ function resetGame2(){
     document.body.appendChild(openingPanel);
     questionList = []; 
     questionNumber = 0;
-typeSelectQuestion = null;
-typeSelectWitness = null;
+typeSelectQuestion = document.createElement('select');
+typeSelectWitness = document.createElement('select');
     
 }
 function pauseGame2(){
@@ -90,7 +90,6 @@ function resumeGame2(){
 
 
 var createQuestion = function questionCreator(q){
-	 alert(q.context.context);
 	this.context = q.context.context;
 	this.caseID = q.context.caseID; 
 	this.witness = q.witness;
@@ -106,7 +105,16 @@ var createQuestion = function questionCreator(q){
 				this.correctObjections[i].objectionableQuestion = false; 
 				this.correctObjections[i].objectionableAnswer = true; 
 			}
+		
+		if (currentPracticeType != -1){
+			alert(currentPracticeType);
+			if(this.correctObjections[i].fk_objectionTypeID != currentPracticeType){
+				this.correctObjections[i] = blankObjection;
+			}
+		}
+		
 	}
+	
 	this.previousQuestion = function generatePreviousText(){
 	let answer = "";
 	for(let i = 0; i < this.transcript.previousQuestion.length; i++){
@@ -258,6 +266,7 @@ function scoreAndUpdateAll(type, time = "none"){
 	let objs = questionList[questionNumber].correctObjections
 	let objection; 
 	let correct = false; 
+	let isPossible = false; //used as a double flag for correcting single objection practice
 	if (objs.length == 0){
 		correct = true; 
 		objection = blankObjection; 
@@ -265,26 +274,35 @@ function scoreAndUpdateAll(type, time = "none"){
 		objection = questionList[questionNumber].correctObjections[0];
 	}
 	
-		
 	objs.forEach(function checkobjections(ob){
+		alert(ob.explanation);
 		if(ob.fk_objectionTypeID == type){
 			if (ob.timing.toLowerCase() == time) {
-				objection = ob; 
-				correct = true; 
+					objection = ob; 
+					correct = true; 
+			}}
+			
+			if (!isPossible){
+				if (ob.fk_objectionTypeID == currentPracticeType){
+					isPossible = true; 
+				}
 			}
-		 
+		 }); 
+	
+	if(!isPossible){
+		if(type==-1 && time == "none"){
+			correct = true; 
 		}
-		
-		
-	}); 
+	}
+
 	let text; 
 	
 	if(correct === true){
         
 	     text = randomPositive() + "\n You got the question correct and have gained a point. See the explanation below for more information on the question \n\n Explanation: \n" + objection.explanation;
-	    }else {
-	        text = "See the explanation below for the correct answer.  \n\n Explanation: \n" + objection.explanation;
-	    }
+	}else {
+	     text = "See the explanation below for the correct answer.  \n\n Explanation: \n" + objection.explanation;
+	}
 	    
 	    showResults(text); 
 	    	   
@@ -543,6 +561,7 @@ var createButton = function myButtonCreator(objection) {
 	temp.innerText = "I want to Practice \n " + objection.objectionType; 
 	temp.onclick = function(){
  		makeSelectionOptions(objection);
+ 		currentPracticeType = objection.objectionTypeID; 
   		startGame(objection.objectionTypeID);
 	};  
 	temp.style.margin = "3px";

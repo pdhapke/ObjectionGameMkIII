@@ -60,9 +60,9 @@
 			  let caseObject = JSON.parse(caseJSON);
 			  let caseBrief = caseObject.context; 
 			  caseTextBox.value = caseBrief; 
-			  caseTextBox.readOnly = true; 
+			  
 		  } else {
-			  caseTextBox.readOnly = false;  
+			  
 		  }
 		  postRequest.onreadystatechange = function() {
 			     if (this.readyState == 4 && this.status == 200) {
@@ -102,19 +102,16 @@
 			  
 			for (let i=0; i< witnessSide.length; i++){
 				if (witnessSide.options[i].value != side){
-					witnessSide.options[i].disabled = true; 
+					
 				} else{
-					witnessSide.options[i].selected = true; 
+					
 				}
 			}
 			  
 			  firstname.value = wO.firstname;
 			  lastname.value = wO.lastname;
 			  affidavit.value = wO.affidavit; 
-			  firstname.readOnly = true;
-			  lastname.readOnly = true;
-			  witnessSide.readOnly = true;
-			  affidavit.readOnly = true; 
+			
 			  
 		  } else {
 			  firstname.value = "";
@@ -122,10 +119,6 @@
 			  witnessSide.value = "";
 			  affidavit.value = ""; 
 			  
-			  firstname.readOnly = false;
-			  lastname.readOnly = false;
-			  witnessSide.readOnly = false;
-			  affidavit.readOnly = false; 
 			  for (let i=0; i< witnessSide.length; i++){
 					witnessSide.options[i].disabled = false; 
 				}
@@ -186,31 +179,29 @@
 			  
 			for (let i=0; i< questionSide.length; i++){
 				if (questionSide.options[i].value != side){
-					questionSide.options[i].disabled = true; 
+					
 				} else {
-					questionSide.options[i].selected = true; 
+					
 				}
 			}
 			let previousID = q.previousQuestionID;
 			for (let i=0; i< previous.length; i++){
 				if (previous.options[i].value != (previousID)){
-					previous.options[i].disabled = true; 
+					
 				} else {
-					previous.options[i].selected = true; 
+					
 				}
 			} 
 			
 			  question.value = q.courtQuestion;
 			  answer.value = q.witnessAnswer;
-			  question.readOnly = true;
-			  answer.readOnly = true;
+			 
 			 
 			  
 		  } else {
 			  question.value = "";
 			  answer.value = "";
-			  question.readOnly = false;
-			  answer.readOnly = false;
+			 
 				for (let i=0; i< questionSide.length; i++){
 						questionSide.options[i].disabled = false; 
 				}
@@ -262,12 +253,12 @@
 			  
 		  	  let timing = ob.timing;
 			  if(timing =! "question"){
-				  objectionTiming.options[0].disabled = true; 
+				
 			  }else{
-				  objectionTiming.options[1].disabled = true; 
+				  
 		  	  }
 			  objectionExplanation.value = ob.explanation;
-			  objectionExplanation.readOnly = true;
+			  
 			  
 			  					  
 			  } else {
@@ -321,9 +312,7 @@
 				objectionSelection.options[i].selected =true; 
 			}
 		}
-		objectionRuleSection.readOnly = true; 
-		objectionName.readOnly = true; 
-		objectionRules.readOnly = true;
+		
 		}
 	}
 	</script>
@@ -438,7 +427,7 @@
   <div id="ObjectionForm"  class="fulldiv" >
   		<div class="inner">
   		Explain this objection: <br>
-  		<textarea id="objectionExplanation" name="objectionExplanation" rows="4" cols="25"> test 1</textarea> 
+  		<textarea id="objectionExplanation" name="objectionExplanation" rows="4" cols="25"> </textarea> 
   		</div>
   		<div class="inner">
   		Select when this objection can first be made: <br>

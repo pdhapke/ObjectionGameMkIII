@@ -17,11 +17,15 @@ function testAuth(){
 <form action="enter-new.mvc" method="post">
     <input type="submit" value="Push to Add a Question" />
 </form>
+<form action="edit-old.mvc" method="post">
+    <input type="submit" value="Push to Edit a Question" />
+</form>
+
 <form action="all.mvc" method="post">
     <input type="submit" value="View all Questions" />
 </form>
 
-<button onclick="testAuth()">Press</button>
+
 
 <%@include file="playerOptions.jsp" %>
 

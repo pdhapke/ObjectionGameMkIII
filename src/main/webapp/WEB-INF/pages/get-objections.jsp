@@ -8,7 +8,7 @@
     <c:forEach items="${objections}" var="ob">
     	<option 
     	value="${ob.fk_objectionTypeID}"
-    	id="correctObjection${ob.objectionID}"
+    	id="correctObjection${ob.fk_objectionTypeID}"
     	data-json='${ob.jsonString}'
     	>Rule ${ob.description.objectionRuleNumber } : ${ob.description.objectionType} </option>
     </c:forEach>
