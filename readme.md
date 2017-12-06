@@ -15,7 +15,7 @@ Planned
 	- [x] Persistence Controller
 	- [x] GUI
 	- [x] Objection Timing
-	- [ ] Practice Type
+	- [x] Practice Type
 
 - [x] Database
 	- [x] Relationship table
