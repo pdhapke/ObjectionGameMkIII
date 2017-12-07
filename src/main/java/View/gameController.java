@@ -199,7 +199,7 @@ public class gameController {
 				}
 			};
 				
-		return model.view(req);
+		return plainUser(req, model);
 	}
 	
 	
@@ -207,7 +207,7 @@ public class gameController {
 	 * Admin functions and servlets below
 	 */
 	
-	@RequestMapping(value = "/all", method = RequestMethod.POST)
+	@RequestMapping(value = "/all", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView showAll(HttpServletRequest req){
 		Model model = new Model(){
 			public ModelAndView view(HttpServletRequest req){
@@ -222,7 +222,7 @@ public class gameController {
 	}
 
 	
-	@RequestMapping(value = "/enter-new", method = RequestMethod.POST)
+	@RequestMapping(value = "/enter-new", method = {RequestMethod.POST, RequestMethod.GET})
 		public ModelAndView enterNew(HttpServletRequest req){
 			Model model = new Model(){
 				public ModelAndView view(HttpServletRequest req){
@@ -237,7 +237,7 @@ public class gameController {
 			return admin(req, model);
 		}
 	
-	@RequestMapping(value = "/edit-old", method = RequestMethod.POST)
+	@RequestMapping(value = "/edit-old", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView editOld(HttpServletRequest req){
 		Model model = new Model(){
 			public ModelAndView view(HttpServletRequest req){
@@ -253,7 +253,7 @@ public class gameController {
 	}
 	
 	//get contexts
-		@RequestMapping(value = "/get-context", method = RequestMethod.POST)
+		@RequestMapping(value = "/get-context", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView get_context(HttpServletRequest req){
 		Model model = new Model(){
 			public ModelAndView view(HttpServletRequest req){
@@ -278,7 +278,7 @@ public class gameController {
 		return admin(req, model);
 	}
 	//get witnesses
-	@RequestMapping(value = "/get-witnesses", method = RequestMethod.POST)
+	@RequestMapping(value = "/get-witnesses", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView get_witnesses(HttpServletRequest req){
 		Model model = new Model(){
 			public ModelAndView view(HttpServletRequest req){
@@ -310,7 +310,7 @@ public class gameController {
 	}
 	
 	//get objection
-	@RequestMapping(value = "/get-objections", method = RequestMethod.POST)
+	@RequestMapping(value = "/get-objections", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView get_objections(HttpServletRequest req){
 		Model model = new Model(){
 			public ModelAndView view(HttpServletRequest req){
@@ -339,7 +339,7 @@ public class gameController {
 	}
 	
 	//get transcripts / questions
-	@RequestMapping(value = "/get-questions", method = RequestMethod.POST)
+	@RequestMapping(value = "/get-questions", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView get_questions(HttpServletRequest req){
 		Model model = new Model(){
 			public ModelAndView view(HttpServletRequest req){
@@ -369,7 +369,7 @@ public class gameController {
 		return admin(req, model);
 	}
 	//get objection type
-	@RequestMapping(value = "/get-objectiontypes", method = RequestMethod.POST)
+	@RequestMapping(value = "/get-objectiontypes", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView get_objections_types(HttpServletRequest req){
 		Model model = new Model(){
 			public ModelAndView view(HttpServletRequest req){
@@ -401,7 +401,7 @@ public class gameController {
 	
 	
 	
-	@RequestMapping(value = "/submit-new-question", method = RequestMethod.POST)
+	@RequestMapping(value = "/submit-new-question", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView submit_new_question(HttpServletRequest req){
 		System.out.println("inside");
 		Model model = new Model(){
@@ -530,26 +530,58 @@ public class gameController {
 	
 	//admin function to verify if the user is authorized before running 
 	public ModelAndView admin(HttpServletRequest req, Model model){
-		ModelAndView modelAndView = new ModelAndView();
+		ModelAndView modelAndView = new ModelAndView("redirect:/Welcome.mvc");
 		HttpSession session = req.getSession();
-		AuthenticatedUser user = db.getAuthenticatedUser(session.getAttribute("email").toString());
-		
-		if(user == null){
-			return new ModelAndView("redirect:/Welcome.mvc");
-		} else if(user.getSession_id().equals(session.getId())){
-			if(user.isAdmin()){
-				//add the view name and the objects needed
-					modelAndView = model.view(req); 
-					modelAndView.addObject("user", user);
-				} else {
-					modelAndView.setViewName("Not-Authorized");
+		if(session != null){
+			
+			//get the user
+			Object emailOb = session.getAttribute("email");
+			if (emailOb != null){
+				String email = emailOb.toString(); 
+				if(email != null){
+					AuthenticatedUser user = db.getAuthenticatedUser(email);
+					if(user != null){
+						if (user.getSession_id().equals(session.getId())){
+							if(user.isAdmin()){
+								//add the view name and the objects needed
+								modelAndView = model.view(req); 
+								modelAndView.addObject("user", user);
+							} else {
+								modelAndView.setViewName("Not-Authorized");
+							}
+						}
+					} 
 				}
-		} else {
-				return new ModelAndView("redirect:/Welcome.mvc");
-			}
-			return modelAndView;
+			} 
 		}
+		return modelAndView;
+	}
+	public ModelAndView plainUser(HttpServletRequest req, Model model){
+		ModelAndView modelAndView = new ModelAndView("redirect:/Welcome.mvc");
+		HttpSession session = req.getSession();
+		if(session != null){
+			
+			//get the user
+			Object emailOb = session.getAttribute("email");
+			if (emailOb != null){
+				String email = emailOb.toString(); 
+				if(email != null){
+					AuthenticatedUser user = db.getAuthenticatedUser(email);
+					if(user != null){
+						if (user.getSession_id().equals(session.getId())){
+								//add the view name and the objects needed
+								modelAndView = model.view(req); 
+								modelAndView.addObject("user", user);
+						}
+						}
+					} 
+				}
+			} 
+		return modelAndView;
+	}
+		
 	
+		
 	/* 
 	 * Admin template 
 		 		
