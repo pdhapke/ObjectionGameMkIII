@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -23,11 +24,15 @@ import Model.ObjectionType;
 import Model.Question;
 import Model.Transcript;
 import Model.Witness;
+import Model.databaseInformation;
+import Model.databaseInformationLocal;
 
 
 
 public class ClientDatabaseServicesBean implements ClientDatabaseServices {
-	EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII");
+	private databaseInformation info = new databaseInformation();
+	private EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.userProperties());
+	
 	final private int TWENTY_MINUTES = 1000 * 60 * 1; 
 	public void close(){
 		emfactory.close();
@@ -148,27 +153,58 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 		em.getTransaction().begin();
 		String query; 
 		TypedQuery<Transcript> transcriptQuery;
+		List<Transcript> transcripts;
+
 		if(type == -1){
 			query = "Select result FROM Transcript result WHERE result.questionID NOT IN :hist";
 			transcriptQuery = em.createQuery(query, Transcript.class);
 			transcriptQuery.setParameter("hist", history);
+			transcripts = transcriptQuery.getResultList();
 		} else {
+			transcripts = new ArrayList<Transcript>();
 			List<Objection> subquery = getAllObjectionsByType(type);
 			
 			List<Integer> availibleQuestions = new ArrayList<Integer>(); 
 			for(Objection item : subquery){
 				availibleQuestions.add(item.getFk_questionID());
 			}
+			query = "Select result FROM Transcript result WHERE result.questionID NOT IN :hist";
+			transcriptQuery = em.createQuery(query, Transcript.class);
+			transcriptQuery.setParameter("hist", history);
+			List<Transcript> transcriptsNoObjection = transcriptQuery.getResultList();
+			Collections.shuffle(transcriptsNoObjection);
 			
-			
-			query = "Select result FROM Transcript result WHERE result.questionID NOT IN(:hist) AND result.questionID IN (:avail)";
+			query = "Select result FROM Transcript result WHERE result.questionID NOT IN :hist AND result.questionID IN :avail";
 			transcriptQuery = em.createQuery(query, Transcript.class);
 			transcriptQuery.setParameter("hist", history);
 			transcriptQuery.setParameter("avail", availibleQuestions);
+			List<Transcript> transcriptsWithObjection = transcriptQuery.getResultList();
+			Collections.shuffle(transcriptsWithObjection);
+			int i = 0; 
+			int  n; 
+			Random rand = new Random();
+			while(i < number && (i <= transcriptsNoObjection.size() || i <= transcriptsWithObjection.size())){
+				n = rand.nextInt(1) + 1;
+				System.out.println(n);
+				if(n==1)
+				
+				if((n==1 && !transcriptsWithObjection.isEmpty() && transcriptsNoObjection.isEmpty())){
+					transcripts.add(transcriptsWithObjection.get(0));
+					transcriptsWithObjection.remove(0);
+				} else if (!transcriptsNoObjection.isEmpty()) {
+					transcripts.add(transcriptsNoObjection.get(0));
+					transcriptsNoObjection.remove(0);
+				} else if (!transcriptsWithObjection.isEmpty()){
+					transcripts.add(transcriptsWithObjection.get(0));
+					transcriptsWithObjection.remove(0);
+				}
+				i++;
+			}
+
 		}
 				
-		List<Transcript> transcripts = transcriptQuery.getResultList();
 		Collections.shuffle(transcripts);
+		
 		int i = 0; 
 		Transcript t; 
 		int previousID; 

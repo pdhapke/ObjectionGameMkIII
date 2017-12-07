@@ -31,7 +31,7 @@ public class BeanConfiguration {
 	}
 	@Bean 
 	public databaseInformation dbInfo(){
-		databaseInformation bean = new databaseInformationLocal(); 
+		databaseInformation bean = new databaseInformation(); 
 		return bean;		
 	}
 	@Bean 

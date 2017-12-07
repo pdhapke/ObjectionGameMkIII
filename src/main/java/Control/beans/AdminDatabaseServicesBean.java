@@ -2,6 +2,8 @@ package Control.beans;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import com.google.gson.Gson;
 
@@ -12,10 +14,13 @@ import Model.ObjectionType;
 import Model.Question;
 import Model.Transcript;
 import Model.Witness;
+import Model.databaseInformation;
+import Model.databaseInformationLocal;
 import Control.AdminDatabaseServices;
 
 public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implements AdminDatabaseServices {
-
+	private databaseInformation info = new databaseInformation();
+	private EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
 	public boolean addQuestions(List<Question> list) {
 		boolean success = true; 
 		try{
@@ -473,5 +478,8 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 		}
 		em.close();
 		return answer;
+	}
+	public void close(){
+		emfactory.close(); 
 	}
 }
