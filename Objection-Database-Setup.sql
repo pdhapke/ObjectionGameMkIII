@@ -17,7 +17,7 @@ context VARCHAR(300) NOT NULL
 -- primary key is the witness_ID, foregin key is case_ID. 
 -- one to many relationship with questions
 CREATE TABLE witnesses (
-  	witness_id int PRIMARY KEY AUTO_INCREMENT, 
+  	witness_id int AUTO_INCREMENT PRIMARY KEY , 
 	case_id int, 
     first_name VARCHAR(30), 
     last_name VARCHAR(30),
@@ -90,10 +90,21 @@ session_exp DATE,
 INDEX(email)
 ); 
 
+
+CREATE USER 'user'@'%' IDENTIFIED BY 'password';
+GRANT SELECT ON objection_database.* TO 'user'@'%';
+GRANT SELECT, UPDATE, INSERT ON objection_database.users TO 'user'@'%';
+
+CREATE USER 'admin-user'@'%' IDENTIFIED BY '12345';
+GRANT ALL ON objection_database.*
+TO 'admin-user'@'%';
+    
 SELECT * FROM users; 
 SELECT * FROM objection;
 SELECT * FROM correct_objection;
-
+SELECT * FROM context; 
+SELECT * FROM questions; 
+SELECT * FROM witnesses; 
 
 
 UPDATE users

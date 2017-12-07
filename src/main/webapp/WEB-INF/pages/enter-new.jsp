@@ -336,7 +336,9 @@
 
 <body>
 	<h2>Complete the fields below and press add to add a question to the database</h2>
-
+<form action="processSignIn.mvc" class="inline">
+    <button class="float-left submit-button" >Main Menu</button>
+</form>
 <p>You can choose to enter new information or you can use existing entries from the drop down menus</p>
 
 

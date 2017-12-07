@@ -9,9 +9,13 @@
 <%! String pq=""; %>
 <%! String objs=""; %>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <title>All Questions</title>
 </head>
 <body>
+<form action="processSignIn.mvc" class="inline">
+    <button class="float-left submit-button" >Main Menu</button>
+</form>
 	<table>
 		<tr>
 			<th> Case ID # </th>

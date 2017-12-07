@@ -13,6 +13,9 @@
 </head>
 <body>
 <h3>Your information was added successfully!</h3>
+<form action="processSignIn.mvc" class="inline">
+    <button class="float-left submit-button" >Main Menu</button>
+</form>
 <p>Please check to make sure all the information is correct. </p>
 	<table>
 		<tr>
