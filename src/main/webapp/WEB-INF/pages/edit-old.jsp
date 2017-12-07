@@ -324,7 +324,7 @@
 </head>
 
 <body>
-	<h2>Complete the fields below and press add to edit a question to the database</h2>
+	<h2>Alter the fields below and press submit to submit changes to the database</h2>
 <form action="processSignIn.mvc" class="inline">
     <button class="float-left submit-button" >Main Menu</button>
 </form>
@@ -466,7 +466,7 @@
   <br>
    
   
-  <!--  This will submit the form -->>
+  <!--  This will submit the form -->
   <input type="submit">
 </form>
 

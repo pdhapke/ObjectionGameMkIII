@@ -20,7 +20,6 @@ import Control.AdminDatabaseServices;
 
 public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implements AdminDatabaseServices {
 	private databaseInformation info = new databaseInformation();
-	private EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
 	public boolean addQuestions(List<Question> list) {
 		boolean success = true; 
 		try{
@@ -78,6 +77,8 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 	}
 
 	public int addContext(Context c) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		try {
 		
@@ -90,11 +91,13 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 		}finally{
 			em.close();
 		}
-				
+		emfactory.close();
 		return c.getCaseID();
 	}
 
 	public int addWitness(Witness w) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+
 		EntityManager em = emfactory.createEntityManager();
 		try {
 			em.getTransaction().begin();
@@ -111,6 +114,8 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 	}
 
 	public int addTranscript(Transcript t) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		try {
 	
@@ -123,11 +128,13 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 		} finally{
 			em.close();
 		}
-				
+		emfactory.close();		
 		return t.getQuestionID();
 	}
 
 	public int addObjection(Objection obj) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		try {
 		
@@ -140,11 +147,13 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 		} finally{
 			em.close();
 		}
-				
+		emfactory.close();		
 		return obj.getObjectionID();
 	}
 
 	public int addObjectionType(ObjectionType type) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		try {
 			em.getTransaction().begin();
@@ -155,7 +164,7 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 		} finally{
 			em.close();
 		}
-				
+		emfactory.close();		
 		return type.getObjectionTypeID();
 	}
 
@@ -163,6 +172,8 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 	
 	
 	public boolean updateQuestion(Question q) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		boolean finished = false; 
 		try{
 			boolean up1 = updateContext(q.getContextObject()); 
@@ -181,7 +192,8 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			
 		}catch (Error e){
 			System.out.print(e.getMessage());
-		}		
+		}	
+		emfactory.close();	
 		return finished;
 		
 	}
@@ -220,6 +232,8 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 	}
 
 	public boolean updateContext(Context newC) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -231,12 +245,15 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 		} catch(Error e){
 			System.out.println(e.getMessage());
 		}
-		
 		em.close();
+		emfactory.close();
+		
 		return answer;
 	}
 
 	public boolean updateWitness(Witness w) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -249,10 +266,14 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+		
 		return answer;
 	}
 
 	public boolean updateTranscript(Transcript t) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -265,10 +286,14 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+		
 		return answer;
 	}
 
 	public boolean updateObjection(Objection obj) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -281,10 +306,14 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+		
 		return answer;
 	}
 
 	public boolean updateObjectionType(ObjectionType type) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -297,6 +326,8 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+		
 		return answer;
 	}
 	public boolean deleteContext(Context c) {
@@ -320,6 +351,8 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 	}
 
 	public boolean deleteContext(int id) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -332,10 +365,15 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+		
+		
 		return answer;
 	}
 
 	public boolean deleteWitness(int id) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -348,10 +386,14 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+		
 		return answer;
 	}
 
 	public boolean deleteTranscript(int id) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -364,10 +406,13 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
 		return answer;
 	}
 
 	public boolean deleteObjection(int id) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -380,10 +425,14 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+		
 		return answer;
 	}
 
 	public boolean deleteObjectionType(int id) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -396,10 +445,14 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+		
 		return answer;
 	}
 
 	public boolean updateContext(int ID, String con) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -411,12 +464,15 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 		} catch(Error e){
 			System.out.println(e.getMessage());
 		}
-		
 		em.close();
+		emfactory.close();
+		
 		return answer;
 	}
 
 	public boolean updateWitness(String fname, String lname, String aff, String side, int witID, int caseID) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -429,10 +485,14 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+				
 		return answer;
 	}
 
 	public boolean updateTranscript(String side, String current, String answer, int qID, int preID, int fk) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean reply = false; 
@@ -445,10 +505,14 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+		
 		return reply;
 	}
 
 	public boolean updateObjection(String exp, String time, int objID, int fkQ, int fkOT) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+		
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
@@ -461,16 +525,21 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 			System.out.println(e.getMessage());
 		}
 		em.close();
+		emfactory.close();
+		
+		
 		return answer;
 	}
 
-	public boolean updateObjectionType(String type, String info, int typeID) {
+	public boolean updateObjectionType(String type, String obInfo, int typeID) {
+		EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("ObjectionGameMkIII", info.adminProperties());
+
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		boolean answer = false; 
 		try{	
 		ObjectionType oldOT = em.find(ObjectionType.class, typeID); 
-		oldOT.update(type, info, typeID); 
+		oldOT.update(type, obInfo, typeID); 
 		em.getTransaction().commit();
 		answer = true;
 		} catch(Error e){
@@ -479,7 +548,5 @@ public class AdminDatabaseServicesBean extends ClientDatabaseServicesBean implem
 		em.close();
 		return answer;
 	}
-	public void close(){
-		emfactory.close(); 
-	}
+
 }

@@ -54,7 +54,7 @@ public class GoogleAuthenticatorServiceBean{
 		  } else {
 			 user = null;  
 		  }
-		cService.close();
+		
 		  
 		 return user; 
 		}
