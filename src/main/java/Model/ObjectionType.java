@@ -75,6 +75,7 @@ public class ObjectionType {
 		this.objectionInformation = type.getObjectionInformation(); 
 		this.objectionType = type.getObjectionType(); 
 		this.objectionTypeID = type.getObjectionTypeID(); 
+		this.objectionRuleNumber = type.getObjectionRuleNumber();
 	}
 	public void update(String type, String info, int typeID){
 		this.objectionInformation = info; 
