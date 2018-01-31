@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
 		
-	<context:component-scan base-package="View"></context:component-scan>
+	<context:component-scan base-package="View, Control.beans"></context:component-scan>
 	<context:annotation-config />
 	<mvc:annotation-driven />
 	
@@ -15,6 +15,18 @@
 	<property name="prefix" value = "/WEB-INF/pages/"/>
 	<property name="suffix" value = ".jsp"/>
 	</bean>
+	
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+ <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+ </bean>
+	
+	<mvc:default-servlet-handler/>
+	<mvc:resources mapping="/googlefe1672b955e39eb0.html" location="/WEB-INF/googlefe1672b955e39eb0.html"/>
+	<mvc:resources mapping="/Reference/**" location="/Reference/"/>
+	<mvc:resources mapping="/about.html" location="/about.html"/>
+	<mvc:resources mapping="/topbar.html" location="/topbar.html"/>
+	<mvc:resources mapping="/topbar-js.html" location="/topbar-js.html"/>
+	<mvc:resources mapping="/javascript.html" location="/javascript.html"/>
 
-
+	<mvc:annotation-driven />
 </beans>

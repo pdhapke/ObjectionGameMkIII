@@ -47,7 +47,7 @@
 			
 		} else {
 			signout.style.display = 'none';
-			signin.style.diplay = 'block';
+			signin.style.display = 'block';
 		}
 		}
 		
@@ -80,10 +80,10 @@
 	function signOut() {
 	    if(gauth != null) {
 	    	 gauth.signOut().then(function () {
-	   	     console.log('User signed out.'); onpageload(); 
+	   	     console.log('User signed out.');
+	   	     updatepage(); 
 	   	    });
 	    }
-	  
 	  }
 	function renderButton() {
 	      gapi.signin2.render('signin', {
@@ -170,7 +170,7 @@ position: relative;
 <body>
 <div class='buttonbar' id='buttonbar' onload="onpageload()">
 	<div id='signout' class='signout'>
-		<a id='signoutlink' class='signoutllink' href="" onclick="signOut();">Sign out</a>
+		<a id='signoutlink' class='signoutllink' href=# onclick="signOut();">Sign out</a>
 		<a id='game' class='game' onclick="launchGame()" href=#>Objection Game</a>
 	</div>
 	<div id='signin'></div>
@@ -184,8 +184,9 @@ position: relative;
 </div>
 
 <div class='pagecontent'>
-<h3>Welcome! Sign in using the link at the top</h3>
-Please be patient as the website is updated
+
+
+
 
 </div>
 
@@ -193,7 +194,8 @@ Please be patient as the website is updated
 </body>
 <footer>
 <div id="formDiv" hidden="true"></div>
-<link rel="import" href="topbar-js.html">
+<%@include file="../../../topbar-js.html" %>
+
 </footer>
 </html>
 

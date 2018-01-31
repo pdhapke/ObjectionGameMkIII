@@ -12,15 +12,15 @@ position: relative;
 }
 </style>
 <%@include file="topbar.jsp" %>
-<title>ERROR</title>
 </head>
 
 <body>
 <div class='pagecontent'>
 
-<h2>You are not authorized!</h2>
+
 
 
 </div>
 </body>
 </html>
+

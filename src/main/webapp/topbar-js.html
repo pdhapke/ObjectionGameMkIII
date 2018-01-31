@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<script >
+var domain = domain || window.location.hostname;
+
+if (domain == 'localhost'){domain = "http://localhost:8080/ObjectionGameMkIII"}
+else {domain = "http://" + domain};
+gamelocation = domain + "/Game.mvc";
+var home =  home || document.getElementById("home");
+var objectionReference =  objectionReference || document.getElementById("ObjectionReference");
+var basics =  basics || document.getElementById("basics");
+var guide =  guide || document.getElementById("Guide");
+var links =  links || document.getElementById("links");
+var about =  about || document.getElementById("about");
+
+home.href = domain;
+objectionReference.href = domain + "/Reference/ObjectionReference.html"
+basics.href = domain + "/Reference/MockTrialBasics.html"
+guide.href = domain + "/Reference/Guide.html"
+links.href = domain + "/Reference/links.html"
+about.href = domain +  "/about.html"
+
+</script>
+

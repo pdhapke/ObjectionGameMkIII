@@ -1,27 +1,23 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="mvc"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page isELIgnored="false"%>
 <head>
-<script type="text/javascript"> 
+<style type="text/css" media="screen">
+.pagecontent {
+margin: 50px auto 0;
+position: relative;
 
-</script>
-
+}
+</style>
+<%@include file="topbar.jsp" %>
 </head>
+
 <body>
-
-<div id="playerOptions">
-<h2>Player Options</h2>
-
-</div>
-<div id="playerInfo">
+<div class='pagecontent'>
+<%@include file="playerOptionsContent.jsp" %>
 
 </div>
-
-<div id="gameScreen">
-
-</div>
-
-<%@include file="GameFunctions.jsp" %>
-
 </body>
-
+</html>

@@ -3,17 +3,25 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="mvc"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page isELIgnored="false"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
 <head>
 <%! String pq=""; %>
 <%! String objs=""; %>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Success!</title>
+<style type="text/css" media="screen">
+.pagecontent {
+margin: 50px auto 0;
+position: relative;
+
+}
+</style>
+<%@include file="topbar.jsp" %>
 </head>
+
 <body>
+<div class='pagecontent'>
 <h3>Your information was added successfully!</h3>
-<form action="processSignIn.mvc" class="inline">
+<form action="Game.mvc" class="inline">
     <button class="float-left submit-button" >Main Menu</button>
 </form>
 <p>Please check to make sure all the information is correct. </p>
@@ -98,5 +106,9 @@
 	</table>
 	
 	
+
+
+
+</div>
 </body>
 </html>

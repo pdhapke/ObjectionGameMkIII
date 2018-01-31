@@ -1,10 +1,17 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri = "http://www.springframework.org/tags/form" prefix= "mvc"  %>    
-<%@ page isELIgnored="false" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="mvc"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page isELIgnored="false"%>
 <head>
+<style type="text/css" media="screen">
+.pagecontent {
+margin: 50px auto 0;
+position: relative;
+
+}
+</style>
+<%@include file="topbar.jsp" %>
 <style type="text/css" media="screen">
   div {
   
@@ -335,8 +342,9 @@
 </head>
 
 <body>
-	<h2>Complete the fields below and press submit to add a question to the database</h2>
-<form action="processSignIn.mvc" class="inline">
+<div class='pagecontent'>
+<h2>Complete the fields below and press submit to add a question to the database</h2>
+<form action="Game.mvc" class="inline">
     <button class="float-left submit-button" >Main Menu</button>
 </form>
 <p>You can choose to enter new information or you can use existing entries from the drop down menus</p>
@@ -482,5 +490,10 @@
 </form>
 
 <div id="formDiv" hidden="true"></div>
+
+
+
+</div>
 </body>
 </html>
+

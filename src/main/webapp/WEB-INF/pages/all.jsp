@@ -3,20 +3,26 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="mvc"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page isELIgnored="false"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
 <head>
+<title>All Questions</title>
 <%! String pq=""; %>
 <%! String objs=""; %>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css" media="screen">
+.pagecontent {
+margin: 50px auto 0;
+position: relative;
 
-<title>All Questions</title>
+}
+</style>
+<%@include file="topbar.jsp" %>
 </head>
+
 <body>
-<form action="processSignIn.mvc" class="inline">
+<div class='pagecontent'>
+<form action="Game.mvc" class="inline">
     <button class="float-left submit-button" >Main Menu</button>
 </form>
-	<table>
+<table>
 		<tr>
 			<th> Case ID # </th>
 			<th> Case Description</th>
@@ -77,7 +83,7 @@
 		</c:forEach>
 	
 	</table>
-	
-	
+
+</div>
 </body>
 </html>

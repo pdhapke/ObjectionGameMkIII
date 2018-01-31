@@ -36,8 +36,7 @@ import javax.servlet.http.HttpSession;
 @SessionAttributes(value = "user", types = { AuthenticatedUser.class })
 public class gameController {
 	// Sets up the beans
-	AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(
-			BeanConfiguration.class);
+	AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(BeanConfiguration.class);
 	QuestionServiceBean serve = applicationContext.getBean("service", QuestionServiceBean.class);
 	AdminDatabaseServicesBean db = applicationContext.getBean("db", AdminDatabaseServicesBean.class);
 	databaseInformation dbInfo = applicationContext.getBean("dbInfo", databaseInformation.class);
@@ -52,6 +51,15 @@ public class gameController {
 	 * 
 	 */
 
+	
+	@RequestMapping(value = "/preview")
+	public ModelAndView testpreview() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("topbar");
+		modelAndView.addObject("signIn", dbInfo.getGoogleClientID());
+		return modelAndView;
+	}
+	
 	@RequestMapping(value = "/Welcome")
 	public ModelAndView mainpage() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -60,11 +68,11 @@ public class gameController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/processSignIn", method = { RequestMethod.POST, RequestMethod.GET })
+	@RequestMapping(value = "/Game", method = { RequestMethod.POST, RequestMethod.GET })
 	public ModelAndView processUser(HttpServletRequest req) {
 		// , @RequestParam(value="idtoken") String token
 		String token = req.getParameter("idtoken");
-		ModelAndView modelAndView = new ModelAndView("redirect:/Welcome.mvc");
+		ModelAndView modelAndView = new ModelAndView("redirect:/");
 
 		if (token == null) {
 			HttpSession session = req.getSession();
@@ -85,11 +93,16 @@ public class gameController {
 								modelAndView.setViewName("adminOptions");
 								modelAndView.addObject("ObjectionTypes", client.getAllObjectionTypes());
 								modelAndView.addObject("user", user);
-							} else {
+							} else if (false){
+								//add a check to see if the user is registered 
 								modelAndView = new ModelAndView();
 								modelAndView.setViewName("playerOptions");
 								modelAndView.addObject("user", user);
 								modelAndView.addObject("ObjectionTypes", client.getAllObjectionTypes());
+								
+							} else {
+								// redirect user to the sign in page
+								
 							}
 						}
 					}
@@ -211,7 +224,7 @@ public class gameController {
 				return modelAndView;
 			}
 		};
-		return admin(req, model);
+		return admin(req, model, true);
 	}
 
 	@RequestMapping(value = "/enter-new", method = { RequestMethod.POST, RequestMethod.GET })
@@ -226,7 +239,7 @@ public class gameController {
 				return modelAndView;
 			}
 		};
-		return admin(req, model);
+		return admin(req, model, true);
 	}
 
 	@RequestMapping(value = "/edit-old", method = { RequestMethod.POST, RequestMethod.GET })
@@ -241,7 +254,7 @@ public class gameController {
 				return modelAndView;
 			}
 		};
-		return admin(req, model);
+		return admin(req, model, true);
 	}
 
 	// get contexts
@@ -522,7 +535,7 @@ public class gameController {
 
 	// admin function to verify if the user is authorized before running
 	public ModelAndView admin(HttpServletRequest req, Model model) {
-		ModelAndView modelAndView = new ModelAndView("redirect:/Welcome.mvc");
+		ModelAndView modelAndView = new ModelAndView("redirect:/");
 		HttpSession session = req.getSession();
 		if (session != null) {
 
@@ -548,9 +561,35 @@ public class gameController {
 		}
 		return modelAndView;
 	}
-
+	public ModelAndView admin(HttpServletRequest req, Model model, boolean hastoken) {
+		ModelAndView modelAndView = new ModelAndView("redirect:/");
+		HttpSession session = req.getSession();
+		String token = req.getParameter("idtoken");
+		
+		if (token != null){
+			req.changeSessionId();
+			AuthenticatedUser user = google.verify(token, session.getId());
+			if (user != null) {
+				session.setAttribute("email", user.getEmail());
+				modelAndView = new ModelAndView();
+				modelAndView.addObject("signIn", dbInfo.getGoogleClientID());
+					
+				if (user.isAdmin()) {
+					modelAndView = model.view(req);
+					modelAndView.addObject("user", user);
+				} else {
+					modelAndView.addObject("user", user);
+					modelAndView.addObject("ObjectionTypes", client.getAllObjectionTypes());
+					modelAndView.setViewName("playerOptions");
+				}	
+			}
+		}	
+			
+		return modelAndView;
+	}
+	
 	public ModelAndView plainUser(HttpServletRequest req, Model model) {
-		ModelAndView modelAndView = new ModelAndView("redirect:/Welcome.mvc");
+		ModelAndView modelAndView = new ModelAndView("redirect:/");
 		HttpSession session = req.getSession();
 		if (session != null) {
 
@@ -573,6 +612,22 @@ public class gameController {
 		return modelAndView;
 	}
 
+	//static pages
+	/*
+	@RequestMapping(value = "/ObjectionReference", method = RequestMethod.GET)
+	   public String redirect() {
+	      return "redirect:/ObjectionReference.html";
+	   }
+
+	
+	
+	@RequestMapping(value = "/googlefe1672b955e39eb0")
+	public ModelAndView google_verification() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("googleverification");
+		return modelAndView;
+	}
+	*/
 	/*
 	 * Admin template
 	 * 

@@ -184,14 +184,26 @@ public class ClientDatabaseServicesBean implements ClientDatabaseServices {
 			transcriptQuery.setParameter("avail", availibleQuestions);
 			List<Transcript> transcriptsWithObjection = transcriptQuery.getResultList();
 			Collections.shuffle(transcriptsWithObjection);
+			
+			
+			
+			for(int x=0; x < transcriptsWithObjection.size(); x++){
+				for(int y=0; y < transcriptsWithObjection.size(); y++){
+					if(transcriptsWithObjection.get(x).getQuestionID() == transcriptsNoObjection.get(y).getQuestionID()){
+						transcriptsNoObjection.remove(y);
+						y--;
+					}
+				}
+			}
+			
+			
 			int i = 0; 
 			int  n; 
 			Random rand = new Random();
-			while(i < number && (i <= transcriptsNoObjection.size() || i <= transcriptsWithObjection.size())){
+			while(i < number && ( transcriptsNoObjection.size() != 0 || transcriptsWithObjection.size() != 0)){
 				n = rand.nextInt(1) + 1;
 				System.out.println(n);
-				if(n==1)
-				
+						
 				if((n==1 && !transcriptsWithObjection.isEmpty() && transcriptsNoObjection.isEmpty())){
 					transcripts.add(transcriptsWithObjection.get(0));
 					transcriptsWithObjection.remove(0);

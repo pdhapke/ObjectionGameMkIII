@@ -8,8 +8,25 @@ import Model.beans.QuestionListBean;
 import Model.databaseInformation;
 import Model.databaseInformationLocal;
 
+
+//delete
 @Configuration
-public class BeanConfiguration {
+
+public class BeanConfiguration  {
+	/*
+	@Bean
+    public InternalResourceViewResolver viewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/pages/");
+        resolver.setSuffix(".jsp");
+        return resolver;
+    }
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("/");
+        registry.addResourceHandler("/Reference/**").addResourceLocations("/Reference/");
+    }
+	*/
+	
 	
 	@Bean
 	public QuestionListBean makeQuestionList(){

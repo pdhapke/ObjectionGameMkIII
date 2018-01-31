@@ -156,7 +156,7 @@ possibleObjections = [];
 		objectionTypeID:${type.objectionTypeID},
 		objectionRuleNumber: ${type.objectionRuleNumber}, 
 		objectionType: "${type.objectionType}", 
-		objectionInformation: "${type.objectionInformation}"
+		objectionInformation: `${type.objectionInformation}`
 		})
 </c:forEach>
 
@@ -353,7 +353,7 @@ questionElement.appendChild(document.createElement("br"));
 
 previousQuestionBox = document.createElement('textarea');
 
-previousQuestionBox.value = "Loading";
+previousQuestionBox.value = "...loading";
 previousQuestionBox.style.backgroundColor = "cornsilk"; 
 previousQuestionBox.rows = 4;
 previousQuestionBox.cols = 50;
@@ -372,7 +372,7 @@ questionElement.appendChild(document.createElement("br"));
 
 
 questionBox = document.createElement("textarea");
-questionBox.value = "Loading";
+questionBox.value = "...loading";
 questionBox.style.backgroundColor = "silver"; 
 questionBox.rows = 4;
 questionBox.cols = 50;
@@ -402,7 +402,7 @@ questionElement.appendChild(document.createElement("br"));
 
 
 witnessBox= document.createElement("textarea");
-witnessBox.value = "delete me later";
+witnessBox.value = "...loading";
 witnessBox.style.backgroundColor = "white"; 
 witnessBox.rows = 4;
 witnessBox.cols = 50;
@@ -446,7 +446,7 @@ storyElement.style.display="inline-table";
 storyElement.appendChild(document.createTextNode("The Witness' Statement:"));
 storyElement.appendChild(document. createElement("br"));
 storyBox = document.createElement("textarea");
-storyBox.value = "delete me later";
+storyBox.value = "...loading";
 storyBox.style.backgroundColor = "cornsilk"; 
 storyBox.rows = 24;
 storyBox.cols = 54;

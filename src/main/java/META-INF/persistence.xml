@@ -10,7 +10,7 @@
 		<class>Model.AuthenticatedUser</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://0.0.0.0:3306/objection_database"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://74.208.183.152:3306/objection_database"/>
 			<property name="javax.persistence.jdbc.user" value="user"/>
 			<property name="javax.persistence.jdbc.password" value="password"/>
 		</properties>
