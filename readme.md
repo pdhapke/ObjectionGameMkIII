@@ -16,7 +16,7 @@ Planned
 	- [x] GUI
 	- [x] Objection Timing
 	- [x] Practice Type
-	- [ ] User Welcome
+	- [x] User Welcome
 	- [ ] Score Tracking
 
 - [x] Database
